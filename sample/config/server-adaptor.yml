@@ -1,0 +1,27 @@
+- id: server1
+  type: rest
+  url: http://127.0.0.1:8001/server1
+  message:
+    type: simple-json
+  protocol:
+    type: java
+    class-name: com.bizmda.bizsip.sample.serveradaptor.controller.Server1
+
+- id: server2
+  type: rest
+  url: http://127.0.0.1:8001/server2
+  message:
+    type: json
+    pack-rules:
+      - predicate: ${data.code == 0}
+        rule: ${"server1/pack/"+data.tranCode}
+      - predicate:
+        rule: server1/pack/error
+    unpack-rules:
+      - predicate: ${data.code == 0}
+        rule: ${"server1/unpack/"+data.tranCode}
+      - predicate:
+        rule: server1/unpack/error
+  protocol:
+    type: java
+    class-name: com.bizmda.bizsip.demo.Server1

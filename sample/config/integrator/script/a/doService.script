@@ -1,0 +1,7 @@
+import server;
+var a = {
+    sex : 0,
+    name : '小明'
+};
+var b = server.doService("server1",a)
+return b;

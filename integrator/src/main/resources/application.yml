@@ -1,0 +1,18 @@
+server:
+  port: 8000
+
+bizsip:
+  config-path: /Users/shizhengye/IdeaProjects/BizSIP/sample/config
+#  integrator:
+#  server-adaptors:
+#    - id: server1
+#      type: rest
+#      url: http://127.0.0.1:8001/server1
+
+#spring:
+#  application:
+#    name: nacos-provider
+#  cloud:
+#    nacos:
+#      discovery:
+#        server-addr: localhost:8848

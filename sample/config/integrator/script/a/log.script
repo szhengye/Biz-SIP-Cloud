@@ -1,0 +1,10 @@
+import log;
+// 切换到"运行日志"查看日志信息
+log.info('info日志:{}',message);
+log.warn('warn日志');
+try{
+    return 1 / 0;
+}catch(e){
+    log.error('error日志',e);
+}
+return 'ok';

@@ -1,0 +1,5 @@
+import 'java.util.Date' as Date;
+import 'java.text.SimpleDateFormat' as SimpleDateFormat;
+var now = new Date();
+var df = new SimpleDateFormat('yyyy-MM-dd');
+return df.format(now);
