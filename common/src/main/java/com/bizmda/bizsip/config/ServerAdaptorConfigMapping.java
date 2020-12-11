@@ -9,10 +9,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ServerAdaptorMapping {
-    private Map<String, AbstractServerAdaptorConfig> serverAdaptorMap;
+public class ServerAdaptorConfigMapping {
+    private Map<String, AbstractServerAdaptorConfig> serverAdaptorConfigMap;
 
-    public ServerAdaptorMapping(String configPath) {
+    public ServerAdaptorConfigMapping(String configPath) {
         Yaml yaml = new Yaml();
         List<Map> serverAdaptorList = null;
         try {
@@ -21,7 +21,7 @@ public class ServerAdaptorMapping {
             e.printStackTrace();
         }
         AbstractServerAdaptorConfig serverAdaptor = null;
-        this.serverAdaptorMap = new HashMap<String, AbstractServerAdaptorConfig>();
+        this.serverAdaptorConfigMap = new HashMap<String, AbstractServerAdaptorConfig>();
         for (Map serverAdaptorMap:serverAdaptorList) {
             String type = (String)serverAdaptorMap.get("type");
             if (type.equalsIgnoreCase("rest")) {
@@ -30,11 +30,11 @@ public class ServerAdaptorMapping {
             else {
                 continue;
             }
-            this.serverAdaptorMap.put(serverAdaptor.getId(),serverAdaptor);
+            this.serverAdaptorConfigMap.put(serverAdaptor.getId(),serverAdaptor);
         }
     }
 
-    public AbstractServerAdaptorConfig getServerAdaptor(String id) {
-        return this.serverAdaptorMap.get(id);
+    public AbstractServerAdaptorConfig getServerAdaptorConfig(String id) {
+        return this.serverAdaptorConfigMap.get(id);
     }
 }

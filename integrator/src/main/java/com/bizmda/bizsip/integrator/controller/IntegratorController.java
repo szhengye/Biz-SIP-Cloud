@@ -1,7 +1,7 @@
 package com.bizmda.bizsip.integrator.controller;
 
 import com.bizmda.bizsip.config.ScriptServiceMapping;
-import com.bizmda.bizsip.config.ServerAdaptorMapping;
+import com.bizmda.bizsip.config.ServerAdaptorConfigMapping;
 import com.bizmda.bizsip.integrator.script.ServerService;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
@@ -44,7 +44,7 @@ public class IntegratorController {
     @Autowired
     ScriptServiceMapping scriptServiceMapping;
     @Autowired
-    ServerAdaptorMapping serverAdaptorMapping;
+    ServerAdaptorConfigMapping serverAdaptorConfigMapping;
     @Autowired(required = false)
     private List<HttpMessageConverter<?>> httpMessageConverters;
     @Autowired
@@ -56,7 +56,7 @@ public class IntegratorController {
     @PostConstruct
     public void init() {
         setupMagicModules();
-        ServerService.serverAdaptorMapping = this.serverAdaptorMapping;
+        ServerService.serverAdaptorConfigMapping = this.serverAdaptorConfigMapping;
     }
 
     @GetMapping(value={"/sip/{path1}","/sip/{path1}/{path2}","/sip/{path1}/{path2}/{path3}"})

@@ -13,7 +13,7 @@
         <module>common</module>
         <module>client-adaptor</module>
         <module>sample</module>
-        <module>server-adaptor</module>
+        <module>server-adaptor-spring-boot-starter</module>
     </modules>
 
     <properties>

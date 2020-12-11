@@ -2,7 +2,7 @@ server:
   port: 8000
 
 bizsip:
-  config-path: /Users/shizhengye/IdeaProjects/BizSIP/sample/config
+  config-path: /Users/shizhengye/IdeaProjects/biz-sip/sample/config
 #  integrator:
 #  server-adaptors:
 #    - id: server1

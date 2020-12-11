@@ -5,7 +5,7 @@
     type: simple-json
   protocol:
     type: java
-    class-name: com.bizmda.bizsip.sample.serveradaptor.controller.Server1
+    class-name: com.bizmda.bizsip.sample.serveradaptor.server1.controller.Server1
 
 - id: server2
   type: rest
