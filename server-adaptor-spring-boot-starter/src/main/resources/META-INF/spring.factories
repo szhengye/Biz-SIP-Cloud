@@ -1,2 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-com.bizmda.bizsip.serveradaptor.config.ServerAdaptorConfig
+com.bizmda.bizsip.serveradaptor.config.ServerAdaptorConfiguration

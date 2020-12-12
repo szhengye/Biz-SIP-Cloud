@@ -2,9 +2,7 @@ package com.bizmda.bizsip.sample.serveradaptor.server1.controller;
 
 import com.bizmda.bizsip.common.BizException;
 import com.bizmda.bizsip.common.BizMessage;
-import com.bizmda.bizsip.config.ServerAdaptorConfigMapping;
 import com.bizmda.bizsip.serveradaptor.ServerAdaptorProcessor;
-import com.bizmda.bizsip.serveradaptor.config.ServerAdaptorConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -18,14 +16,12 @@ import java.util.Map;
 @RequestMapping("/")
 public class ServerAdaptorController {
     @Autowired
-    private ServerAdaptorConfig serverAdaptorConfig;
-//    private ServerAdaptorConfigMapping serverAdaptorConfigMapping;
     private ServerAdaptorProcessor serverAdaptorProcessor;
 
     @PostConstruct
     public void init() {
         try {
-            this.serverAdaptorProcessor = this.serverAdaptorConfig.getServerAdaptorProcessor("server1");
+            this.serverAdaptorProcessor.init("server1");
         } catch (BizException e) {
             log.error("服务端适配器初始化失败！",e);
         }

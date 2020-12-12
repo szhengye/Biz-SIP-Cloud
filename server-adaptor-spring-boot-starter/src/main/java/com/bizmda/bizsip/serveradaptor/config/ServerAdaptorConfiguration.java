@@ -16,7 +16,7 @@ import java.util.Map;
 
 @Slf4j
 @Configuration
-public class ServerAdaptorConfig {
+public class ServerAdaptorConfiguration {
     @Value("${bizsip.config-path}")
     private String configPath;
 
@@ -26,14 +26,18 @@ public class ServerAdaptorConfig {
         return new ServerAdaptorConfigMapping(this.configPath);
     }
 
-    @Autowired
-    private ServerAdaptorConfigMapping serverAdaptorConfigMapping;
-
-    public AbstractServerAdaptorConfig getServerAdaptorConfig(String serverId) {
-        return this.serverAdaptorConfigMapping.getServerAdaptorConfig(serverId);
+    @Bean
+    public ServerAdaptorProcessor serverAdaptorProcessor() {
+        return new ServerAdaptorProcessor();
     }
+//    @Autowired
+//    private ServerAdaptorConfigMapping serverAdaptorConfigMapping;
 
-    public ServerAdaptorProcessor getServerAdaptorProcessor(String serverId) throws BizException {
-        return new ServerAdaptorProcessor(this.serverAdaptorConfigMapping.getServerAdaptorConfig(serverId));
-    }
+//    public AbstractServerAdaptorConfig getServerAdaptorConfig(String serverId) {
+//        return this.serverAdaptorConfigMapping.getServerAdaptorConfig(serverId);
+//    }
+//
+//    public ServerAdaptorProcessor getServerAdaptorProcessor(String serverId) throws BizException {
+//        return new ServerAdaptorProcessor(this.serverAdaptorConfigMapping.getServerAdaptorConfig(serverId));
+//    }
 }

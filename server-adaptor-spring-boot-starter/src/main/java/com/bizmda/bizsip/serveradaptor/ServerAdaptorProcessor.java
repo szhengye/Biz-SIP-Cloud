@@ -4,19 +4,28 @@ import com.bizmda.bizsip.common.BizException;
 import com.bizmda.bizsip.common.BizResultEnum;
 import com.bizmda.bizsip.config.AbstractServerAdaptorConfig;
 import com.bizmda.bizsip.config.BizSipConfig;
+import com.bizmda.bizsip.config.ServerAdaptorConfigMapping;
 import com.bizmda.bizsip.message.AbstractMessageProcessor;
-import com.bizmda.bizsip.serveradaptor.config.ServerAdaptorConfig;
+import com.bizmda.bizsip.serveradaptor.config.ServerAdaptorConfiguration;
 import com.bizmda.bizsip.serveradaptor.protocol.AbstractServerProtocolProcessor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Service;
 
 @Slf4j
+@Service
+@Scope("prototype")
 public class ServerAdaptorProcessor {
+    @Autowired
+    private ServerAdaptorConfigMapping serverAdaptorConfigMapping;
 
     private AbstractMessageProcessor messageProcessor;
     private AbstractServerProtocolProcessor protocolProcessor;
 
-    public ServerAdaptorProcessor(AbstractServerAdaptorConfig serverAdaptorConfig) throws BizException {
-        String messageType = (String)serverAdaptorConfig.getMessageMap().get("type");
+    public void init(String serverId) throws BizException {
+        AbstractServerAdaptorConfig serverAdaptorConfig = this.serverAdaptorConfigMapping.getServerAdaptorConfig(serverId);
+        String messageType = (String) serverAdaptorConfig.getMessageMap().get("type");
         String clazzName = BizSipConfig.messageTypeMap.get(messageType);
         if (clazzName == null) {
             throw new BizException(BizResultEnum.NO_MESSAGE_PROCESSOR_ERROR);
@@ -65,10 +74,4 @@ public class ServerAdaptorProcessor {
         return message;
     }
 
-//    public AbstractServerAdaptorConfig getServerAdaptorConfigById(String serverId) {
-//        if (this.serverAdaptorConfigMapping == null) {
-//            this.serverAdaptorConfigMapping = new ServerAdaptorConfigMapping(this.configPath);
-//        }
-//        return this.serverAdaptorConfigMapping.getServerAdaptorConfig(serverId);
-//    }
 }

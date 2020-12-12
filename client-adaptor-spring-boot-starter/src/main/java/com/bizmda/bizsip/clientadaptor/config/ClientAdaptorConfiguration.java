@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Configuration;
 
 @Slf4j
 @Configuration
-public class ClientAdaptorConfig {
+public class ClientAdaptorConfiguration {
     @Value("${bizsip.config-path}")
     private String configPath;
 
