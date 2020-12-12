@@ -1,0 +1,9 @@
+- id: client1
+  message:
+    type: simple-json
+  service:
+    service-rules:
+      - predicate: ${data.code == 0}
+        rule: ${"server1/unpack/"+data.tranCode}
+      - predicate:
+        rule: server1/unpack/error

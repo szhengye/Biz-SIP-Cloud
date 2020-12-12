@@ -20,8 +20,8 @@ public class BizMessage<T> {
 
     public static BizMessage fail(BizException e) {
         BizMessage bizMessage = new BizMessage();
-        bizMessage.setCode(e.getBizResultEnum().getCode());
-        bizMessage.setMessage(e.getBizResultEnum().getMessage());
+        bizMessage.setCode(e.getCode());
+        bizMessage.setMessage(e.getMessage());
         return bizMessage;
     }
 }

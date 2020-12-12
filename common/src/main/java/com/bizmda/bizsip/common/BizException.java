@@ -4,14 +4,21 @@ import lombok.Getter;
 
 @Getter
 public class BizException extends Exception {
-    private BizResultEnum bizResultEnum;
+    private int code;
+//    private BizResultEnum bizResultEnum;
 
     public BizException(BizResultEnum bizResultEnum) {
-        this.bizResultEnum = bizResultEnum;
+        super((bizResultEnum.getMessage()));
+        this.code = code;
     }
 
     public BizException(BizResultEnum bizResultEnum, Throwable e) {
-        super(e);
-        this.bizResultEnum = bizResultEnum;
+        super(bizResultEnum.getMessage(),e);
+        this.code = code;
+    }
+
+    public BizException(int code,String message) {
+        super(message);
+        this.code = code;
     }
 }

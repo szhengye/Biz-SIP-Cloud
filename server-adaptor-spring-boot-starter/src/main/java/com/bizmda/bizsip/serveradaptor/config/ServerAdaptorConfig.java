@@ -22,7 +22,7 @@ public class ServerAdaptorConfig {
 
     @Bean
     @ConditionalOnProperty(name = "bizsip.config-path", matchIfMissing = false)
-    public ServerAdaptorConfigMapping serverAdaptorMapping() {
+    public ServerAdaptorConfigMapping serverAdaptorConfigMapping() {
         return new ServerAdaptorConfigMapping(this.configPath);
     }
 

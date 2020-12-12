@@ -4,10 +4,12 @@ import cn.hutool.json.JSONUtil;
 import com.bizmda.bizsip.common.BizException;
 import com.bizmda.bizsip.config.AbstractServerAdaptorConfig;
 
+import java.util.Map;
+
 public class SimpleJsonMessageProcessor extends AbstractMessageProcessor {
     @Override
-    public void init(AbstractServerAdaptorConfig serverAdaptor) throws BizException{
-        super.init(serverAdaptor);
+    public void init(Map messageMap) throws BizException{
+        super.init(messageMap);
     }
 
     @Override

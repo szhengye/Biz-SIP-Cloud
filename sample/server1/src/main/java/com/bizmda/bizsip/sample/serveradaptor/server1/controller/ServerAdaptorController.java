@@ -33,7 +33,7 @@ public class ServerAdaptorController {
 
     @PostMapping(value = "/server1", consumes = "application/json", produces = "application/json")
     public BizMessage doService(@RequestBody Map inMessage, HttpServletResponse response) {
-        log.info("inMessage:{}", inMessage);
+        log.debug("inMessage:{}", inMessage);
         Object outMessage = null;
         try {
             outMessage = this.serverAdaptorProcessor.process(inMessage);
@@ -42,13 +42,5 @@ public class ServerAdaptorController {
             log.error("服务端适配器执行出错",e);
             return BizMessage.fail(e);
         }
-//        BizMessage outMessage = new BizMessage();
-//        Map data = new HashMap();
-//        data.put("a", "111");
-//        data.put("b", "222");
-//        outMessage.setData(data);
-//        outMessage.setCode(1);
-//        outMessage.setMessage("success");
-//        return outMessage;
     }
 }

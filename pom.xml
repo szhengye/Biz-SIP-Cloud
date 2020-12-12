@@ -14,6 +14,7 @@
         <module>client-adaptor</module>
         <module>sample</module>
         <module>server-adaptor-spring-boot-starter</module>
+        <module>client-adaptor-spring-boot-starter</module>
     </modules>
 
     <properties>

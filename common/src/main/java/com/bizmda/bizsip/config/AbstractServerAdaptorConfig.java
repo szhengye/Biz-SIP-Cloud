@@ -8,33 +8,31 @@ import java.util.*;
 public abstract class AbstractServerAdaptorConfig {
     private String id;
     private String type;
-    private String messageType;
-    private List<MessageRuleConfig> packRules;
-    private List<MessageRuleConfig> unpackRules;
+    private Map messageMap;
     private AbstractServerAdaptorProtocolConfig protocol;
 
     public AbstractServerAdaptorConfig(Map map) {
         this.id = (String)map.get("id");
-        Map messageMap = (Map)map.get("message");
-        this.messageType = (String)messageMap.get("type");
-        List<Map> packRules = (List<Map>)messageMap.get("pack-rules");
-        if (packRules == null ) {
-            packRules = new ArrayList<Map>();
-        }
-        this.packRules = new ArrayList<MessageRuleConfig>();
-        for(Map ruleMap:packRules) {
-            MessageRuleConfig messageRuleConfig = new MessageRuleConfig(ruleMap);
-            this.packRules.add(messageRuleConfig);
-        }
-        List<Map> unpackRules = (List<Map>)messageMap.get("unpack-rules");
-        if (unpackRules == null) {
-            unpackRules = new ArrayList<Map>();
-        }
-        this.unpackRules = new ArrayList<MessageRuleConfig>();
-        for(Map ruleMap:unpackRules) {
-            MessageRuleConfig messageRuleConfig = new MessageRuleConfig(ruleMap);
-            this.unpackRules.add(messageRuleConfig);
-        }
+        this.messageMap = (Map)map.get("message");
+//        this.messageType = (String)messageMap.get("type");
+//        List<Map> packRules = (List<Map>)messageMap.get("pack-rules");
+//        if (packRules == null ) {
+//            packRules = new ArrayList<Map>();
+//        }
+//        this.packRules = new ArrayList<PredicateRuleConfig>();
+//        for(Map ruleMap:packRules) {
+//            PredicateRuleConfig predicateRuleConfig = new PredicateRuleConfig(ruleMap);
+//            this.packRules.add(predicateRuleConfig);
+//        }
+//        List<Map> unpackRules = (List<Map>)messageMap.get("unpack-rules");
+//        if (unpackRules == null) {
+//            unpackRules = new ArrayList<Map>();
+//        }
+//        this.unpackRules = new ArrayList<PredicateRuleConfig>();
+//        for(Map ruleMap:unpackRules) {
+//            PredicateRuleConfig predicateRuleConfig = new PredicateRuleConfig(ruleMap);
+//            this.unpackRules.add(predicateRuleConfig);
+//        }
         Map protocolMap = (Map)map.get("protocol");
         String type = (String)protocolMap.get("type");
         if (type.equalsIgnoreCase("java")) {
