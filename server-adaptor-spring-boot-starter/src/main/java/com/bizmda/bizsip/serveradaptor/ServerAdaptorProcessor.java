@@ -3,38 +3,53 @@ package com.bizmda.bizsip.serveradaptor;
 import com.bizmda.bizsip.common.BizException;
 import com.bizmda.bizsip.common.BizResultEnum;
 import com.bizmda.bizsip.config.AbstractServerAdaptorConfig;
-import com.bizmda.bizsip.config.ServerAdaptorConfigMapping;
+import com.bizmda.bizsip.config.BizSipConfig;
 import com.bizmda.bizsip.message.AbstractMessageProcessor;
-import com.bizmda.bizsip.message.SimpleJsonMessageProcessor;
-import com.bizmda.bizsip.message.SimpleXmlMessageProcessor;
 import com.bizmda.bizsip.serveradaptor.config.ServerAdaptorConfig;
-import com.bizmda.bizsip.serveradaptor.protocol.AbstractServerProtocol;
-import com.bizmda.bizsip.serveradaptor.protocol.JavaServerProtocol;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.bizmda.bizsip.serveradaptor.protocol.AbstractServerProtocolProcessor;
 
 public class ServerAdaptorProcessor {
 
     private AbstractMessageProcessor messageProcessor;
-    private AbstractServerProtocol protocolProcessor;
+    private AbstractServerProtocolProcessor protocolProcessor;
 
     public ServerAdaptorProcessor(AbstractServerAdaptorConfig serverAdaptorConfig) throws BizException {
         String messageType = serverAdaptorConfig.getMessageType();
-        if (messageType.equalsIgnoreCase("simple-json")) {
-            this.messageProcessor = new SimpleJsonMessageProcessor(serverAdaptorConfig);
+        String clazzName = BizSipConfig.messageTypeMap.get(messageType);
+        if (clazzName == null) {
+            throw new BizException(BizResultEnum.SERVER_NO_MESSAGE_PROCESSOR_ERROR);
         }
-        else if (messageType.equalsIgnoreCase("simple-xml")) {
-            this.messageProcessor = new SimpleXmlMessageProcessor(serverAdaptorConfig);
+
+        try {
+            this.messageProcessor = (AbstractMessageProcessor)Class.forName(clazzName).newInstance();
+        } catch (InstantiationException e) {
+            throw new BizException(BizResultEnum.SERVER_MESSAGE_CREATE_ERROR,e);
+        } catch (IllegalAccessException e) {
+            throw new BizException(BizResultEnum.SERVER_MESSAGE_CREATE_ERROR,e);
+        } catch (ClassNotFoundException e) {
+            throw new BizException(BizResultEnum.SERVER_MESSAGE_CREATE_ERROR,e);
         }
-        else {
-            throw new BizException(BizResultEnum.SERVER_ADAPTOR_NO_MESSAGE_PROCESSOR_ERROR);
-        }
+
+        this.messageProcessor.init(serverAdaptorConfig);
+
         String protocolType = serverAdaptorConfig.getProtocol().getType();
-        if (protocolType.equalsIgnoreCase("java")) {
-            this.protocolProcessor = new JavaServerProtocol(serverAdaptorConfig);
+
+        clazzName = BizSipConfig.protocolTypeMap.get(protocolType);
+        if (clazzName == null) {
+            throw new BizException(BizResultEnum.SERVER_NO_PROTOCOL_PROCESSOR_ERROR);
         }
-        else {
-            throw new BizException(BizResultEnum.SERVER_ADAPTOR_NO_PROTOCOL_PROCESSOR_ERROR);
+
+        try {
+            this.protocolProcessor = (AbstractServerProtocolProcessor)Class.forName(clazzName).newInstance();
+        } catch (InstantiationException e) {
+            throw new BizException(BizResultEnum.SERVER_PROTOCOL_CREATE_ERROR,e);
+        } catch (IllegalAccessException e) {
+            throw new BizException(BizResultEnum.SERVER_PROTOCOL_CREATE_ERROR,e);
+        } catch (ClassNotFoundException e) {
+            throw new BizException(BizResultEnum.SERVER_PROTOCOL_CREATE_ERROR,e);
         }
+
+        this.protocolProcessor.init(serverAdaptorConfig);
     }
 
     public Object process(Object inMessage) throws BizException {

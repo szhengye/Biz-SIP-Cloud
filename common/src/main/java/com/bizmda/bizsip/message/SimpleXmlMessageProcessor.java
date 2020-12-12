@@ -5,8 +5,9 @@ import com.bizmda.bizsip.common.BizException;
 import com.bizmda.bizsip.config.AbstractServerAdaptorConfig;
 
 public class SimpleXmlMessageProcessor extends AbstractMessageProcessor {
-    public SimpleXmlMessageProcessor(AbstractServerAdaptorConfig serverAdaptor) {
-        super(serverAdaptor);
+    @Override
+    public void init(AbstractServerAdaptorConfig serverAdaptor) throws BizException {
+        super.init(serverAdaptor);
     }
 
     @Override

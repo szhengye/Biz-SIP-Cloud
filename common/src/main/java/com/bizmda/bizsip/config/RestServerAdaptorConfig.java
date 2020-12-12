@@ -1,12 +1,18 @@
 package com.bizmda.bizsip.config;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
 
 import java.util.Map;
 
-@Data
 public class RestServerAdaptorConfig extends AbstractServerAdaptorConfig {
     private String url;
+
+    public String getUrl() {
+        return url;
+    }
+
     public RestServerAdaptorConfig(Map map) {
         super(map);
         this.setType("rest");

@@ -1,12 +1,11 @@
-package com.bizmda.bizsip.message;
+package com.bizmda.bizsip.serveradaptor.protocol;
 
 import com.bizmda.bizsip.common.BizException;
 import com.bizmda.bizsip.config.AbstractServerAdaptorConfig;
 
-public abstract class AbstractMessageProcessor {
+public abstract class AbstractServerProtocolProcessor {
     private AbstractServerAdaptorConfig serverAdaptorConfig;
-    public abstract Object pack(Object inMessage) throws BizException;
-    public abstract Object unpack(Object inMessage) throws BizException;
+    public abstract Object process(Object inMessage) throws BizException;
 
     public void init(AbstractServerAdaptorConfig serverAdaptorConfig) throws BizException {
         this.serverAdaptorConfig = serverAdaptorConfig;
