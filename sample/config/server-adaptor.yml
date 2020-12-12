@@ -2,7 +2,7 @@
   type: rest
   url: http://127.0.0.1:8001/server1
   message:
-    type: simple-json
+    type: simple-xml
   protocol:
     type: java
     class-name: com.bizmda.bizsip.sample.serveradaptor.server1.controller.Server1

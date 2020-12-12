@@ -8,7 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 public class Server1 implements JavaProtocolInterface {
     @Override
     public Object process(Object inMessage) throws BizException {
-        log.info("Java执行类传入消息:{}",inMessage);
+        log.debug("Java执行类传入消息:{}",inMessage);
         return inMessage;
     }
 }

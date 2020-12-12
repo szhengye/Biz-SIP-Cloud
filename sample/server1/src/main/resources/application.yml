@@ -1,5 +1,9 @@
 server:
   port: 8001
 
+
 bizsip:
   config-path: /Users/shizhengye/IdeaProjects/biz-sip/sample/config
+logging:
+  level:
+    com.bizmda.bizsip: debug

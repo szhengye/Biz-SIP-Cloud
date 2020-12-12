@@ -7,7 +7,9 @@ import com.bizmda.bizsip.config.BizSipConfig;
 import com.bizmda.bizsip.message.AbstractMessageProcessor;
 import com.bizmda.bizsip.serveradaptor.config.ServerAdaptorConfig;
 import com.bizmda.bizsip.serveradaptor.protocol.AbstractServerProtocolProcessor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class ServerAdaptorProcessor {
 
     private AbstractMessageProcessor messageProcessor;
@@ -53,9 +55,13 @@ public class ServerAdaptorProcessor {
     }
 
     public Object process(Object inMessage) throws BizException {
+        log.debug("服务端处理器传入消息:{}",inMessage);
         Object message = this.messageProcessor.pack(inMessage);
+        log.debug("打包后消息:{}",message);
         message = this.protocolProcessor.process(message);
+        log.debug("应用返回消息:{}",message);
         message = this.messageProcessor.unpack(message);
+        log.debug("解包后消息:{}",message);
         return message;
     }
 
