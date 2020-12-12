@@ -12,7 +12,8 @@
     <artifactId>sample</artifactId>
     <packaging>pom</packaging>
     <modules>
-        <module>server1</module>
+        <module>sample-server1</module>
+        <module>sample-client1</module>
     </modules>
 
 

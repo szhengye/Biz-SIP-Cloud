@@ -8,6 +8,7 @@ import java.util.Map;
 public class BizMessage<T> {
     private int code;
     private String message;
+    private String extMessage;
     private T data;
 
     public static BizMessage success(Object data) {
@@ -22,6 +23,7 @@ public class BizMessage<T> {
         BizMessage bizMessage = new BizMessage();
         bizMessage.setCode(e.getCode());
         bizMessage.setMessage(e.getMessage());
+        bizMessage.setExtMessage(e.getExtMessage());
         return bizMessage;
     }
 }

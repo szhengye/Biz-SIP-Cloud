@@ -14,6 +14,7 @@ public enum BizResultEnum {
     // 其它错误（1000以上）
     NO_MESSAGE_PROCESSOR_ERROR(1001,"没有设置消息转换处理器"),
     MESSAGE_CREATE_ERROR(1002,"服务端适配器消息处理Java类创建失败"),
+    EL_CALCULATE_ERROR(1003,"EL表达式计算出错"),
 
     SUCCESS(0,"成功");
 

@@ -6,18 +6,26 @@ import com.bizmda.bizsip.common.BizResultEnum;
 import com.bizmda.bizsip.config.*;
 import com.bizmda.bizsip.message.AbstractMessageProcessor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 
 @Slf4j
+@Service
+@Scope("prototype")
 public class ClientAdaptorProcessor {
+    @Autowired
+    private ClientAdaptorConfigMapping clientAdaptorConfigMapping;
 
     private AbstractMessageProcessor messageProcessor;
     private List<PredicateRuleConfig> serviceRules;
     private String bizServiceUrl;
 
-    public ClientAdaptorProcessor(CommonClientAdaptorConfig clientAdaptorConfig) throws BizException {
+    public void init(String adaptorId) throws BizException {
+        CommonClientAdaptorConfig clientAdaptorConfig = this.clientAdaptorConfigMapping.getClientAdaptorConfig(adaptorId);
         String messageType = (String)clientAdaptorConfig.getMessageMap().get("type");
         String clazzName = BizSipConfig.messageTypeMap.get(messageType);
         if (clazzName == null) {
@@ -59,10 +67,5 @@ public class ClientAdaptorProcessor {
         }
         return outMessage;
     }
-//    public AbstractServerAdaptorConfig getServerAdaptorConfigById(String serverId) {
-//        if (this.serverAdaptorConfigMapping == null) {
-//            this.serverAdaptorConfigMapping = new ServerAdaptorConfigMapping(this.configPath);
-//        }
-//        return this.serverAdaptorConfigMapping.getServerAdaptorConfig(serverId);
-//    }
+
 }

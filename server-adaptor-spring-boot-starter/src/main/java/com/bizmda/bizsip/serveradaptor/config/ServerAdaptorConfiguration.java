@@ -30,14 +30,4 @@ public class ServerAdaptorConfiguration {
     public ServerAdaptorProcessor serverAdaptorProcessor() {
         return new ServerAdaptorProcessor();
     }
-//    @Autowired
-//    private ServerAdaptorConfigMapping serverAdaptorConfigMapping;
-
-//    public AbstractServerAdaptorConfig getServerAdaptorConfig(String serverId) {
-//        return this.serverAdaptorConfigMapping.getServerAdaptorConfig(serverId);
-//    }
-//
-//    public ServerAdaptorProcessor getServerAdaptorProcessor(String serverId) throws BizException {
-//        return new ServerAdaptorProcessor(this.serverAdaptorConfigMapping.getServerAdaptorConfig(serverId));
-//    }
 }

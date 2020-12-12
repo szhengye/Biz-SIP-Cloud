@@ -21,14 +21,8 @@ public class ClientAdaptorConfiguration {
         return new ClientAdaptorConfigMapping(this.configPath);
     }
 
-    @Autowired
-    private ClientAdaptorConfigMapping clientAdaptorConfigMapping;
-
-    public CommonClientAdaptorConfig getClientAdaptorConfig(String serverId) {
-        return this.clientAdaptorConfigMapping.getClientAdaptorConfig(serverId);
+    @Bean
+    public ClientAdaptorProcessor clientAdaptorProcessor() {
+        return new ClientAdaptorProcessor();
     }
-
-//    public ServerAdaptorProcessor getServerAdaptorProcessor(String serverId) throws BizException {
-//        return new ServerAdaptorProcessor(this.serverAdaptorConfigMapping.getServerAdaptorConfig(serverId));
-//    }
 }
