@@ -1,5 +1,6 @@
 package com.bizmda.bizsip.sample.serveradaptor.server1.controller;
 
+import cn.hutool.json.JSONObject;
 import com.bizmda.bizsip.common.BizException;
 import com.bizmda.bizsip.common.BizMessage;
 import com.bizmda.bizsip.serveradaptor.ServerAdaptorProcessor;
@@ -28,7 +29,7 @@ public class ServerAdaptorController {
     }
 
     @PostMapping(value = "/server1", consumes = "application/json", produces = "application/json")
-    public BizMessage doService(@RequestBody Map inMessage, HttpServletResponse response) {
+    public BizMessage doService(@RequestBody JSONObject inMessage, HttpServletResponse response) {
         log.debug("inMessage:{}", inMessage);
         Object outMessage = null;
         try {

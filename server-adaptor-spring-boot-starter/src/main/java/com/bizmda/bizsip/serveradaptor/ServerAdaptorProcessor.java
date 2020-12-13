@@ -1,5 +1,6 @@
 package com.bizmda.bizsip.serveradaptor;
 
+import cn.hutool.json.JSONObject;
 import com.bizmda.bizsip.common.BizException;
 import com.bizmda.bizsip.common.BizResultEnum;
 import com.bizmda.bizsip.config.AbstractServerAdaptorConfig;
@@ -63,7 +64,7 @@ public class ServerAdaptorProcessor {
         this.protocolProcessor.init(serverAdaptorConfig);
     }
 
-    public Object process(Object inMessage) throws BizException {
+    public Object process(JSONObject inMessage) throws BizException {
         log.debug("服务端处理器传入消息:{}",inMessage);
         Object message = this.messageProcessor.pack(inMessage);
         log.debug("打包后消息:{}",message);
