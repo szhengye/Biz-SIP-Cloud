@@ -1,5 +1,12 @@
 package com.bizmda.bizsip.integrator.controller;
 
+import cn.hutool.core.text.StrFormatter;
+import cn.hutool.json.JSONObject;
+import cn.hutool.json.JSONUtil;
+import com.bizmda.bizsip.common.BizException;
+import com.bizmda.bizsip.common.BizMessage;
+import com.bizmda.bizsip.common.BizResultEnum;
+import com.bizmda.bizsip.common.BizUtils;
 import com.bizmda.bizsip.config.ScriptServiceMapping;
 import com.bizmda.bizsip.config.ServerAdaptorConfigMapping;
 import com.bizmda.bizsip.integrator.script.ServerService;
@@ -59,10 +66,12 @@ public class IntegratorController {
         ServerService.serverAdaptorConfigMapping = this.serverAdaptorConfigMapping;
     }
 
-    @GetMapping(value={"/sip/{path1}","/sip/{path1}/{path2}","/sip/{path1}/{path2}/{path3}"})
-    public Object doBizService(HttpServletRequest request, HttpServletResponse response,
+    @PostMapping(value={"/sip/{path1}","/sip/{path1}/{path2}","/sip/{path1}/{path2}/{path3}"},consumes = "application/json", produces = "application/json")
+    public BizMessage doBizService(HttpServletRequest request, HttpServletResponse response,
+                               @RequestBody BizMessage inMessage,
                                @PathVariable(required = false) Map<String, Object> pathVariables,
-                               @RequestParam(required = false) Map<String, Object> parameters) throws Throwable {
+                               @RequestParam(required = false) Map<String, Object> parameters) throws BizException {
+        BizUtils.currentBizMessage.set(inMessage);
         String serviceId = "";
         for(int i=1;;i++) {
             String a = (String)pathVariables.get("path"+String.valueOf(i));
@@ -74,99 +83,24 @@ public class IntegratorController {
 
         String script = this.scriptServiceMapping.getScript(serviceId);
         if (script == null) {
-            log.error("服务不存在:{}",serviceId);
-            return this.resultProvider.buildResult(1001, "fail", "接口不存在");
+            throw new BizException(BizResultEnum.INTEGRATOR_SERVICE_NOT_FOUND,
+                    StrFormatter.format("聚合服务不存在:{}",serviceId));
         }
-        MagicScriptContext context = this.createMagicScriptContext(request, pathVariables, parameters);
-        Object value;
-//            if ((value = this.doPreHandle(info, context)) != null) {
-//                return value;
-//            } else if (requestedFromTest) {
-//                return this.isRequestedFromContinue(request) ? this.invokeContinueRequest(request, response) : this.invokeTestRequest(info, (MagicScriptDebugContext)context, request, response);
-//            } else {
-        return this.invokeRequest(script, context, request, response);
-    }
+        MagicScriptContext context = new MagicScriptContext();;
+        context.set("bizmessage", inMessage);
+        Object result = executeScript(script, context);
+        JSONObject jsonObject = JSONUtil.parseObj(result);
 
-    private MagicScriptContext createMagicScriptContext(HttpServletRequest request, Map<String, Object> pathVariables, Map<String, Object> parameters) throws IOException {
-//        MagicScriptContext context = this.isRequestedFromTest(request) ? new MagicScriptDebugContext() : new MagicScriptContext();
-        MagicScriptContext context = new MagicScriptContext();
-//        Object wrap = info.getOptionValue("wrap_request_parameter");
-//        if (wrap != null && StringUtils.isNotBlank(wrap.toString())) {
-//            ((MagicScriptContext)context).set(wrap.toString(), parameters);
-//        }
+        inMessage.success(jsonObject);
 
-        ((MagicScriptContext)context).putMapIntoContext(parameters);
-        ((MagicScriptContext)context).putMapIntoContext(pathVariables);
-        ((MagicScriptContext)context).set("cookie", new CookieContext(request));
-        ((MagicScriptContext)context).set("header", new HeaderContext(request));
-        ((MagicScriptContext)context).set("session", new SessionContext(request.getSession()));
-        ((MagicScriptContext)context).set("path", pathVariables);
-        Object requestBody = this.readRequestBody(request);
-        if (requestBody != null) {
-            ((MagicScriptContext)context).set("body", requestBody);
-        }
-
-        return (MagicScriptContext)context;
-    }
-
-    private Object readRequestBody(HttpServletRequest request) throws IOException {
-        if (this.httpMessageConverters != null && request.getContentType() != null) {
-            MediaType mediaType = MediaType.valueOf(request.getContentType());
-            Class clazz = Map.class;
-            Iterator var4 = this.httpMessageConverters.iterator();
-
-            while(var4.hasNext()) {
-                HttpMessageConverter<?> converter = (HttpMessageConverter)var4.next();
-                if (converter.canRead(clazz, mediaType)) {
-                    return converter.read(clazz, new ServletServerHttpRequest(request));
-                }
-            }
-        }
-
-        return null;
-    }
-
-    private Object invokeRequest(String script, MagicScriptContext context, HttpServletRequest request, HttpServletResponse response) throws Throwable {
-        try {
-            RequestContext.setRequestAttribute(request, response);
-            Object result = executeScript(script, context);
-            Object value = result;
-            // 执行后置拦截器
-//            if ((value = doPostHandle(info, context, value)) != null) {
-//                return value;
-//            }
-            // 对返回结果包装处理
-            return response(result);
-        } catch (Throwable root) {
-            Throwable parent = root;
-            do {
-                if (parent instanceof MagicScriptAssertException) {
-                    MagicScriptAssertException sae = (MagicScriptAssertException) parent;
-                    return resultProvider.buildResult(sae.getCode(), sae.getMessage());
-                }
-            } while ((parent = parent.getCause()) != null);
-            if (throwException) {
-                throw root;
-            }
-            log.error("接口{}请求出错", request.getRequestURI(),root);
-            return resultProvider.buildResult(-1, "系统内部出现错误");
-        } finally {
-            RequestContext.remove();
-        }
+        BizUtils.currentBizMessage.remove();
+        return inMessage;
     }
 
     private Object executeScript(String script, MagicScriptContext context) {
         SimpleScriptContext simpleScriptContext = new SimpleScriptContext();
         simpleScriptContext.setAttribute("ROOT", context, 100);
         return ScriptManager.compile("MagicScript", script).eval(simpleScriptContext);
-    }
-
-    private Object response(Object value) {
-        if (value instanceof ResponseEntity) {
-            return value;
-        } else {
-            return value instanceof ResponseFunctions.NullValue ? null : this.resultProvider.buildResult(value);
-        }
     }
 
     private void setupMagicModules() {
@@ -197,33 +131,5 @@ public class IntegratorController {
         MagicModuleLoader.addModule("assert", AssertFunctions.class);
         log.info("注册模块:{} -> {}", "server", ServerService.class);
         MagicModuleLoader.addModule("server", ServerService.class);
-//        ServerService.serverAdaptorsConfig = this.serverAdaptorsConfig;
-//        if (magicModules != null) {
-//            for (MagicModule module : magicModules) {
-//                logger.info("注册模块:{} -> {}", module.getModuleName(), module.getClass());
-//                MagicModuleLoader.addModule(module.getModuleName(), module);
-//            }
-//        }
-//        Set<String> moduleNames = MagicModuleLoader.getModuleNames();
-//        for (String moduleName : moduleNames) {
-//            if (importModules.contains(moduleName)) {
-//                log.info("自动导入模块：{}", moduleName);
-//                MagicScriptEngine.addDefaultImport(moduleName, MagicModuleLoader.loadModule(moduleName));
-//            }
-//        }
-//        List<String> importPackages = properties.getAutoImportPackageList();
-//        for (String importPackage : importPackages) {
-//            logger.info("自动导包：{}", importPackage);
-//            MagicPackageLoader.addPackage(importPackage);
-//        }
-//        if (extensionMethods != null) {
-//            for (ExtensionMethod extension : extensionMethods) {
-//                List<Class<?>> supports = extension.supports();
-//                for (Class<?> support : supports) {
-//                    logger.info("注册扩展:{} -> {}", support, extension.getClass());
-//                    AbstractReflection.getInstance().registerExtensionClass(support, extension.getClass());
-//                }
-//            }
-//        }
     }
 }

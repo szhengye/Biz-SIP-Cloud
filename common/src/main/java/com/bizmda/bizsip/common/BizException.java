@@ -9,12 +9,12 @@ public class BizException extends Exception {
 
     public BizException(BizResultEnum bizResultEnum) {
         super((bizResultEnum.getMessage()));
-        this.code = code;
+        this.code = bizResultEnum.getCode();
     }
 
     public BizException(BizResultEnum bizResultEnum, Throwable e) {
         super(bizResultEnum.getMessage(),e);
-        this.code = code;
+        this.code = bizResultEnum.getCode();
     }
 
     public BizException(int code,String message) {
@@ -24,13 +24,14 @@ public class BizException extends Exception {
 
     public BizException(BizResultEnum bizResultEnum, String extMessage) {
         super((bizResultEnum.getMessage()));
-        this.code = code;
+        this.code = bizResultEnum.getCode();
+        this.extMessage = bizResultEnum.getMessage();
         this.extMessage = extMessage;
     }
 
     public BizException(BizResultEnum bizResultEnum, Throwable e, String extMessage) {
         super(bizResultEnum.getMessage(),e);
-        this.code = code;
+        this.code = bizResultEnum.getCode();
         this.extMessage = extMessage;
     }
 

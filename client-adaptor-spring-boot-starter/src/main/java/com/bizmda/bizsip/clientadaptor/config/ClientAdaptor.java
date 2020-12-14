@@ -9,6 +9,7 @@ import com.bizmda.bizsip.config.*;
 import com.bizmda.bizsip.message.AbstractMessageProcessor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -19,13 +20,16 @@ import java.util.Map;
 @Slf4j
 @Service
 @Scope("prototype")
-public class ClientAdaptorProcessor {
+public class ClientAdaptor {
+    @Value("${bizsip.integrator-url}")
+    private String integratorUrl;
+
     @Autowired
     private ClientAdaptorConfigMapping clientAdaptorConfigMapping;
 
     private AbstractMessageProcessor messageProcessor;
     private List<PredicateRuleConfig> serviceRules;
-    private String bizServiceUrl;
+//    private String bizServiceUrl;
 
     public void init(String adaptorId) throws BizException {
         CommonClientAdaptorConfig clientAdaptorConfig = this.clientAdaptorConfigMapping.getClientAdaptorConfig(adaptorId);
@@ -51,11 +55,10 @@ public class ClientAdaptorProcessor {
     }
 
     public Object process(Object inMessage) throws BizException {
-        log.debug("客户端处理器传入消息:{}",inMessage);
+        log.debug("Client-Adaptor传入消息:{}",inMessage);
         JSONObject message = this.messageProcessor.unpack(inMessage);
         log.debug("解包后消息:{}",message);
         message = this.doBizService(message);
-        log.debug("整合器返回消息:{}",message);
         Object outMessage = this.messageProcessor.pack(message);
         log.debug("打包后消息:{}",outMessage);
         return outMessage;
@@ -63,14 +66,18 @@ public class ClientAdaptorProcessor {
 
     private JSONObject doBizService(JSONObject inData) throws BizException {
         RestTemplate restTemplate = new RestTemplate();
-        BizMessage inMessage = new BizMessage();
+        BizMessage inMessage = BizMessage.createNewTransaction();
         inMessage.setData(inData);
         String rule = this.getMatchRule((JSONObject)inData);
-        BizMessage outMessage = (BizMessage)restTemplate.postForObject(this.bizServiceUrl + rule, inData, BizMessage.class);
-        if (outMessage.getCode() != 0) {
+        BizMessage outMessage = (BizMessage)restTemplate.postForObject(this.integratorUrl + rule, inMessage, BizMessage.class);
+        if (outMessage.getCode() == 0) {
+            log.debug("Integrator返回成功:{}",outMessage.getData());
+        }
+        else {
+            log.debug("Integrator返回错误:{}-{}",outMessage.getCode(),outMessage.getMessage());
             throw new BizException(outMessage.getCode(),outMessage.getMessage());
         }
-        return (JSONObject)outMessage.getData();
+        return outMessage.getData();
     }
 
     private String getMatchRule(JSONObject inData) throws BizException {

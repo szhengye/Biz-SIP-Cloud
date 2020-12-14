@@ -6,6 +6,7 @@ import java.util.Map;
 public enum BizResultEnum {
 
     // 聚合器错误（1-99）
+    INTEGRATOR_SERVICE_NOT_FOUND(1,"聚合服务不存在"),
     // 客户端适配器错误（100-199）
     // 服务端适配器错误（200-299）
     SERVER_PROTOCOL_CREATE_ERROR(200,"服务端适配器协议处理Java类创建失败"),

@@ -10,14 +10,14 @@ import org.springframework.expression.spel.support.StandardEvaluationContext;
 
 import java.util.concurrent.Callable;
 
-public class ELThread implements Callable<BizMessage> {
+public class ELThread implements Callable<Object> {
     private String express;
-    private JSONObject data;
+    private Object data;
     private boolean isBooleanResult;
     private ExpressionParser parser;
     private EvaluationContext context;
 
-    public ELThread(String express, JSONObject data, boolean isBooleanResult) {
+    public ELThread(String express, Object data, boolean isBooleanResult) {
         this.express = express;
         this.data = data;
         this.isBooleanResult = isBooleanResult;
@@ -27,15 +27,15 @@ public class ELThread implements Callable<BizMessage> {
     }
 
     @Override
-    public BizMessage call() throws Exception {
+    public Object call() throws Exception {
         Expression expression = this.parser.parseExpression(this.express, new TemplateParserContext());
         if (this.isBooleanResult) {
             Boolean result = expression.getValue(this.context, Boolean.class);
-            return BizMessage.success(result);
+            return result;
         }
         else {
             String result = expression.getValue(this.context, String.class);
-            return BizMessage.success(result);
+            return result;
         }
     }
 }

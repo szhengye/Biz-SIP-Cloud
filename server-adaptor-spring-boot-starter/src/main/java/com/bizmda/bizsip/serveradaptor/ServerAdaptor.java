@@ -1,7 +1,9 @@
 package com.bizmda.bizsip.serveradaptor;
 
+import cn.hutool.extra.ssh.JschRuntimeException;
 import cn.hutool.json.JSONObject;
 import com.bizmda.bizsip.common.BizException;
+import com.bizmda.bizsip.common.BizMessage;
 import com.bizmda.bizsip.common.BizResultEnum;
 import com.bizmda.bizsip.config.AbstractServerAdaptorConfig;
 import com.bizmda.bizsip.config.BizSipConfig;
@@ -17,15 +19,15 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 @Scope("prototype")
-public class ServerAdaptorProcessor {
+public class ServerAdaptor {
     @Autowired
     private ServerAdaptorConfigMapping serverAdaptorConfigMapping;
 
     private AbstractMessageProcessor messageProcessor;
     private AbstractServerProtocolProcessor protocolProcessor;
 
-    public void init(String serverId) throws BizException {
-        AbstractServerAdaptorConfig serverAdaptorConfig = this.serverAdaptorConfigMapping.getServerAdaptorConfig(serverId);
+    public void init(String adaptorId) throws BizException {
+        AbstractServerAdaptorConfig serverAdaptorConfig = this.serverAdaptorConfigMapping.getServerAdaptorConfig(adaptorId);
         String messageType = (String) serverAdaptorConfig.getMessageMap().get("type");
         String clazzName = BizSipConfig.messageTypeMap.get(messageType);
         if (clazzName == null) {
@@ -64,15 +66,15 @@ public class ServerAdaptorProcessor {
         this.protocolProcessor.init(serverAdaptorConfig);
     }
 
-    public Object process(JSONObject inMessage) throws BizException {
+    public JSONObject process(JSONObject inMessage) throws BizException {
         log.debug("服务端处理器传入消息:{}",inMessage);
         Object message = this.messageProcessor.pack(inMessage);
         log.debug("打包后消息:{}",message);
         message = this.protocolProcessor.process(message);
         log.debug("应用返回消息:{}",message);
-        message = this.messageProcessor.unpack(message);
-        log.debug("解包后消息:{}",message);
-        return message;
+        JSONObject jsonObject = this.messageProcessor.unpack(message);
+        log.debug("解包后消息:{}",jsonObject);
+        return jsonObject;
     }
 
 }

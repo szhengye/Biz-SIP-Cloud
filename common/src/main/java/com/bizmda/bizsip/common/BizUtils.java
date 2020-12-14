@@ -12,6 +12,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 
 public class BizUtils {
+    public static ThreadLocal<BizMessage> currentBizMessage = new ThreadLocal<BizMessage>();
     private static ExecutorService executorService = ThreadUtil.newExecutor(5);
 
     public static List<File> getFileList(String strPath, String suffix) {
@@ -36,35 +37,29 @@ public class BizUtils {
         return filelist;
     }
 
-    public static String getELStringResult(String express, JSONObject data) throws BizException {
+    public static String getELStringResult(String express, Object data) throws BizException {
 //        ExecutorService service = ThreadUtil.newSingleExecutor();
-        BizMessage bizMessage;
-        Future<BizMessage> future = executorService.submit(new ELThread(express,data,false));
+        String result;
+        Future<Object> future = executorService.submit(new ELThread(express,data,false));
         try {
-            bizMessage = future.get();
+            result = (String)future.get();
         } catch (InterruptedException | ExecutionException e) {
             throw new BizException(BizResultEnum.EL_CALCULATE_ERROR,e,
                     StrFormatter.format("EL表达式计算出错:{}",express));
         }
-        if (bizMessage.getCode() != 0) {
-            throw new BizException(bizMessage);
-        }
-        return (String)bizMessage.getData();
+        return result;
     }
 
-    public static Boolean getELBooleanResult(String express, JSONObject data) throws BizException {
+    public static Boolean getELBooleanResult(String express, Object data) throws BizException {
 //        ExecutorService service = ThreadUtil.newExecutor(5);
-        BizMessage bizMessage;
-        Future<BizMessage> future = executorService.submit(new ELThread(express,data,true));
+        Boolean result;
+        Future<Object> future = executorService.submit(new ELThread(express,data,true));
         try {
-            bizMessage = future.get();
+            result = (Boolean)future.get();
         } catch (InterruptedException | ExecutionException e) {
             throw new BizException(BizResultEnum.EL_CALCULATE_ERROR,e,
                     StrFormatter.format("EL表达式计算出错:{}",express));
         }
-        if (bizMessage.getCode() != 0) {
-            throw new BizException(bizMessage);
-        }
-        return (Boolean) bizMessage.getData();
+        return result;
     }
 }

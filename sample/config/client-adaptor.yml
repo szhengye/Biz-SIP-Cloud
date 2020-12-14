@@ -3,7 +3,7 @@
     type: simple-json
   service:
     service-rules:
-      - predicate: ${data.code == 0}
-        rule: ${"server1/unpack/"+data.tranCode}
+      - predicate: '#{#data[flag]==1}'
+        rule: /a/doService1
       - predicate:
         rule: server1/unpack/error

@@ -27,7 +27,7 @@ public class SimpleXmlMessageProcessor<String> extends AbstractMessageProcessor 
     protected String json2adaptor(JSONObject inMessage) throws BizException {
         Document document = XmlUtil.beanToXml(inMessage);
         Node node = document.getFirstChild();
-        document.renameNode(node,null,"data");
+        document.renameNode(node,null,"root");
         return (String)XmlUtil.toStr(document);
     }
 

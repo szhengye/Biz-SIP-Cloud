@@ -1,29 +1,51 @@
 package com.bizmda.bizsip.common;
 
+import cn.hutool.core.util.IdUtil;
+import cn.hutool.json.JSONObject;
 import lombok.Data;
 
 import java.util.Map;
 
 @Data
-public class BizMessage<T> {
+public class BizMessage {
     private int code;
     private String message;
     private String extMessage;
-    private T data;
+    private String traceId;
+    private long timestamp;
+    private JSONObject data;
 
-    public static BizMessage success(Object data) {
+    public BizMessage() {
+
+    }
+
+    public BizMessage(JSONObject jsonObject) {
+        this.code = (int) jsonObject.get("code");
+        this.message = (String)jsonObject.get("message");
+        this.extMessage = (String)jsonObject.get("extMessage");
+        this.traceId = (String)jsonObject.get("traceId");
+        this.timestamp = (long)jsonObject.get("timestamp");
+        this.data = (JSONObject)jsonObject.get("data");
+    }
+
+    public static BizMessage createNewTransaction() {
         BizMessage bizMessage = new BizMessage();
-        bizMessage.setCode(0);
-        bizMessage.setMessage("success");
-        bizMessage.setData(data);
+        bizMessage.traceId = IdUtil.fastSimpleUUID();
+        bizMessage.timestamp = System.currentTimeMillis();
         return bizMessage;
     }
 
-    public static BizMessage fail(BizException e) {
-        BizMessage bizMessage = new BizMessage();
-        bizMessage.setCode(e.getCode());
-        bizMessage.setMessage(e.getMessage());
-        bizMessage.setExtMessage(e.getExtMessage());
-        return bizMessage;
+    public void success(JSONObject data) {
+        this.setCode(0);
+        this.setMessage("success");
+        this.setExtMessage(null);
+        this.setData(data);
+    }
+
+    public void fail(BizException e) {
+        this.setCode(e.getCode());
+        this.setMessage(e.getMessage());
+        this.setExtMessage(e.getExtMessage());
+        this.data = null;
     }
 }

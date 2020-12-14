@@ -80,7 +80,7 @@ public abstract class AbstractMessageProcessor<T> {
         }
     }
 
-    protected String matchPredicateRule(List<PredicateRuleConfig> predicateRuleConfigs, JSONObject message) {
+    public String matchPredicateRule(List<PredicateRuleConfig> predicateRuleConfigs, JSONObject message) {
         String rule;
         for (PredicateRuleConfig predicateRuleConfig:predicateRuleConfigs) {
             try {
