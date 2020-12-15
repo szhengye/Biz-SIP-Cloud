@@ -9,12 +9,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * @author shizhengye
+ */
 @Slf4j
 public class ScriptServiceMapping {
     private Map<String, String> mappings;
 
     public ScriptServiceMapping(String configPath) {
-        String scriptPath = configPath + "/integrator/script";
+        String scriptPath = configPath + "/service";
         List<File> fileList = BizUtils.getFileList(scriptPath,".script");
         mappings = new HashMap<String,String>();
         for (File file:fileList) {

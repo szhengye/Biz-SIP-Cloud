@@ -5,6 +5,9 @@ import com.bizmda.bizsip.common.BizResultEnum;
 import com.bizmda.bizsip.config.AbstractServerAdaptorConfig;
 import com.bizmda.bizsip.config.JavaServerAdaptorProtocolConfig;
 
+/**
+ * @author shizhengye
+ */
 public class JavaServerProtocolProcessor extends AbstractServerProtocolProcessor {
     private JavaProtocolInterface javaProtocol;
 

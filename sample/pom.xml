@@ -14,6 +14,7 @@
     <modules>
         <module>sample-server1</module>
         <module>sample-client1</module>
+        <module>sample-server2</module>
     </modules>
 
 

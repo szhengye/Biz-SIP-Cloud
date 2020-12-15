@@ -44,6 +44,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * @author shizhengye
+ */
 @Slf4j
 @RestController
 @RequestMapping("/")
@@ -56,6 +59,8 @@ public class IntegratorController {
     private List<HttpMessageConverter<?>> httpMessageConverters;
     @Autowired
     private ApplicationContext springContext;
+
+    public static ThreadLocal<BizMessage> currentBizMessage = new ThreadLocal<BizMessage>();
 
     private ResultProvider resultProvider = new DefaultResultProvider();
     private boolean throwException = false;
@@ -71,15 +76,16 @@ public class IntegratorController {
                                @RequestBody BizMessage inMessage,
                                @PathVariable(required = false) Map<String, Object> pathVariables,
                                @RequestParam(required = false) Map<String, Object> parameters) throws BizException {
-        BizUtils.currentBizMessage.set(inMessage);
-        String serviceId = "";
+        IntegratorController.currentBizMessage.set(inMessage);
+        StringBuilder stringBuilder = new StringBuilder();
         for(int i=1;;i++) {
             String a = (String)pathVariables.get("path"+String.valueOf(i));
             if (a == null) {
                 break;
             }
-            serviceId = serviceId + "/" + a;
+            stringBuilder.append("/" + a);
         }
+        String serviceId = stringBuilder.toString();
 
         String script = this.scriptServiceMapping.getScript(serviceId);
         if (script == null) {
@@ -93,7 +99,7 @@ public class IntegratorController {
 
         inMessage.success(jsonObject);
 
-        BizUtils.currentBizMessage.remove();
+        IntegratorController.currentBizMessage.remove();
         return inMessage;
     }
 
@@ -120,13 +126,8 @@ public class IntegratorController {
         });
         log.info("注册模块:{} -> {}", "log", Logger.class);
         MagicModuleLoader.addModule("log", LoggerFactory.getLogger(MagicScript.class));
-//        List<String> importModules = properties.getAutoImportModuleList();
-//        log.info("注册模块:{} -> {}", "env", EnvFunctions.class);
-//        MagicModuleLoader.addModule("env", new EnvFunctions(environment));
         log.info("注册模块:{} -> {}", "request", RequestFunctions.class);
         MagicModuleLoader.addModule("request", new RequestFunctions());
-//        log.info("注册模块:{} -> {}", "response", ResponseFunctions.class);
-//        MagicModuleLoader.addModule("response", new ResponseFunctions(resultProvider));
         log.info("注册模块:{} -> {}", "assert", AssertFunctions.class);
         MagicModuleLoader.addModule("assert", AssertFunctions.class);
         log.info("注册模块:{} -> {}", "server", ServerService.class);

@@ -13,6 +13,9 @@ import org.ssssssss.script.annotation.Comment;
 
 import java.util.Map;
 
+/**
+ * @author shizhengye
+ */
 public class ServerService implements MagicModule {
     public static ServerAdaptorConfigMapping serverAdaptorConfigMapping;
 
@@ -21,11 +24,10 @@ public class ServerService implements MagicModule {
         JSONObject jsonObject = JSONUtil.parseObj(inData);
         RestTemplate restTemplate = new RestTemplate();
 
-        BizMessage inMessage = BizUtils.currentBizMessage.get();
+        BizMessage inMessage = IntegratorController.currentBizMessage.get();
         inMessage.setData(jsonObject);
         RestServerAdaptorConfig serverAdaptorConfig = (RestServerAdaptorConfig) serverAdaptorConfigMapping.getServerAdaptorConfig(serviceId);
         BizMessage outMessage = (BizMessage)restTemplate.postForObject(serverAdaptorConfig.getUrl(), inMessage, BizMessage.class);
-        BizUtils.currentBizMessage.set(outMessage);
         return outMessage;
     }
 

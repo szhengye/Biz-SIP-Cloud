@@ -1,0 +1,4 @@
+import server;
+
+var b = server.doService("server2",bizmessage.data)
+return b;

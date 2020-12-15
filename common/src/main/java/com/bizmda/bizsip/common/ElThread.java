@@ -10,14 +10,17 @@ import org.springframework.expression.spel.support.StandardEvaluationContext;
 
 import java.util.concurrent.Callable;
 
-public class ELThread implements Callable<Object> {
+/**
+ * @author shizhengye
+ */
+public class ElThread implements Callable<Object> {
     private String express;
     private Object data;
     private boolean isBooleanResult;
     private ExpressionParser parser;
     private EvaluationContext context;
 
-    public ELThread(String express, Object data, boolean isBooleanResult) {
+    public ElThread(String express, Object data, boolean isBooleanResult) {
         this.express = express;
         this.data = data;
         this.isBooleanResult = isBooleanResult;

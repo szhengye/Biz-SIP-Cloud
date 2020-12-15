@@ -9,19 +9,15 @@
 
 - id: server2
   type: rest
-  url: http://127.0.0.1:8001/server2
+  url: http://127.0.0.1:8002/server2
   message:
-    type: json
+    type: velocity-json
     pack-rules:
-      - predicate: ${data.code == 0}
-        rule: ${"server1/pack/"+data.tranCode}
+      - predicate: '#{#data[flag]==2}'
+        rule: /server2/1.vm
       - predicate:
         rule: server1/pack/error
     unpack-rules:
-      - predicate: ${data.code == 0}
-        rule: ${"server1/unpack/"+data.tranCode}
-      - predicate:
-        rule: server1/unpack/error
   protocol:
     type: java
-    class-name: com.bizmda.bizsip.demo.Server1
+    class-name: com.bizmda.bizsip.sample.serveradaptor.server2.controller.Server2

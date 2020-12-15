@@ -25,6 +25,7 @@
         <spring-platform.version>Cairo-SR3</spring-platform.version>
         <hutool.version>5.5.2</hutool.version>
         <snakeyaml.version>1.8</snakeyaml.version>
+        <velocity.version>1.7</velocity.version>
     </properties>
 
     <dependencies>

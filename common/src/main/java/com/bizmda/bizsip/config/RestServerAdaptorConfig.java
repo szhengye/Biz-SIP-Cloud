@@ -6,6 +6,9 @@ import lombok.Getter;
 
 import java.util.Map;
 
+/**
+ * @author shizhengye
+ */
 public class RestServerAdaptorConfig extends AbstractServerAdaptorConfig {
     private String url;
 

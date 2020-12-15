@@ -7,6 +7,9 @@ import lombok.Data;
 
 import java.util.Map;
 
+/**
+ * @author shizhengye
+ */
 @Data
 public class PredicateRuleConfig {
     private String predicate;
@@ -19,11 +22,11 @@ public class PredicateRuleConfig {
 
     public String getMatchRule(JSONObject data) throws BizException {
         if (this.predicate == null || this.predicate.isEmpty()) {
-            return BizUtils.getELStringResult(this.rule,data);
+            return BizUtils.getElStringResult(this.rule,data);
         }
-        Boolean predicateFlag = BizUtils.getELBooleanResult(this.predicate,data);
+        Boolean predicateFlag = BizUtils.getElBooleanResult(this.predicate,data);
         if (predicateFlag) {
-            return BizUtils.getELStringResult(this.rule,data);
+            return BizUtils.getElStringResult(this.rule,data);
         }
         return null;
     }

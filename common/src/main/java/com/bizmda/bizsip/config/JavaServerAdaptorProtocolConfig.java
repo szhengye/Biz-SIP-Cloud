@@ -4,6 +4,9 @@ import lombok.Data;
 
 import java.util.Map;
 
+/**
+ * @author shizhengye
+ */
 public class JavaServerAdaptorProtocolConfig extends AbstractServerAdaptorProtocolConfig {
     private String clazzName;
 

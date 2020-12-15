@@ -6,6 +6,9 @@ import lombok.Data;
 
 import java.util.Map;
 
+/**
+ * @author shizhengye
+ */
 @Data
 public class BizMessage {
     private int code;

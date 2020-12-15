@@ -2,7 +2,6 @@ package com.bizmda.bizsip.common;
 
 import cn.hutool.core.text.StrFormatter;
 import cn.hutool.core.thread.ThreadUtil;
-import cn.hutool.json.JSONObject;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -11,14 +10,16 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 
+/**
+ * @author shizhengye
+ */
 public class BizUtils {
-    public static ThreadLocal<BizMessage> currentBizMessage = new ThreadLocal<BizMessage>();
     private static ExecutorService executorService = ThreadUtil.newExecutor(5);
 
     public static List<File> getFileList(String strPath, String suffix) {
         List<File> filelist = new ArrayList<File>();
         File dir = new File(strPath);
-        File[] files = dir.listFiles(); // 该文件目录下文件全部放入数组
+        File[] files = dir.listFiles();
         if (files != null) {
             for (File file : files) {
                 if (file.isDirectory()) {
@@ -33,14 +34,12 @@ public class BizUtils {
             }
 
         }
-        //       System.out.println("a:"+filelist.size());
         return filelist;
     }
 
-    public static String getELStringResult(String express, Object data) throws BizException {
-//        ExecutorService service = ThreadUtil.newSingleExecutor();
+    public static String getElStringResult(String express, Object data) throws BizException {
         String result;
-        Future<Object> future = executorService.submit(new ELThread(express,data,false));
+        Future<Object> future = executorService.submit(new ElThread(express,data,false));
         try {
             result = (String)future.get();
         } catch (InterruptedException | ExecutionException e) {
@@ -50,10 +49,9 @@ public class BizUtils {
         return result;
     }
 
-    public static Boolean getELBooleanResult(String express, Object data) throws BizException {
-//        ExecutorService service = ThreadUtil.newExecutor(5);
+    public static Boolean getElBooleanResult(String express, Object data) throws BizException {
         Boolean result;
-        Future<Object> future = executorService.submit(new ELThread(express,data,true));
+        Future<Object> future = executorService.submit(new ElThread(express,data,true));
         try {
             result = (Boolean)future.get();
         } catch (InterruptedException | ExecutionException e) {

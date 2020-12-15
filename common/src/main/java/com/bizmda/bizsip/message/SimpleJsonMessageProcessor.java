@@ -6,11 +6,14 @@ import com.bizmda.bizsip.common.BizException;
 
 import java.util.Map;
 
+/**
+ * @author shizhengye
+ */
 public class SimpleJsonMessageProcessor<String> extends AbstractMessageProcessor {
-    @Override
-    public void init(Map messageMap) throws BizException{
-        super.init(messageMap);
-    }
+//    @Override
+//    public void init(Map messageMap) throws BizException{
+//        super.init(messageMap);
+//    }
 
     @Override
     protected JSONObject biz2json(JSONObject inMessage) throws BizException {

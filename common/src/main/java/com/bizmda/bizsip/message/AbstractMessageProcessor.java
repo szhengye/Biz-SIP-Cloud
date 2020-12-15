@@ -8,14 +8,25 @@ import com.bizmda.bizsip.config.PredicateRuleConfig;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * @author shizhengye
+ */
 @Slf4j
 public abstract class AbstractMessageProcessor<T> {
-    private String type;
-    private List<PredicateRuleConfig> packRules;
-    private List<PredicateRuleConfig> unpackRules;
+    protected String type;
+    protected String configPath;
+    protected List<PredicateRuleConfig> packRules;
+    protected List<PredicateRuleConfig> unpackRules;
+
+    public final static Map<String,Class> MESSAGE_TYPE_MAP = new HashMap<String,Class>(){{
+        put("simple-json",SimpleJsonMessageProcessor.class);
+        put("simple-xml",SimpleXmlMessageProcessor.class);
+        put("velocity-json",VelocityJsonMessageProcessor.class);
+    }};
 
     /**
      * 根据传入JSONObject打包断言规则选择规则，根据规则打包成JSONObject对象。
@@ -58,8 +69,9 @@ public abstract class AbstractMessageProcessor<T> {
         return this.biz2json(message);
     }
 
-    public void init(Map messageMap) throws BizException {
+    public void init(String configPath,Map messageMap) throws BizException {
         this.type = (String)messageMap.get("type");
+        this.configPath = configPath;
         List<Map> packRules = (List<Map>)messageMap.get("pack-rules");
         if (packRules == null ) {
             packRules = new ArrayList<Map>();
@@ -80,7 +92,7 @@ public abstract class AbstractMessageProcessor<T> {
         }
     }
 
-    public String matchPredicateRule(List<PredicateRuleConfig> predicateRuleConfigs, JSONObject message) {
+    public String matchMessagePredicateRule(List<PredicateRuleConfig> predicateRuleConfigs, JSONObject message) {
         String rule;
         for (PredicateRuleConfig predicateRuleConfig:predicateRuleConfigs) {
             try {

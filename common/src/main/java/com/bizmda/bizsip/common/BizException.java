@@ -2,6 +2,9 @@ package com.bizmda.bizsip.common;
 
 import lombok.Getter;
 
+/**
+ * @author shizhengye
+ */
 @Getter
 public class BizException extends Exception {
     private int code;

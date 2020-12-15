@@ -4,6 +4,8 @@
   service:
     service-rules:
       - predicate: '#{#data[flag]==1}'
-        rule: /a/doService1
+        rule: /a/doService
+      - predicate: '#{#data[flag]==2}'
+        rule: /sample/server2/service1
       - predicate:
         rule: server1/unpack/error

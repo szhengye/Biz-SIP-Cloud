@@ -9,6 +9,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * @author shizhengye
+ */
 public class ClientAdaptorConfigMapping {
     private Map<String, CommonClientAdaptorConfig> clientAdaptorConfigMap;
 
