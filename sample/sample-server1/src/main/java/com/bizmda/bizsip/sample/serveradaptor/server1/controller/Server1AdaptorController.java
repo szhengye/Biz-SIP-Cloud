@@ -31,7 +31,6 @@ public class Server1AdaptorController {
     @PostMapping(value = "/server1", consumes = "application/json", produces = "application/json")
     public BizMessage doService(@RequestBody BizMessage inMessage, HttpServletResponse response) {
         log.debug("inMessage:{}", inMessage);
-//        BizUtils.currentBizMessage.set(inMessage);
         JSONObject outMessage = null;
         try {
             outMessage = this.serverAdaptor.process(inMessage.getData());

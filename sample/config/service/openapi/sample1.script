@@ -1,0 +1,3 @@
+var data = bizmessage.data;
+data.accountName = data.accountNo + "的账户名";
+return data;

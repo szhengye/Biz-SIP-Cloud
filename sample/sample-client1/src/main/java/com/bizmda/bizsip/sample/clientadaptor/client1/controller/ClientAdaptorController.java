@@ -39,7 +39,10 @@ public class ClientAdaptorController {
             return outMessage;
         } catch (BizException e) {
             log.error("客户端适配器执行出错",e);
-            return "客户端适配器执行出错！";
+            return "客户端适配器执行出错:"
+                    + "\ncode:" + e.getCode()
+                    + "\nmessage:" + e.getMessage()
+                    + "\nextMessage:" + e.getExtMessage();
         }
     }
 }
