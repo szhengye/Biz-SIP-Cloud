@@ -1,0 +1,23 @@
+var result = server.doService("server1",bizmessage.data)
+if (result.code == 0) {
+    bizmessage.data.accountName = result.data.accountName;
+}
+else {
+    var error_result = {
+        code: result.code,
+        message: result.message
+    }
+    return error_result;
+}
+result = server.doService("server2",bizmessage.data)
+if (result.code == 0) {
+    bizmessage.data.balance = result.data.balance;
+}
+else {
+    var error_result = {
+        code: result.code,
+        message: result.message
+    }
+    return error_result;
+}
+return bizmessage.data;

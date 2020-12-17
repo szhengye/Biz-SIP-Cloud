@@ -72,16 +72,16 @@ public class IntegratorController {
     }
 
     @PostMapping(value={"/api/{path1}","/api/{path1}/{path2}","/api/{path1}/{path2}/{path3}"},consumes = "application/json", produces = "application/json")
-    public BizMessage doApiService(HttpServletRequest request, HttpServletResponse response,
+    public BizMessage<JSONObject> doApiService(HttpServletRequest request, HttpServletResponse response,
                                    @RequestBody JSONObject inJsonObject,
                                    @PathVariable(required = false) Map<String, Object> pathVariables,
                                    @RequestParam(required = false) Map<String, Object> parameters) throws BizException {
-        BizMessage inMessage = BizMessage.createNewTransaction();
+        BizMessage<JSONObject> inMessage = BizMessage.createNewTransaction();
         inMessage.setData(inJsonObject);
         IntegratorController.currentBizMessage.set(inMessage);
         StringBuilder stringBuilder = new StringBuilder();
         for(int i=1;;i++) {
-            String a = (String)pathVariables.get("path"+String.valueOf(i));
+            String a = (String)pathVariables.get("path" + String.valueOf(i));
             if (a == null) {
                 break;
             }
@@ -105,37 +105,37 @@ public class IntegratorController {
         return inMessage;
     }
 
-    @PostMapping(value={"/sip/{path1}","/sip/{path1}/{path2}","/sip/{path1}/{path2}/{path3}"},consumes = "application/json", produces = "application/json")
-    public BizMessage doBizService(HttpServletRequest request, HttpServletResponse response,
-                               @RequestBody BizMessage inMessage,
-                               @PathVariable(required = false) Map<String, Object> pathVariables,
-                               @RequestParam(required = false) Map<String, Object> parameters) throws BizException {
-        IntegratorController.currentBizMessage.set(inMessage);
-        StringBuilder stringBuilder = new StringBuilder();
-        for(int i=1;;i++) {
-            String a = (String)pathVariables.get("path"+String.valueOf(i));
-            if (a == null) {
-                break;
-            }
-            stringBuilder.append("/" + a);
-        }
-        String serviceId = stringBuilder.toString();
-
-        String script = this.scriptServiceMapping.getScript(serviceId);
-        if (script == null) {
-            throw new BizException(BizResultEnum.INTEGRATOR_SERVICE_NOT_FOUND,
-                    StrFormatter.format("聚合服务不存在:{}",serviceId));
-        }
-        MagicScriptContext context = new MagicScriptContext();;
-        context.set("bizmessage", inMessage);
-        Object result = executeScript(script, context);
-        JSONObject jsonObject = JSONUtil.parseObj(result);
-
-        inMessage.success(jsonObject);
-
-        IntegratorController.currentBizMessage.remove();
-        return inMessage;
-    }
+//    @PostMapping(value={"/sip/{path1}","/sip/{path1}/{path2}","/sip/{path1}/{path2}/{path3}"},consumes = "application/json", produces = "application/json")
+//    public BizMessage doBizService(HttpServletRequest request, HttpServletResponse response,
+//                               @RequestBody BizMessage inMessage,
+//                               @PathVariable(required = false) Map<String, Object> pathVariables,
+//                               @RequestParam(required = false) Map<String, Object> parameters) throws BizException {
+//        IntegratorController.currentBizMessage.set(inMessage);
+//        StringBuilder stringBuilder = new StringBuilder();
+//        for(int i=1;;i++) {
+//            String a = (String)pathVariables.get("path"+String.valueOf(i));
+//            if (a == null) {
+//                break;
+//            }
+//            stringBuilder.append("/" + a);
+//        }
+//        String serviceId = stringBuilder.toString();
+//
+//        String script = this.scriptServiceMapping.getScript(serviceId);
+//        if (script == null) {
+//            throw new BizException(BizResultEnum.INTEGRATOR_SERVICE_NOT_FOUND,
+//                    StrFormatter.format("聚合服务不存在:{}",serviceId));
+//        }
+//        MagicScriptContext context = new MagicScriptContext();;
+//        context.set("bizmessage", inMessage);
+//        Object result = executeScript(script, context);
+//        JSONObject jsonObject = JSONUtil.parseObj(result);
+//
+//        inMessage.success(jsonObject);
+//
+//        IntegratorController.currentBizMessage.remove();
+//        return inMessage;
+//    }
 
     private Object executeScript(String script, MagicScriptContext context) {
         SimpleScriptContext simpleScriptContext = new SimpleScriptContext();

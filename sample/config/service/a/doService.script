@@ -1,4 +1,0 @@
-import server;
-
-var b = server.doService("server1",bizmessage.data)
-return b;

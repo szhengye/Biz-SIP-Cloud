@@ -3,9 +3,7 @@
     type: simple-json
   service:
     service-rules:
-      - predicate: '#{#data[flag]==1}'
-        rule: /a/doService
-      - predicate: '#{#data[flag]==2}'
-        rule: /sample/server2/service1
+      - predicate: '#{#data[serviceId] != null}'
+        rule: '#{#data[serviceId]}'
       - predicate:
-        rule: server1/unpack/error
+        rule: client1/error

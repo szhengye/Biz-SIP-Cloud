@@ -10,13 +10,13 @@ import java.util.Map;
  * @author shizhengye
  */
 @Data
-public class BizMessage {
+public class BizMessage<T> {
     private int code;
     private String message;
     private String extMessage;
     private String traceId;
     private long timestamp;
-    private JSONObject data;
+    private T data;
 
     public BizMessage() {
 
@@ -28,7 +28,7 @@ public class BizMessage {
         this.extMessage = (String)jsonObject.get("extMessage");
         this.traceId = (String)jsonObject.get("traceId");
         this.timestamp = (long)jsonObject.get("timestamp");
-        this.data = (JSONObject)jsonObject.get("data");
+        this.data = (T)jsonObject.get("data");
     }
 
     public static BizMessage createNewTransaction() {
@@ -38,7 +38,7 @@ public class BizMessage {
         return bizMessage;
     }
 
-    public void success(JSONObject data) {
+    public void success(T data) {
         this.setCode(0);
         this.setMessage("success");
         this.setExtMessage(null);

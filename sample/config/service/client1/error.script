@@ -1,0 +1,5 @@
+var error_result = {
+    code: 100,
+    message: "client1的错误信息！"
+}
+return error_result;

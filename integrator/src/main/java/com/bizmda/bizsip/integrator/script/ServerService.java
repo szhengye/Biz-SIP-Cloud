@@ -24,10 +24,10 @@ public class ServerService implements MagicModule {
         JSONObject jsonObject = JSONUtil.parseObj(inData);
         RestTemplate restTemplate = new RestTemplate();
 
-        BizMessage inMessage = IntegratorController.currentBizMessage.get();
+        BizMessage<JSONObject> inMessage = IntegratorController.currentBizMessage.get();
         inMessage.setData(jsonObject);
         RestServerAdaptorConfig serverAdaptorConfig = (RestServerAdaptorConfig) serverAdaptorConfigMapping.getServerAdaptorConfig(serviceId);
-        BizMessage outMessage = (BizMessage)restTemplate.postForObject(serverAdaptorConfig.getUrl(), inMessage, BizMessage.class);
+        BizMessage<JSONObject> outMessage = (BizMessage)restTemplate.postForObject(serverAdaptorConfig.getUrl(), inMessage, BizMessage.class);
         return outMessage;
     }
 

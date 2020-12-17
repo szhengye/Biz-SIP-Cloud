@@ -2,22 +2,35 @@
   type: rest
   url: http://127.0.0.1:8001/server1
   message:
-    type: simple-xml
+    type: simple-json
   protocol:
     type: java
-    class-name: com.bizmda.bizsip.sample.serveradaptor.server1.controller.Server1
+    class-name: com.bizmda.bizsip.sample.serveradaptor.server.controller.CrmServer
 
 - id: server2
   type: rest
-  url: http://127.0.0.1:8002/server2
+  url: http://127.0.0.1:8001/server2
   message:
+    type: simple-json
+  protocol:
+    type: java
+    class-name: com.bizmda.bizsip.sample.serveradaptor.server.controller.ActServer
+
+- id: server3
+  type: rest
+  url: http://127.0.0.1:8001/server3
+  message:
+#    type: simple-json
+#    type: simple-xml
     type: velocity-json
     pack-rules:
-      - predicate: '#{#data[flag]==2}'
-        rule: /server2/1.vm
+      - predicate: '#{#data[sex]=="0"}'
+        rule: server3/woman.vm
+      - predicate: '#{#data[sex]=="1"}'
+        rule: server3/man.vm
       - predicate:
-        rule: server1/pack/error
+        rule: server3/error.vm
     unpack-rules:
   protocol:
     type: java
-    class-name: com.bizmda.bizsip.sample.serveradaptor.server2.controller.Server2
+    class-name: com.bizmda.bizsip.sample.serveradaptor.server.controller.EchoServer
