@@ -66,7 +66,7 @@ public abstract class AbstractMessageProcessor<T> {
     }
     public JSONObject unpack(T inMessage) throws BizException {
         JSONObject message = this.adaptor2json(inMessage);
-        return this.biz2json(message);
+        return this.json2biz(message);
     }
 
     public void init(String configPath,Map messageMap) throws BizException {

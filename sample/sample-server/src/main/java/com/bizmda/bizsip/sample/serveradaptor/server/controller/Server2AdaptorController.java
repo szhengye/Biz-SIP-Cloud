@@ -1,16 +1,13 @@
 package com.bizmda.bizsip.sample.serveradaptor.server.controller;
 
-import cn.hutool.extra.spring.SpringUtil;
 import cn.hutool.json.JSONObject;
 import com.bizmda.bizsip.common.BizException;
 import com.bizmda.bizsip.common.BizMessage;
-import com.bizmda.bizsip.common.SpringContextUtil;
 import com.bizmda.bizsip.serveradaptor.ServerAdaptor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.PostConstruct;

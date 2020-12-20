@@ -20,7 +20,7 @@ public class ServerService implements MagicModule {
     public static ServerAdaptorConfigMapping serverAdaptorConfigMapping;
 
     @Comment("执行适配器服务调用")
-    public static Object doService(@Comment("服务ID") String serviceId, @Comment("调用输入参数") Object inData) {
+    public static BizMessage<JSONObject> doService(@Comment("服务ID") String serviceId, @Comment("调用输入参数") Object inData) {
         JSONObject jsonObject = JSONUtil.parseObj(inData);
         RestTemplate restTemplate = new RestTemplate();
 
