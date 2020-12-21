@@ -23,5 +23,12 @@ public abstract class AbstractIntegratorService {
     public AbstractIntegratorService() {
     }
 
+    public AbstractIntegratorService(String serviceId,String type,String fileContent) {
+        this.serviceId = serviceId;
+        this.type = type;
+        this.fileContent = fileContent;
+    }
+
+    public abstract void init();
     public abstract BizMessage doBizService(BizMessage<JSONObject> message);
 }

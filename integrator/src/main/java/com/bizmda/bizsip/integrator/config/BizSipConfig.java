@@ -15,18 +15,16 @@ public class BizSipConfig {
     private String configPath;
 
     @Bean
-    @ConditionalOnProperty(name = "bizsip.config-path", matchIfMissing = false)
     public IntegratorServiceMapping IntegratorServiceMapping() {
         try {
             return new IntegratorServiceMapping(this.configPath);
         } catch (BizException e) {
-            log.error("聚合服务文件装载出错!");
+            log.error("聚合服务文件装载出错!",e);
             return null;
         }
     }
 
     @Bean
-    @ConditionalOnProperty(name = "bizsip.config-path", matchIfMissing = false)
     public ServerAdaptorConfigMapping serverAdaptorConfigMapping() {
         return new ServerAdaptorConfigMapping(this.configPath);
     }

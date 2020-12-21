@@ -10,6 +10,8 @@ import com.bizmda.bizsip.integrator.service.ScriptIntegratorService;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 
 /**
@@ -39,18 +41,17 @@ public class IntegratorServiceMapping {
             Class integratorClazz = AbstractIntegratorService.SERVICE_SCRIPT_SUFFIX_MAP.get(suffix);
             if (integratorClazz != null) {
                 FileReader fileReader = new FileReader(file);
-                String script = fileReader.readString();
+                String fileContent = fileReader.readString();
                 String allPath = file.getPath();
                 String serviceId = allPath.substring(scriptPath.length(),allPath.length() - suffix.length() - 1);
                 log.info("装载聚合服务:{}",serviceId);
                 try {
-                    integratorService = (AbstractIntegratorService) integratorClazz.newInstance();
-                } catch (InstantiationException | IllegalAccessException e) {
+                    Constructor constructor=integratorClazz.getDeclaredConstructor(String.class,String.class,String.class);
+                    integratorService = (AbstractIntegratorService) constructor.newInstance(serviceId,suffix,fileContent);
+                } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
                     throw new BizException(BizResultEnum.INTEGRATOR_SERVICE_CLASS_LOAD_ERROR,e);
                 }
-                integratorService.setServiceId(serviceId);
-                integratorService.setType(suffix);
-                integratorService.setFileContent(script);
+                integratorService.init();
                 mappings.put(serviceId,integratorService);
             }
         }

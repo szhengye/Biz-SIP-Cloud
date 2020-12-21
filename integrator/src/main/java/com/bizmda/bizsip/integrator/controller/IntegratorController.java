@@ -36,8 +36,8 @@ import java.util.Map;
 public class IntegratorController {
     @Autowired
     IntegratorServiceMapping integratorServiceMapping;
-    @Autowired
-    ServerAdaptorConfigMapping serverAdaptorConfigMapping;
+//    @Autowired
+//    ServerAdaptorConfigMapping serverAdaptorConfigMapping;
 //    @Autowired(required = false)
 //    private List<HttpMessageConverter<?>> httpMessageConverters;
     @Autowired
@@ -48,11 +48,11 @@ public class IntegratorController {
     private ResultProvider resultProvider = new DefaultResultProvider();
     private boolean throwException = false;
 
-    @PostConstruct
-    public void init() {
-        setupMagicModules();
-        ServerService.serverAdaptorConfigMapping = this.serverAdaptorConfigMapping;
-    }
+//    @PostConstruct
+//    public void init() {
+//        setupMagicModules();
+//        ServerService.serverAdaptorConfigMapping = this.serverAdaptorConfigMapping;
+//    }
 
     @PostMapping(value="/api",consumes = "application/json", produces = "application/json")
     public BizMessage<JSONObject> doApiService(HttpServletRequest request, HttpServletResponse response,
@@ -79,62 +79,28 @@ public class IntegratorController {
         return outMessage;
     }
 
-//    @PostMapping(value={"/sip/{path1}","/sip/{path1}/{path2}","/sip/{path1}/{path2}/{path3}"},consumes = "application/json", produces = "application/json")
-//    public BizMessage doBizService(HttpServletRequest request, HttpServletResponse response,
-//                               @RequestBody BizMessage inMessage,
-//                               @PathVariable(required = false) Map<String, Object> pathVariables,
-//                               @RequestParam(required = false) Map<String, Object> parameters) throws BizException {
-//        IntegratorController.currentBizMessage.set(inMessage);
-//        StringBuilder stringBuilder = new StringBuilder();
-//        for(int i=1;;i++) {
-//            String a = (String)pathVariables.get("path"+String.valueOf(i));
-//            if (a == null) {
-//                break;
+//    private void setupMagicModules() {
+//        // 设置脚本import时 class加载策略
+//        MagicModuleLoader.setClassLoader((className) -> {
+//            try {
+//                return springContext.getBean(className);
+//            } catch (Exception e) {
+//                Class<?> clazz = null;
+//                try {
+//                    clazz = Class.forName(className);
+//                    return springContext.getBean(clazz);
+//                } catch (Exception ex) {
+//                    return clazz;
+//                }
 //            }
-//            stringBuilder.append("/" + a);
-//        }
-//        String serviceId = stringBuilder.toString();
-//
-//        String script = this.scriptServiceMapping.getScript(serviceId);
-//        if (script == null) {
-//            throw new BizException(BizResultEnum.INTEGRATOR_SERVICE_NOT_FOUND,
-//                    StrFormatter.format("聚合服务不存在:{}",serviceId));
-//        }
-//        MagicScriptContext context = new MagicScriptContext();;
-//        context.set("bizmessage", inMessage);
-//        Object result = executeScript(script, context);
-//        JSONObject jsonObject = JSONUtil.parseObj(result);
-//
-//        inMessage.success(jsonObject);
-//
-//        IntegratorController.currentBizMessage.remove();
-//        return inMessage;
+//        });
+//        log.info("注册模块:{} -> {}", "log", Logger.class);
+//        MagicModuleLoader.addModule("log", LoggerFactory.getLogger(MagicScript.class));
+//        log.info("注册模块:{} -> {}", "request", RequestFunctions.class);
+//        MagicModuleLoader.addModule("request", new RequestFunctions());
+//        log.info("注册模块:{} -> {}", "assert", AssertFunctions.class);
+//        MagicModuleLoader.addModule("assert", AssertFunctions.class);
+//        log.info("注册模块:{} -> {}", "server", ServerService.class);
+//        MagicModuleLoader.addModule("server", ServerService.class);
 //    }
-
-
-
-    private void setupMagicModules() {
-        // 设置脚本import时 class加载策略
-        MagicModuleLoader.setClassLoader((className) -> {
-            try {
-                return springContext.getBean(className);
-            } catch (Exception e) {
-                Class<?> clazz = null;
-                try {
-                    clazz = Class.forName(className);
-                    return springContext.getBean(clazz);
-                } catch (Exception ex) {
-                    return clazz;
-                }
-            }
-        });
-        log.info("注册模块:{} -> {}", "log", Logger.class);
-        MagicModuleLoader.addModule("log", LoggerFactory.getLogger(MagicScript.class));
-        log.info("注册模块:{} -> {}", "request", RequestFunctions.class);
-        MagicModuleLoader.addModule("request", new RequestFunctions());
-        log.info("注册模块:{} -> {}", "assert", AssertFunctions.class);
-        MagicModuleLoader.addModule("assert", AssertFunctions.class);
-        log.info("注册模块:{} -> {}", "server", ServerService.class);
-        MagicModuleLoader.addModule("server", ServerService.class);
-    }
 }
