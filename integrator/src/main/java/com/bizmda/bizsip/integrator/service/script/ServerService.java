@@ -1,4 +1,4 @@
-package com.bizmda.bizsip.integrator.script;
+package com.bizmda.bizsip.integrator.service.script;
 
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;

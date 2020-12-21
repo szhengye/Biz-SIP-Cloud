@@ -2,46 +2,29 @@ package com.bizmda.bizsip.integrator.controller;
 
 import cn.hutool.core.text.StrFormatter;
 import cn.hutool.json.JSONObject;
-import cn.hutool.json.JSONUtil;
 import com.bizmda.bizsip.common.BizException;
 import com.bizmda.bizsip.common.BizMessage;
 import com.bizmda.bizsip.common.BizResultEnum;
-import com.bizmda.bizsip.common.BizUtils;
-import com.bizmda.bizsip.config.ScriptServiceMapping;
+import com.bizmda.bizsip.integrator.config.IntegratorServiceMapping;
 import com.bizmda.bizsip.config.ServerAdaptorConfigMapping;
-import com.bizmda.bizsip.integrator.script.ServerService;
+import com.bizmda.bizsip.integrator.service.script.ServerService;
+import com.bizmda.bizsip.integrator.service.AbstractIntegratorService;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.http.converter.HttpMessageConverter;
-import org.springframework.http.server.ServletServerHttpRequest;
 import org.springframework.web.bind.annotation.*;
-import org.ssssssss.magicapi.context.CookieContext;
-import org.ssssssss.magicapi.context.HeaderContext;
-import org.ssssssss.magicapi.context.RequestContext;
-import org.ssssssss.magicapi.context.SessionContext;
 import org.ssssssss.magicapi.functions.AssertFunctions;
 import org.ssssssss.magicapi.functions.RequestFunctions;
-import org.ssssssss.magicapi.functions.ResponseFunctions;
 import org.ssssssss.magicapi.provider.ResultProvider;
 import org.ssssssss.magicapi.provider.impl.DefaultResultProvider;
-import org.ssssssss.magicapi.script.ScriptManager;
 import org.ssssssss.script.MagicModuleLoader;
 import org.ssssssss.script.MagicScript;
-import org.ssssssss.script.MagicScriptContext;
-import org.ssssssss.script.exception.MagicScriptAssertException;
 
 import javax.annotation.PostConstruct;
-import javax.script.SimpleScriptContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -52,7 +35,7 @@ import java.util.Map;
 @RequestMapping("/")
 public class IntegratorController {
     @Autowired
-    ScriptServiceMapping scriptServiceMapping;
+    IntegratorServiceMapping integratorServiceMapping;
     @Autowired
     ServerAdaptorConfigMapping serverAdaptorConfigMapping;
 //    @Autowired(required = false)
@@ -80,34 +63,20 @@ public class IntegratorController {
         inMessage.setData(inJsonObject);
         IntegratorController.currentBizMessage.set(inMessage);
 
-//        StringBuilder stringBuilder = new StringBuilder();
-//        for(int i=1;;i++) {
-//            String a = (String)pathVariables.get("path" + String.valueOf(i));
-//            if (a == null) {
-//                break;
-//            }
-//            stringBuilder.append("/" + a);
-//        }
-//        String serviceId = stringBuilder.toString();
-
         String serviceId = request.getHeader("Biz-Service-Id");
         if (!serviceId.startsWith("/")) {
             serviceId = "/" + serviceId;
         }
-        String script = this.scriptServiceMapping.getScript(serviceId);
-        if (script == null) {
+        AbstractIntegratorService integratorService = this.integratorServiceMapping.getIntegratorService(serviceId);
+        if (integratorService == null) {
             throw new BizException(BizResultEnum.INTEGRATOR_SERVICE_NOT_FOUND,
                     StrFormatter.format("聚合服务不存在:{}",serviceId));
         }
-        MagicScriptContext context = new MagicScriptContext();;
-        context.set("bizmessage", inMessage);
-        Object result = executeScript(script, context);
-        JSONObject jsonObject = JSONUtil.parseObj(result);
 
-        inMessage.success(jsonObject);
+        BizMessage outMessage = integratorService.doBizService(inMessage);
 
         IntegratorController.currentBizMessage.remove();
-        return inMessage;
+        return outMessage;
     }
 
 //    @PostMapping(value={"/sip/{path1}","/sip/{path1}/{path2}","/sip/{path1}/{path2}/{path3}"},consumes = "application/json", produces = "application/json")
@@ -142,11 +111,7 @@ public class IntegratorController {
 //        return inMessage;
 //    }
 
-    private Object executeScript(String script, MagicScriptContext context) {
-        SimpleScriptContext simpleScriptContext = new SimpleScriptContext();
-        simpleScriptContext.setAttribute("ROOT", context, 100);
-        return ScriptManager.compile("MagicScript", script).eval(simpleScriptContext);
-    }
+
 
     private void setupMagicModules() {
         // 设置脚本import时 class加载策略
