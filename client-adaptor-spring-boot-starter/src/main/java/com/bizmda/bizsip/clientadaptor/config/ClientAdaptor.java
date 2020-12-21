@@ -12,6 +12,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Scope;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 import org.springframework.util.RouteMatcher;
 import org.springframework.web.client.RestTemplate;
@@ -96,10 +98,15 @@ public class ClientAdaptor {
         if (this.integratorUrl.endsWith("/")) {
             this.integratorUrl = this.integratorUrl.substring(0,integratorUrl.length()-1);
         }
-        if (rule.startsWith("/")) {
-            rule = rule.substring(1,rule.length());
-        }
-        BizMessage outMessage = (BizMessage)restTemplate.postForObject(this.integratorUrl + "/"+ rule, inData, BizMessage.class);
+//        if (rule.startsWith("/")) {
+//            rule = rule.substring(1,rule.length());
+//        }
+        HttpHeaders header = new HttpHeaders();
+        header.add("Biz-Service-Id",rule);
+//        header.setContentType(MediaType.MULTIPART_FORM_DATA);
+        HttpEntity<JSONObject> httpEntity = new HttpEntity<>(inData, header);
+
+        BizMessage outMessage = (BizMessage)restTemplate.postForObject(this.integratorUrl, httpEntity, BizMessage.class);
         if (outMessage.getCode() == 0) {
             log.debug("Integrator返回成功:{}",outMessage.getData());
         }

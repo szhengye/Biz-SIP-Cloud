@@ -55,8 +55,8 @@ public class IntegratorController {
     ScriptServiceMapping scriptServiceMapping;
     @Autowired
     ServerAdaptorConfigMapping serverAdaptorConfigMapping;
-    @Autowired(required = false)
-    private List<HttpMessageConverter<?>> httpMessageConverters;
+//    @Autowired(required = false)
+//    private List<HttpMessageConverter<?>> httpMessageConverters;
     @Autowired
     private ApplicationContext springContext;
 
@@ -71,7 +71,7 @@ public class IntegratorController {
         ServerService.serverAdaptorConfigMapping = this.serverAdaptorConfigMapping;
     }
 
-    @PostMapping(value={"/api/{path1}","/api/{path1}/{path2}","/api/{path1}/{path2}/{path3}"},consumes = "application/json", produces = "application/json")
+    @PostMapping(value="/api",consumes = "application/json", produces = "application/json")
     public BizMessage<JSONObject> doApiService(HttpServletRequest request, HttpServletResponse response,
                                    @RequestBody JSONObject inJsonObject,
                                    @PathVariable(required = false) Map<String, Object> pathVariables,
@@ -79,16 +79,21 @@ public class IntegratorController {
         BizMessage<JSONObject> inMessage = BizMessage.createNewTransaction();
         inMessage.setData(inJsonObject);
         IntegratorController.currentBizMessage.set(inMessage);
-        StringBuilder stringBuilder = new StringBuilder();
-        for(int i=1;;i++) {
-            String a = (String)pathVariables.get("path" + String.valueOf(i));
-            if (a == null) {
-                break;
-            }
-            stringBuilder.append("/" + a);
-        }
-        String serviceId = stringBuilder.toString();
 
+//        StringBuilder stringBuilder = new StringBuilder();
+//        for(int i=1;;i++) {
+//            String a = (String)pathVariables.get("path" + String.valueOf(i));
+//            if (a == null) {
+//                break;
+//            }
+//            stringBuilder.append("/" + a);
+//        }
+//        String serviceId = stringBuilder.toString();
+
+        String serviceId = request.getHeader("Biz-Service-Id");
+        if (!serviceId.startsWith("/")) {
+            serviceId = "/" + serviceId;
+        }
         String script = this.scriptServiceMapping.getScript(serviceId);
         if (script == null) {
             throw new BizException(BizResultEnum.INTEGRATOR_SERVICE_NOT_FOUND,

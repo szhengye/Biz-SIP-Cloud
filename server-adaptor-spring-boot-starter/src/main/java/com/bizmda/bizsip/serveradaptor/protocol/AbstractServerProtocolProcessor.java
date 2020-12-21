@@ -10,7 +10,7 @@ import java.util.Map;
  * @author shizhengye
  */
 public abstract class AbstractServerProtocolProcessor {
-    public final static Map<String,Class> PROTOCOL_TYPE_MAP = new HashMap<String,Class>() {{
+    public final static Map<String,Class> protocolTypeMap = new HashMap<String,Class>() {{
         put("java",com.bizmda.bizsip.serveradaptor.protocol.JavaServerProtocolProcessor.class);
     }};
 
