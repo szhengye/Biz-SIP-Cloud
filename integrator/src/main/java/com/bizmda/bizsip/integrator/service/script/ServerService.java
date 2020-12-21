@@ -23,6 +23,8 @@ public class ServerService implements MagicModule {
 
     public static ServerAdaptorConfigMapping serverAdaptorConfigMapping = null;
 
+    public static ServerService serverService = new ServerService();
+
     @Comment("执行适配器服务调用")
     public static BizMessage<JSONObject> doService(@Comment("服务ID") String serviceId, @Comment("调用输入参数") Object inData) {
         JSONObject jsonObject = JSONUtil.parseObj(inData);

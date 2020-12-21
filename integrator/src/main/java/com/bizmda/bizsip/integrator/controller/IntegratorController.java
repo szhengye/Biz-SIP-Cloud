@@ -40,8 +40,8 @@ public class IntegratorController {
 //    ServerAdaptorConfigMapping serverAdaptorConfigMapping;
 //    @Autowired(required = false)
 //    private List<HttpMessageConverter<?>> httpMessageConverters;
-    @Autowired
-    private ApplicationContext springContext;
+//    @Autowired
+//    private ApplicationContext springContext;
 
     public static ThreadLocal<BizMessage> currentBizMessage = new ThreadLocal<BizMessage>();
 
