@@ -2,6 +2,7 @@ package com.bizmda.bizsip.integrator;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
 
@@ -9,6 +10,7 @@ import org.springframework.context.annotation.Import;
  * @author shizhengye
  */
 @SpringBootApplication
+@EnableDiscoveryClient
 //@ComponentScan(value = "com.bizmda.bizsip.config")
 @ComponentScan(value = "cn.hutool.extra.spring")
 @ComponentScan(value = "com.bizmda.bizsip.integrator")

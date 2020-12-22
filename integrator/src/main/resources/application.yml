@@ -1,5 +1,12 @@
 server:
-  port: 8000
+  port: 8080
+spring:
+  application:
+    name: sip-integrator
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8848
 
 bizsip:
   config-path: /Users/shizhengye/IdeaProjects/biz-sip/sample/config
