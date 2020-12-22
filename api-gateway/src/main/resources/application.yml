@@ -1,0 +1,22 @@
+server:
+  port: 8000
+spring:
+  application:
+    name: sip-api-gaetway
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8848
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
+      routes:
+        - id: sip-integrator
+          uri: lb://sip-integrator
+          predicates:
+            - Path=/api/**
+
+bizsip:
+  config-path: /Users/shizhengye/IdeaProjects/biz-sip/sample/config
