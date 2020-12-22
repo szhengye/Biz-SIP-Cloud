@@ -36,6 +36,9 @@ public class ClientAdaptor {
     @Autowired
     private ClientAdaptorConfigMapping clientAdaptorConfigMapping;
 
+    @Autowired
+    private RestTemplate restTemplate;
+
     private AbstractMessageProcessor messageProcessor;
     private List<PredicateRuleConfig> serviceRules;
 
@@ -93,7 +96,7 @@ public class ClientAdaptor {
     }
 
     private BizMessage doBizService(JSONObject inData) throws BizException {
-        RestTemplate restTemplate = new RestTemplate();
+//        RestTemplate restTemplate = new RestTemplate();
         String rule = this.matchServicePredicateRule((JSONObject)inData);
         if (this.integratorUrl.endsWith("/")) {
             this.integratorUrl = this.integratorUrl.substring(0,integratorUrl.length()-1);
@@ -106,7 +109,7 @@ public class ClientAdaptor {
 //        header.setContentType(MediaType.MULTIPART_FORM_DATA);
         HttpEntity<JSONObject> httpEntity = new HttpEntity<>(inData, header);
 
-        BizMessage outMessage = (BizMessage)restTemplate.postForObject(this.integratorUrl, httpEntity, BizMessage.class);
+        BizMessage outMessage = (BizMessage)this.restTemplate.postForObject(this.integratorUrl, httpEntity, BizMessage.class);
         if (outMessage.getCode() == 0) {
             log.debug("Integrator返回成功:{}",outMessage.getData());
         }

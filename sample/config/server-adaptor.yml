@@ -1,6 +1,6 @@
 - id: server1
   type: rest
-  url: http://127.0.0.1:8001/server1
+  url: http://sip-sample-server/server1
   message:
     type: simple-json
   protocol:
@@ -9,7 +9,7 @@
 
 - id: server2
   type: rest
-  url: http://127.0.0.1:8001/server2
+  url: http://sip-sample-server/server2
   message:
     type: simple-json
   protocol:
@@ -18,7 +18,7 @@
 
 - id: server3
   type: rest
-  url: http://127.0.0.1:8001/server3
+  url: http://sip-sample-server/server3
   message:
 #    type: simple-json
 #    type: simple-xml

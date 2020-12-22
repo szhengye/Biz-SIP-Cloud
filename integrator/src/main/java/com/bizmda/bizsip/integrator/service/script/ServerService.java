@@ -21,20 +21,24 @@ import java.util.Map;
 @Service
 public class ServerService implements MagicModule {
 
-    public static ServerAdaptorConfigMapping serverAdaptorConfigMapping = null;
+    private static ServerAdaptorConfigMapping serverAdaptorConfigMapping = null;
+    private static RestTemplate restTemplate = null;
 
     public static ServerService serverService = new ServerService();
 
     @Comment("执行适配器服务调用")
     public static BizMessage<JSONObject> doService(@Comment("服务ID") String serviceId, @Comment("调用输入参数") Object inData) {
         JSONObject jsonObject = JSONUtil.parseObj(inData);
-        RestTemplate restTemplate = new RestTemplate();
-
-        BizMessage<JSONObject> inMessage = IntegratorController.currentBizMessage.get();
-        inMessage.setData(jsonObject);
+        if (restTemplate == null) {
+            restTemplate = SpringUtil.getBean("restTemplate");
+        }
         if (serverAdaptorConfigMapping == null) {
             serverAdaptorConfigMapping = SpringUtil.getBean("serverAdaptorConfigMapping");
         }
+
+        BizMessage<JSONObject> inMessage = IntegratorController.currentBizMessage.get();
+        inMessage.setData(jsonObject);
+
         RestServerAdaptorConfig serverAdaptorConfig = (RestServerAdaptorConfig) serverAdaptorConfigMapping.getServerAdaptorConfig(serviceId);
         BizMessage<JSONObject> outMessage = (BizMessage)restTemplate.postForObject(serverAdaptorConfig.getUrl(), inMessage, BizMessage.class);
         return outMessage;

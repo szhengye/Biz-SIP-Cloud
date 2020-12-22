@@ -3,8 +3,8 @@ server:
 
 
 bizsip:
-  config-path: /Users/shizhengye/IdeaProjects/biz-sip/sample/config
-  integrator-url: http://127.0.0.1:8000/api/
+  config-path: /Users/shizhengye/IdeaProjects/Biz-SIP-Cloud/sample/config
+  integrator-url: http://sip-integrator/api/
 
 logging:
   level:

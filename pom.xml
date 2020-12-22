@@ -13,7 +13,7 @@
         <module>common</module>
         <module>sample</module>
         <module>server-adaptor-spring-boot-starter</module>
-        <module>client-adaptor-spring-boot-starter</module>
+        <module>client-adaptor-spring-cloud-starter</module>
         <module>api-gateway</module>
     </modules>
 
@@ -87,6 +87,16 @@
             <dependency>
                 <groupId>com.bizmda.bizsip</groupId>
                 <artifactId>common</artifactId>
+                <version>${core.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.bizmda.bizsip</groupId>
+                <artifactId>client-adaptor-spring-cloud-starter</artifactId>
+                <version>${core.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.bizmda.bizsip</groupId>
+                <artifactId>server-adaptor-spring-boot-starter</artifactId>
                 <version>${core.version}</version>
             </dependency>
         </dependencies>

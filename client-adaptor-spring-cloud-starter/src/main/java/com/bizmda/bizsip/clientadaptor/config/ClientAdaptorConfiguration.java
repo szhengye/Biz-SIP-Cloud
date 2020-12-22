@@ -4,9 +4,11 @@ import com.bizmda.bizsip.config.ClientAdaptorConfigMapping;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
+import org.springframework.web.client.RestTemplate;
 
 /**
  * @author shizhengye
@@ -27,5 +29,12 @@ public class ClientAdaptorConfiguration {
     @Scope("prototype")
     public ClientAdaptor clientAdaptor() {
         return new ClientAdaptor();
+    }
+
+    @Bean
+    @LoadBalanced
+    public RestTemplate restTemplate()
+    {
+        return new RestTemplate();
     }
 }
