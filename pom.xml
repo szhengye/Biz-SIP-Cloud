@@ -14,18 +14,23 @@
         <module>sample</module>
         <module>server-adaptor-spring-boot-starter</module>
         <module>client-adaptor-spring-boot-starter</module>
+        <module>api-gateway</module>
     </modules>
 
     <properties>
+        <core.version>1.0-SNAPSHOT</core.version>
         <java.version>1.8</java.version>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <lombok.version>1.18.12</lombok.version>
         <spring-boot.version>2.2.9.RELEASE</spring-boot.version>
         <spring-platform.version>Cairo-SR3</spring-platform.version>
+        <spring-cloud-dependencies.version>Hoxton.SR8</spring-cloud-dependencies.version>
+        <spring-cloud-alibaba-dependencies.version>2.2.1.RELEASE</spring-cloud-alibaba-dependencies.version>
         <hutool.version>5.5.2</hutool.version>
         <snakeyaml.version>1.8</snakeyaml.version>
         <velocity.version>1.7</velocity.version>
+        <magic-api.version>0.4.7</magic-api.version>
     </properties>
 
     <dependencies>
@@ -54,6 +59,35 @@
                 <version>${spring-platform.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring-cloud-dependencies.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>com.alibaba.cloud</groupId>
+                <artifactId>spring-cloud-alibaba-dependencies</artifactId>
+                <version>${spring-cloud-alibaba-dependencies.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>cn.hutool</groupId>
+                <artifactId>hutool-all</artifactId>
+                <version>${hutool.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.ssssssss</groupId>
+                <artifactId>magic-api</artifactId>
+                <version>${magic-api.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.bizmda.bizsip</groupId>
+                <artifactId>common</artifactId>
+                <version>${core.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
