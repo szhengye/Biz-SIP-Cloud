@@ -17,6 +17,3 @@ spring:
           uri: lb://sip-integrator
           predicates:
             - Path=/api/**
-
-bizsip:
-  config-path: /Users/shizhengye/IdeaProjects/biz-sip/sample/config
