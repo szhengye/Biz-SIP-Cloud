@@ -3,7 +3,7 @@ package com.bizmda.bizsip.sample.serveradaptor.server.controller;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import com.bizmda.bizsip.common.BizException;
-import com.bizmda.bizsip.serveradaptor.protocol.JavaProtocolInterface;
+import com.bizmda.bizsip.serveradaptor.protocol.java.JavaProtocolInterface;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.HashMap;

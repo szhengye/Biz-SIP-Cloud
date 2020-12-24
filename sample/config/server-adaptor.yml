@@ -34,3 +34,13 @@
   protocol:
     type: java
     class-name: com.bizmda.bizsip.sample.serveradaptor.server.controller.EchoServer
+
+- id: netty
+  type: rest
+  url: http://sip-sample-server/netty
+  message:
+    type: simple-json
+  protocol:
+    type: netty
+    host: 127.0.0.1
+    port: 10001

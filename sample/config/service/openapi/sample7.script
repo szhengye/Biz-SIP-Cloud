@@ -1,0 +1,11 @@
+var result = server.doService("netty",bizmessage.data)
+if (result.code == 0) {
+    return result.data;
+}
+else {
+    var error_result = {
+        code: result.code,
+        message: result.message
+    }
+    return error_result;
+}
