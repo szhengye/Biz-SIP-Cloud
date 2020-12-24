@@ -1,4 +1,4 @@
-package com.bizmda.bizsip.serveradaptor.netty;
+package com.bizmda.bizsip.clientadaptor.netty;
 
 import com.bizmda.bizsip.clientadaptor.config.ClientAdaptor;
 import com.bizmda.bizsip.common.BizException;

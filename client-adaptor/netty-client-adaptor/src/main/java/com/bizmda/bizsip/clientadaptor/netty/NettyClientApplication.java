@@ -1,12 +1,12 @@
-package com.bizmda.bizsip.serveradaptor.netty;
+package com.bizmda.bizsip.clientadaptor.netty;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class NettyServerApplication {
+public class NettyClientApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(NettyServerApplication.class, args);
+        SpringApplication.run(NettyClientApplication.class, args);
     }
 }

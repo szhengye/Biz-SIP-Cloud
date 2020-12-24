@@ -49,7 +49,7 @@ public class ServerAdaptor {
 
         this.messageProcessor.init(configPath,serverAdaptorConfig.getMessageMap());
 
-        String protocolType = serverAdaptorConfig.getProtocol().getType();
+        String protocolType = (String)serverAdaptorConfig.getProtocolMap().get("type");
 
         clazz = AbstractServerProtocolProcessor.protocolTypeMap.get(protocolType);
         if (clazz == null) {

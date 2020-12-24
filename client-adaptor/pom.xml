@@ -12,7 +12,7 @@
     <artifactId>client-adaptor</artifactId>
     <packaging>pom</packaging>
     <modules>
-        <module>netty-server</module>
+        <module>netty-client-adaptor</module>
     </modules>
 
 

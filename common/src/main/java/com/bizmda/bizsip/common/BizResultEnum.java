@@ -24,6 +24,8 @@ public enum BizResultEnum {
     // 其它错误（1000以上）
     EL_CALCULATE_ERROR(1004,"EL表达式计算出错"),
     NO_MATCH_SERVICE_RULE(1005,"没有找到匹配的断言规则"),
+    NETTY_CONNECT_ERROR(1006,"连接Netty服务端失败"),
+
 
     SUCCESS(0,"成功");
 

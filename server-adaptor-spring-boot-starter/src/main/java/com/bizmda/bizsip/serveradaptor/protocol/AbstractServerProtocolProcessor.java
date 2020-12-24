@@ -12,6 +12,7 @@ import java.util.Map;
 public abstract class AbstractServerProtocolProcessor {
     public final static Map<String,Class> protocolTypeMap = new HashMap<String,Class>() {{
         put("java",com.bizmda.bizsip.serveradaptor.protocol.JavaServerProtocolProcessor.class);
+        put("netty",com.bizmda.bizsip.serveradaptor.protocol.NettyServerProtocolProcessor.class);
     }};
 
     private AbstractServerAdaptorConfig serverAdaptorConfig;

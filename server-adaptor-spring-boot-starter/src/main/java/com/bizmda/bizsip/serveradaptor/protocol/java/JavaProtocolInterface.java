@@ -1,4 +1,4 @@
-package com.bizmda.bizsip.serveradaptor.protocol;
+package com.bizmda.bizsip.serveradaptor.protocol.java;
 
 import com.bizmda.bizsip.common.BizException;
 

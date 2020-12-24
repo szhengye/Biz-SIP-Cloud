@@ -16,7 +16,6 @@
         <module>client-adaptor-spring-cloud-starter</module>
         <module>api-gateway</module>
         <module>client-adaptor</module>
-        <module>server-adaptor</module>
     </modules>
 
     <properties>

@@ -1,4 +1,4 @@
-package com.bizmda.bizsip.serveradaptor.netty;
+package com.bizmda.bizsip.clientadaptor.netty;
 import com.bizmda.bizsip.clientadaptor.config.ClientAdaptor;
 import com.bizmda.bizsip.common.BizException;
 import com.bizmda.bizsip.common.BizMessage;
@@ -27,6 +27,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
      */
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+        //TODO:TCP传输过程中的分包拆包问题有待后期解决，建议采用添加不同解码器的方式来处理
         log.debug("服务器收到消息: {}", msg.toString());
         BizMessage outMessage = null;
         try {
@@ -35,14 +36,10 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
             log.error("客户端适配器执行出错!",e);
             ctx.disconnect();
             return;
-        } catch (RuntimeException e) {
-            log.error("客户端适配器执行出错!",e);
-            ctx.disconnect();
-            return;
         }
         ctx.write(outMessage.getData());
         ctx.flush();
-        ctx.disconnect();
+        ctx.close();
     }
 
     /**
