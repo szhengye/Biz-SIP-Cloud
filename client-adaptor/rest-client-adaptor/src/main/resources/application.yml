@@ -1,0 +1,11 @@
+server:
+  port: 8080
+
+
+bizsip:
+  config-path: /Users/shizhengye/IdeaProjects/Biz-SIP-Cloud/sample/config
+  integrator-url: http://sip-integrator/api/
+
+logging:
+  level:
+    com.bizmda.bizsip: debug
