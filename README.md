@@ -19,9 +19,9 @@ Biz-SIP服务整合中间件，能支持大量不同服务的整合和编排，�
 * 敏捷交付：可快速重组业务逻辑、敏捷交付业务应用，比传统代码模式交付速度提升80%
 
 ### 相关文档
-1. [系统概述](https://www.yuque.com/docs/share/468740ca-fff7-4923-9f49-8fa5e3171492)
-2. [快速启动](https://www.yuque.com/docs/share/ee5fa1f1-4a16-4de1-a6c6-c33ceef99cab)
-3. [系统配置](https://www.yuque.com/docs/share/f296e5a0-5f4f-452a-bcc7-241a968b2274)
-4. [开发规范](https://www.yuque.com/docs/share/2e633d3d-bbb6-476a-8737-fd93542cbcc4)
-5. [Sample介绍](https://www.yuque.com/docs/share/cf54f8ef-a129-4945-87ca-cc835e74a346)
-6. [模块二次开发](https://www.yuque.com/docs/share/ef8a5a2a-1dda-4f38-b931-01cddca40248)
+1. [系统概述](https://www.yuque.com/docs/share/015233b6-15bf-4928-a372-b0b1004d2d03)
+2. [快速启动](https://www.yuque.com/docs/share/46618b42-2741-4124-b2b7-28f846dba52f)
+3. [系统配置](https://www.yuque.com/docs/share/33eaa633-4d51-4736-80cb-00326995f2d2)
+4. [开发规范](https://www.yuque.com/docs/share/76e58d31-3e1c-490d-a24b-ff6f402bfb15)
+5. [模块原理与二次开发](https://www.yuque.com/docs/share/2dcd0a5e-793b-4663-8494-05dfe29756e9)
+5. [Sample测试案例](https://www.yuque.com/docs/share/d27bc7a2-480f-4753-847c-94ee5f8647d4)
