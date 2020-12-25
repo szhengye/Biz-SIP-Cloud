@@ -1,0 +1,16 @@
+- name: sex
+  length: 1
+- name: accountNo
+  length: 8
+  unpack-functions:
+    - name: trim
+- name: accountName
+  length: 10
+  unpack-functions:
+    - name: trim
+- name: balance
+  length: 10
+  pack-functions:
+    - name: decimalFormat
+      args:
+        - "###,###.00"

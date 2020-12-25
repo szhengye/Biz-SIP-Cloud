@@ -27,6 +27,7 @@ public abstract class AbstractMessageProcessor<T> {
         put("simple-xml",SimpleXmlMessageProcessor.class);
         put("velocity-json",VelocityJsonMessageProcessor.class);
         put("velocity-xml",VelocityXmlMessageProcessor.class);
+        put("fixed-length",FixedLengthMessageProcessor.class);
     }};
 
     /**

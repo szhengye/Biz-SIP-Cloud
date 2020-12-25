@@ -38,7 +38,6 @@ public class VelocityJsonMessageProcessor extends AbstractMessageProcessor {
 
     @Override
     protected Object json2adaptor(JSONObject inMessage) throws BizException {
-
         Map map = new HashMap();
         map.put("data",inMessage);
         VelocityContext velocityContext = new VelocityContext(map);

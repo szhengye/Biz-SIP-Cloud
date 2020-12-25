@@ -20,7 +20,10 @@ public enum BizResultEnum {
     // 消息转换错误（300-399
     NO_MESSAGE_PROCESSOR(301,"没有设置消息转换处理器"),
     NO_MESSAGE_MATCH_RULE(302,"没有找到匹配的消息断言规则"),
-    MESSAGE_CREATE_ERROR(303,"消息处理器Java类创建失败"),
+    NO_MESSAGE_CONFIG_FILE(303,"对应的消息转换配置文件不存在"),
+    MESSAGE_CREATE_ERROR(304,"消息处理器Java类创建失败"),
+    NO_FIELD_FUNCTION_IMPL(305,"域处理函数没有找到实现方法"),
+    FIELD_FUNCTION_IMPL_ERROR(306,"域处理函数执行出错"),
     // 其它错误（1000以上）
     EL_CALCULATE_ERROR(1004,"EL表达式计算出错"),
     NO_MATCH_SERVICE_RULE(1005,"没有找到匹配的断言规则"),

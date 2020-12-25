@@ -41,9 +41,9 @@ public class RestClientController {
             return outMessage;
         } catch (BizException e) {
             JSONObject result = JSONUtil.createObj()
-                    .put("code", e.getCode())
-                    .put("message", e.getMessage())
-                    .put("extMessage", e.getExtMessage());
+                    .set("code", e.getCode())
+                    .set("message", e.getMessage())
+                    .set("extMessage", e.getExtMessage());
             return result;
         }
     }
