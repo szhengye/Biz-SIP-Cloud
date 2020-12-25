@@ -61,6 +61,26 @@
     type: java
     class-name: com.bizmda.bizsip.sample.serveradaptor.server.controller.EchoServer
 
+- id: server5
+  type: rest
+  url: http://sip-sample-server/server5
+  message:
+    type: velocity-split
+    separators:
+      - "*"
+      - ","
+    pack-rules:
+      - predicate: '#{#data[sex]=="0"}'
+        rule: server5/woman.vm
+      - predicate: '#{#data[sex]=="1"}'
+        rule: server5/man.vm
+      - predicate:
+        rule: server5/error.vm
+    unpack-rules:
+  protocol:
+    type: java
+    class-name: com.bizmda.bizsip.sample.serveradaptor.server.controller.EchoServer
+
 - id: netty
   type: rest
   url: http://sip-sample-server/netty
