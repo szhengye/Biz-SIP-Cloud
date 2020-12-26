@@ -8,7 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 public class EchoServer implements JavaProtocolInterface {
     @Override
     public Object process(Object inMessage) throws BizException {
-        log.debug("EchoServer传入消息:{}",inMessage);
+        log.debug("EchoServer传入消息:[{}]",inMessage);
         return inMessage;
     }
 }

@@ -1,1 +1,6 @@
-${data.sex},${data.accountNo}*${data.accountName},${data.balance}
+<account>
+    <name>${data.accountName}</name>
+    <balance>${data.balance}</balance>
+    <no>${data.accountNo}</no>
+    <sex>女人</sex>
+</account>

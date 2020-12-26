@@ -1,0 +1,6 @@
+- name: sex
+  length: 1
+- name: accountNo
+  length: 8
+- name: accountName
+  length: 10

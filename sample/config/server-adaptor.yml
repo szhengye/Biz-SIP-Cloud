@@ -20,17 +20,7 @@
   type: rest
   url: http://sip-sample-server/server3
   message:
-#    type: simple-json
-#    type: simple-xml
-    type: velocity-json
-    pack-rules:
-      - predicate: '#{#data[sex]=="0"}'
-        rule: server3/woman.vm
-      - predicate: '#{#data[sex]=="1"}'
-        rule: server3/man.vm
-      - predicate:
-        rule: server3/error.vm
-    unpack-rules:
+    type: simple-xml
   protocol:
     type: java
     class-name: com.bizmda.bizsip.sample.serveradaptor.server.controller.EchoServer
@@ -39,24 +29,15 @@
   type: rest
   url: http://sip-sample-server/server4
   message:
-    type: fixed-length
-    pre-unpack:
-      - name: sex
-        length: 1
+    type: velocity-json
     pack-rules:
       - predicate: '#{#data[sex]=="0"}'
-        rule: server4/woman.yml
+        rule: server4/woman.vm
       - predicate: '#{#data[sex]=="1"}'
-        rule: server4/man.yml
+        rule: server4/man.vm
       - predicate:
-        rule: server4/error.yml
+        rule: server4/error.vm
     unpack-rules:
-      - predicate: '#{#data[sex]=="0"}'
-        rule: server4/woman.yml
-      - predicate: '#{#data[sex]=="1"}'
-        rule: server4/man.yml
-      - predicate:
-        rule: server4/error.yml
   protocol:
     type: java
     class-name: com.bizmda.bizsip.sample.serveradaptor.server.controller.EchoServer
@@ -65,10 +46,7 @@
   type: rest
   url: http://sip-sample-server/server5
   message:
-    type: velocity-split
-    separators:
-      - "*"
-      - ","
+    type: velocity-xml
     pack-rules:
       - predicate: '#{#data[sex]=="0"}'
         rule: server5/woman.vm
@@ -77,6 +55,53 @@
       - predicate:
         rule: server5/error.vm
     unpack-rules:
+  protocol:
+    type: java
+    class-name: com.bizmda.bizsip.sample.serveradaptor.server.controller.EchoServer
+
+- id: server6
+  type: rest
+  url: http://sip-sample-server/server6
+  message:
+    type: fixed-length
+    pre-unpack:
+      - name: sex
+        length: 1
+        functions:
+          - name: trim
+    pack-rules:
+      - predicate: '#{#data[sex]=="0"}'
+        rule: server6/woman.yml
+      - predicate: '#{#data[sex]=="1"}'
+        rule: server6/man.yml
+      - predicate:
+        rule: server6/error.yml
+    unpack-rules:
+      - predicate: '#{#data[sex]=="0"}'
+        rule: server6/woman.yml
+      - predicate: '#{#data[sex]=="1"}'
+        rule: server6/man.yml
+      - predicate:
+        rule: server6/error.yml
+  protocol:
+    type: java
+    class-name: com.bizmda.bizsip.sample.serveradaptor.server.controller.EchoServer
+
+- id: server7
+  type: rest
+  url: http://sip-sample-server/server7
+  message:
+    type: velocity-split
+    separators:
+      - "*"
+      - ","
+    pack-rules:
+      - predicate: '#{#data[sex]=="0"}'
+        rule: server7/woman.vm
+      - predicate: '#{#data[sex]=="1"}'
+        rule: server7/man.vm
+      - predicate:
+        rule: server7/error.vm
   protocol:
     type: java
     class-name: com.bizmda.bizsip.sample.serveradaptor.server.controller.EchoServer
