@@ -8,6 +8,9 @@ import com.bizmda.bizsip.serveradaptor.protocol.java.JavaProtocolInterface;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * @author shizhengye
+ */
 public class ActServer implements JavaProtocolInterface {
     public final static Map<String,Integer> ID_BALANCE_MAP = new HashMap<String,Integer>(){{
         put("003",300);

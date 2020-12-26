@@ -7,6 +7,9 @@ import io.netty.handler.codec.string.StringDecoder;
 import io.netty.handler.codec.string.StringEncoder;
 import io.netty.util.CharsetUtil;
 
+/**
+ * @author shizhengye
+ */
 public class ServerChannelInitializer extends ChannelInitializer<SocketChannel> {
     private ClientAdaptor clientAdaptor;
 

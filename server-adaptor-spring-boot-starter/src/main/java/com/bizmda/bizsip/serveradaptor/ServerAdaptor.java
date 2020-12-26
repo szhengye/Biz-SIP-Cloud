@@ -19,7 +19,6 @@ import org.springframework.stereotype.Service;
  */
 @Slf4j
 @Service
-//@Scope("prototype")
 @Scope(value="prototype", proxyMode= ScopedProxyMode.TARGET_CLASS)
 public class ServerAdaptor {
     @Value("${bizsip.config-path}")
@@ -51,7 +50,7 @@ public class ServerAdaptor {
 
         String protocolType = (String)serverAdaptorConfig.getProtocolMap().get("type");
 
-        clazz = AbstractServerProtocolProcessor.protocolTypeMap.get(protocolType);
+        clazz = AbstractServerProtocolProcessor.PROTOCOL_TYPE_MAP.get(protocolType);
         if (clazz == null) {
             throw new BizException(BizResultEnum.SERVER_NO_PROTOCOL_PROCESSOR);
         }

@@ -28,7 +28,7 @@
         <spring-platform.version>Cairo-SR3</spring-platform.version>
         <spring-cloud-dependencies.version>Hoxton.SR8</spring-cloud-dependencies.version>
         <spring-cloud-alibaba-dependencies.version>2.2.1.RELEASE</spring-cloud-alibaba-dependencies.version>
-        <hutool.version>5.5.2</hutool.version>
+        <hutool.version>5.5.4</hutool.version>
         <snakeyaml.version>1.8</snakeyaml.version>
         <velocity.version>1.7</velocity.version>
         <magic-api.version>0.4.7</magic-api.version>

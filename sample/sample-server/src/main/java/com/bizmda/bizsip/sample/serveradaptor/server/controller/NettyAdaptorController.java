@@ -14,6 +14,9 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletResponse;
 
+/**
+ * @author shizhengye
+ */
 @Slf4j
 @RestController
 public class NettyAdaptorController {

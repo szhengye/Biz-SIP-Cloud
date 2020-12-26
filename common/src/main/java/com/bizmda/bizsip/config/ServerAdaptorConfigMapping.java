@@ -27,7 +27,7 @@ public class ServerAdaptorConfigMapping {
         this.serverAdaptorConfigMap = new HashMap<String, AbstractServerAdaptorConfig>();
         for (Map serverAdaptorMap:serverAdaptorList) {
             String type = (String)serverAdaptorMap.get("type");
-            if (type.equalsIgnoreCase("rest")) {
+            if ("rest".equalsIgnoreCase(type)) {
                 serverAdaptor = new RestServerAdaptorConfig(serverAdaptorMap);
             }
             else {

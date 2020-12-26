@@ -56,7 +56,6 @@ public class VelocityXmlMessageProcessor extends AbstractMessageProcessor {
 
     @Override
     protected JSONObject adaptor2json(Object inMessage) throws BizException {
-//        return JSONUtil.parseObj((String)inMessage);
         JSONObject jsonObject = XML.toJSONObject((java.lang.String)inMessage);
         return jsonObject;
     }

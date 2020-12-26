@@ -13,7 +13,6 @@ public class AbstractServerAdaptorConfig {
     private String type;
     private Map messageMap;
     private Map protocolMap;
-//    private AbstractServerAdaptorProtocolConfig protocol;
 
     public AbstractServerAdaptorConfig(Map map) {
         this.id = (String)map.get("id");

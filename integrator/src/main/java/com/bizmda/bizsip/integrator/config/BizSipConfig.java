@@ -10,6 +10,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestTemplate;
 
+/**
+ * @author shizhengye
+ */
 @Slf4j
 @Configuration
 public class BizSipConfig {
@@ -17,7 +20,7 @@ public class BizSipConfig {
     private String configPath;
 
     @Bean
-    public IntegratorServiceMapping IntegratorServiceMapping() {
+    public IntegratorServiceMapping integratorServiceMapping() {
         try {
             return new IntegratorServiceMapping(this.configPath);
         } catch (BizException e) {

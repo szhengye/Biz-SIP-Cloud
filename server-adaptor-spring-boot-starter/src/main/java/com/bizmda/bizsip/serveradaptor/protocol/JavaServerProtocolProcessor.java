@@ -14,7 +14,6 @@ public class JavaServerProtocolProcessor extends AbstractServerProtocolProcessor
     @Override
     public void init(AbstractServerAdaptorConfig serverAdaptorConfig) throws BizException {
         super.init(serverAdaptorConfig);
-//        JavaServerAdaptorProtocolConfig serverAdaptorProtocol = (JavaServerAdaptorProtocolConfig)serverAdaptorConfig.getProtocol();
         String clazzName = (String)serverAdaptorConfig.getProtocolMap().get("class-name");
         try {
             javaProtocol = (JavaProtocolInterface)Class.forName(clazzName).newInstance();

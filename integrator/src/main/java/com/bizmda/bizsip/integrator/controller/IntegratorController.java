@@ -36,23 +36,11 @@ import java.util.Map;
 public class IntegratorController {
     @Autowired
     IntegratorServiceMapping integratorServiceMapping;
-//    @Autowired
-//    ServerAdaptorConfigMapping serverAdaptorConfigMapping;
-//    @Autowired(required = false)
-//    private List<HttpMessageConverter<?>> httpMessageConverters;
-//    @Autowired
-//    private ApplicationContext springContext;
 
     public static ThreadLocal<BizMessage> currentBizMessage = new ThreadLocal<BizMessage>();
 
     private ResultProvider resultProvider = new DefaultResultProvider();
     private boolean throwException = false;
-
-//    @PostConstruct
-//    public void init() {
-//        setupMagicModules();
-//        ServerService.serverAdaptorConfigMapping = this.serverAdaptorConfigMapping;
-//    }
 
     @PostMapping(value="/api",consumes = "application/json", produces = "application/json")
     public BizMessage<JSONObject> doApiService(HttpServletRequest request, HttpServletResponse response,

@@ -11,7 +11,6 @@ import org.springframework.context.annotation.Import;
  */
 @SpringBootApplication
 @EnableDiscoveryClient
-//@ComponentScan(value = "com.bizmda.bizsip.config")
 @ComponentScan(value = "cn.hutool.extra.spring")
 @ComponentScan(value = "com.bizmda.bizsip.integrator")
 @Import(cn.hutool.extra.spring.SpringUtil.class)

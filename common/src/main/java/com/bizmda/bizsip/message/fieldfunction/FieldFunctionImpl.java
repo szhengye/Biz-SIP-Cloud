@@ -5,6 +5,9 @@ import cn.hutool.core.util.StrUtil;
 
 import java.util.List;
 
+/**
+ * @author shizhengye
+ */
 public class FieldFunctionImpl {
     public static String fill(Object fieldValue, int fieldLen, List<String> args) {
         if (fieldLen == 0) {
@@ -24,11 +27,11 @@ public class FieldFunctionImpl {
         }
         String fieldValueStr = (String)fieldValue;
         String fillStr = StrUtil.repeat(args.get(1),fieldLen - fieldValueStr.length());
-        if (args.get(0).equalsIgnoreCase("left")) {
+        if ("left".equalsIgnoreCase(args.get(0))) {
             fieldValueStr = fillStr + fieldValueStr;
             return fieldValueStr.substring(fieldValueStr.length() - fieldLen,fieldValueStr.length());
         }
-        if (args.get(0).equalsIgnoreCase("right")) {
+        if ("right".equalsIgnoreCase(args.get(0))) {
             fieldValueStr = fieldValueStr + fillStr;
             return fieldValueStr.substring(0,fieldLen);
         }
@@ -39,10 +42,10 @@ public class FieldFunctionImpl {
         if (args.size() == 0) {
             return fieldValue.toString().trim();
         }
-        if (args.get(0).equalsIgnoreCase("left")) {
+        if ("left".equalsIgnoreCase(args.get(0))) {
             return StrUtil.trimStart(fieldValue.toString());
         }
-        if (args.get(0).equalsIgnoreCase("right")) {
+        if ("right".equalsIgnoreCase(args.get(0))) {
             return StrUtil.trimEnd(fieldValue.toString());
         }
 
