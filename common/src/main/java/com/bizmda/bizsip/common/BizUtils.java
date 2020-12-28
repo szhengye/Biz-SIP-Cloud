@@ -14,7 +14,7 @@ import java.util.concurrent.Future;
  * @author shizhengye
  */
 public class BizUtils {
-    private static ExecutorService executorService = ThreadUtil.newExecutor(5);
+    private static ExecutorService executorService = ThreadUtil.newExecutor(Runtime.getRuntime().availableProcessors()*2);
 
     public static List<File> getFileList(String strPath, String suffix) {
         List<File> filelist = new ArrayList<File>();
