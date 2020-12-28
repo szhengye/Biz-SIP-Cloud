@@ -3,7 +3,7 @@ package com.bizmda.bizsip.common;
 import lombok.Getter;
 
 /**
- * @author shizhengye
+ * @author 史正烨
  */
 @Getter
 public class BizException extends Exception {

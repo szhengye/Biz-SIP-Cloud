@@ -7,7 +7,7 @@ import com.bizmda.bizsip.common.BizException;
 import java.util.Map;
 
 /**
- * @author shizhengye
+ * @author 史正烨
  */
 public class SimpleJsonMessageProcessor<String> extends AbstractMessageProcessor {
 //    @Override

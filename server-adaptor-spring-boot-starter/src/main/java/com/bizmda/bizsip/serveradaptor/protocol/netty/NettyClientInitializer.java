@@ -6,7 +6,7 @@ import io.netty.handler.codec.string.StringDecoder;
 import io.netty.handler.codec.string.StringEncoder;
 
 /**
- * @author shizhengye
+ * @author 史正烨
  */
 public class NettyClientInitializer extends ChannelInitializer<SocketChannel> {
     @Override

@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestTemplate;
 
 /**
- * @author shizhengye
+ * @author 史正烨
  */
 @Slf4j
 @Configuration

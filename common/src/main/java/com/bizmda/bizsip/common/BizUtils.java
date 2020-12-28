@@ -11,7 +11,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 
 /**
- * @author shizhengye
+ * @author 史正烨
  */
 public class BizUtils {
     private static ExecutorService executorService = ThreadUtil.newExecutor(Runtime.getRuntime().availableProcessors()*2);

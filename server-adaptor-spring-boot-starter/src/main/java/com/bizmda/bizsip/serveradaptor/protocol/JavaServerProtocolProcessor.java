@@ -6,7 +6,7 @@ import com.bizmda.bizsip.config.AbstractServerAdaptorConfig;
 import com.bizmda.bizsip.serveradaptor.protocol.java.JavaProtocolInterface;
 
 /**
- * @author shizhengye
+ * @author 史正烨
  */
 public class JavaServerProtocolProcessor extends AbstractServerProtocolProcessor {
     private JavaProtocolInterface javaProtocol;

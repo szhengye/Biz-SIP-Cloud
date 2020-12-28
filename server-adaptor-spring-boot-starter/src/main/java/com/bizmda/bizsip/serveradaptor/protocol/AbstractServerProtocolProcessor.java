@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @author shizhengye
+ * @author 史正烨
  */
 public abstract class AbstractServerProtocolProcessor {
     public final static Map<String,Class> PROTOCOL_TYPE_MAP = new HashMap<String,Class>() {{

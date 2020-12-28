@@ -19,7 +19,7 @@ import org.ssssssss.script.MagicScriptContext;
 import javax.script.SimpleScriptContext;
 
 /**
- * @author shizhengye
+ * @author 史正烨
  */
 @Slf4j
 public class ScriptIntegratorService extends AbstractIntegratorService {

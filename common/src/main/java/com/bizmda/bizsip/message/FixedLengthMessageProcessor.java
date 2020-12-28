@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @author shizhengye
+ * @author 史正烨
  */
 public class FixedLengthMessageProcessor<String> extends AbstractMessageProcessor {
     private Map<java.lang.String, List<FixedLengthConfig>> fixedLengthConfigsMap = new HashMap<java.lang.String,List<FixedLengthConfig>>();

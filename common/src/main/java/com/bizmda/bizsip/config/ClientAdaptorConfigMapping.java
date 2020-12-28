@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @author shizhengye
+ * @author 史正烨
  */
 public class ClientAdaptorConfigMapping {
     private Map<String, CommonClientAdaptorConfig> clientAdaptorConfigMap;

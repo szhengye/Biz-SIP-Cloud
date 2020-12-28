@@ -7,7 +7,7 @@ import lombok.Data;
 import java.util.Map;
 
 /**
- * @author shizhengye
+ * @author 史正烨
  */
 @Data
 public class BizMessage<T> {

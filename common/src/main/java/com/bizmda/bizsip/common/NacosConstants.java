@@ -1,5 +1,8 @@
 package com.bizmda.bizsip.common;
 
+/**
+ * @author 史正烨
+ */
 public class NacosConstants {
     public static final String NACOS_GROUP="DEFAULT_GROUP";
     public static final String REFRESH_SERVER_ADAPTOR_DATA_ID="bizsip.refresh.server-adaptor";

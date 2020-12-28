@@ -18,6 +18,9 @@ import org.springframework.stereotype.Service;
 import javax.annotation.PostConstruct;
 import java.util.Properties;
 
+/**
+ * @author 史正烨
+ */
 @Slf4j
 @Service
 public class IntegratorRefreshConfig {

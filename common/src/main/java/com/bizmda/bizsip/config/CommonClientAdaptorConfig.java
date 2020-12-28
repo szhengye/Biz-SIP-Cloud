@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @author shizhengye
+ * @author 史正烨
  */
 @Data
 public class CommonClientAdaptorConfig {

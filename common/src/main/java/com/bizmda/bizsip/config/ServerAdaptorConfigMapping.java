@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @author shizhengye
+ * @author 史正烨
  */
 public class ServerAdaptorConfigMapping {
     private String configPath;

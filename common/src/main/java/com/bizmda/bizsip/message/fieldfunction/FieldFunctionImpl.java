@@ -6,7 +6,7 @@ import cn.hutool.core.util.StrUtil;
 import java.util.List;
 
 /**
- * @author shizhengye
+ * @author 史正烨
  */
 public class FieldFunctionImpl {
     public static String fill(Object fieldValue, int fieldLen, List<String> args) {

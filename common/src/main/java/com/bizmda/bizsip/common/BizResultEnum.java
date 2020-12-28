@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @author shizhengye
+ * @author 史正烨
  */
 
 public enum BizResultEnum {

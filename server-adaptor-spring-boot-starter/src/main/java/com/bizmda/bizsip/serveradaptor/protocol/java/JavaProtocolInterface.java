@@ -3,7 +3,7 @@ package com.bizmda.bizsip.serveradaptor.protocol.java;
 import com.bizmda.bizsip.common.BizException;
 
 /**
- * @author shizhengye
+ * @author 史正烨
  */
 public interface JavaProtocolInterface {
     /**

@@ -7,7 +7,7 @@ import io.netty.channel.ChannelInboundHandlerAdapter;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * @author shizhengye
+ * @author 史正烨
  */
 @Slf4j
 public class NettyServerHandler extends ChannelInboundHandlerAdapter {

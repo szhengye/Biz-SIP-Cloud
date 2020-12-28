@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * @author shizhengye
+ * @author 史正烨
  */
 @Slf4j
 @Configuration

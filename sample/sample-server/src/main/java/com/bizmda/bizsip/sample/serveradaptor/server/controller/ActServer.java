@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @author shizhengye
+ * @author 史正烨
  */
 public class ActServer implements JavaProtocolInterface {
     public final static Map<String,Integer> ID_BALANCE_MAP = new HashMap<String,Integer>(){{

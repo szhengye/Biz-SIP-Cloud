@@ -11,6 +11,9 @@ import java.nio.file.Path;
 import java.nio.file.WatchEvent;
 import java.util.Properties;
 
+/**
+ * @author 史正烨
+ */
 @Slf4j
 public class ConfigWatcher implements Watcher {
     private static int CREATE_FLAG = 1;

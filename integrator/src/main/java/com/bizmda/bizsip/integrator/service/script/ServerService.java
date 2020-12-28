@@ -16,7 +16,7 @@ import org.ssssssss.script.annotation.Comment;
 import java.util.Map;
 
 /**
- * @author shizhengye
+ * @author 史正烨
  */
 @Service
 public class ServerService implements MagicModule {

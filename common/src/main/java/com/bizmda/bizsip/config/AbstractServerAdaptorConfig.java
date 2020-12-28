@@ -5,7 +5,7 @@ import lombok.Data;
 import java.util.*;
 
 /**
- * @author shizhengye
+ * @author 史正烨
  */
 @Data
 public class AbstractServerAdaptorConfig {

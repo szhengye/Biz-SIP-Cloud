@@ -13,7 +13,7 @@ import org.w3c.dom.Node;
 import java.util.Map;
 
 /**
- * @author shizhengye
+ * @author 史正烨
  */
 public class SimpleXmlMessageProcessor<String> extends AbstractMessageProcessor {
 //    @Override

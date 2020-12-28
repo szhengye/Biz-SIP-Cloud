@@ -17,7 +17,7 @@ import java.util.Properties;
 
 
 /**
- * @author shizhengye
+ * @author 史正烨
  */
 public class VelocityXmlMessageProcessor extends AbstractMessageProcessor {
     @Override

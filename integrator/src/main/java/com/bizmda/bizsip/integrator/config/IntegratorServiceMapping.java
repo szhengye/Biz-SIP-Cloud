@@ -15,7 +15,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 
 /**
- * @author shizhengye
+ * @author 史正烨
  */
 @Slf4j
 public class IntegratorServiceMapping {

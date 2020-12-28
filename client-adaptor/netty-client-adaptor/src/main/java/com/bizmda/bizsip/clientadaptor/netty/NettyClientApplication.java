@@ -4,7 +4,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 /**
- * @author shizhengye
+ * @author 史正烨
  */
 @SpringBootApplication
 public class NettyClientApplication {

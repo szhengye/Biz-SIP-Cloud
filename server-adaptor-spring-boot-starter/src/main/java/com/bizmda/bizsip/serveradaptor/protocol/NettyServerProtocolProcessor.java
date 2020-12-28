@@ -7,7 +7,7 @@ import com.bizmda.bizsip.serveradaptor.protocol.java.JavaProtocolInterface;
 import com.bizmda.bizsip.serveradaptor.protocol.netty.NettyClient;
 
 /**
- * @author shizhengye
+ * @author 史正烨
  */
 public class NettyServerProtocolProcessor extends AbstractServerProtocolProcessor {
     private NettyClient nettyClient;

@@ -19,7 +19,7 @@ import java.util.Properties;
 
 
 /**
- * @author shizhengye
+ * @author 史正烨
  */
 public class VelocitySplitMessageProcessor extends AbstractMessageProcessor {
     private List<String> separators;
