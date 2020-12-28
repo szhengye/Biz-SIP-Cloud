@@ -1,6 +1,6 @@
 package com.bizmda.bizsip.clientadaptor.netty;
 
-import com.bizmda.bizsip.clientadaptor.config.ClientAdaptor;
+import com.bizmda.bizsip.clientadaptor.ClientAdaptor;
 import com.bizmda.bizsip.common.BizException;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;

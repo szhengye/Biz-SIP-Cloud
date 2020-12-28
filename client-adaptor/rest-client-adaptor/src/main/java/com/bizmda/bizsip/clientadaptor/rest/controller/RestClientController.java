@@ -2,9 +2,8 @@ package com.bizmda.bizsip.clientadaptor.rest.controller;
 
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
-import com.bizmda.bizsip.clientadaptor.config.ClientAdaptor;
+import com.bizmda.bizsip.clientadaptor.ClientAdaptor;
 import com.bizmda.bizsip.common.BizException;
-import com.bizmda.bizsip.common.BizMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

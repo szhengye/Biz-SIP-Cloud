@@ -1,5 +1,6 @@
 package com.bizmda.bizsip.serveradaptor.config;
 
+import com.bizmda.bizsip.common.BizException;
 import com.bizmda.bizsip.config.ServerAdaptorConfigMapping;
 import com.bizmda.bizsip.serveradaptor.ServerAdaptor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,7 +22,12 @@ public class ServerAdaptorConfiguration {
     @Bean
     @ConditionalOnProperty(name = "bizsip.config-path", matchIfMissing = false)
     public ServerAdaptorConfigMapping serverAdaptorConfigMapping() {
-        return new ServerAdaptorConfigMapping(this.configPath);
+        try {
+            return new ServerAdaptorConfigMapping(this.configPath);
+        } catch (BizException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     @Bean

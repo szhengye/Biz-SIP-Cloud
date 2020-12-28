@@ -1,6 +1,13 @@
 server:
   port: 8080
 
+spring:
+  application:
+    name: sip-rest-client-adaptor
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8848
 
 bizsip:
   config-path: /Users/shizhengye/IdeaProjects/Biz-SIP-Cloud/sample/config

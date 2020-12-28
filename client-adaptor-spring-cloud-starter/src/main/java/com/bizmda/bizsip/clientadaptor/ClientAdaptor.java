@@ -1,11 +1,12 @@
-package com.bizmda.bizsip.clientadaptor.config;
+package com.bizmda.bizsip.clientadaptor;
 
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
-import com.bizmda.bizsip.common.BizException;
-import com.bizmda.bizsip.common.BizMessage;
-import com.bizmda.bizsip.common.BizResultEnum;
-import com.bizmda.bizsip.common.BizUtils;
+import com.alibaba.nacos.api.NacosFactory;
+import com.alibaba.nacos.api.config.ConfigService;
+import com.alibaba.nacos.api.exception.NacosException;
+import com.bizmda.bizsip.clientadaptor.listener.ClientAdaptorListener;
+import com.bizmda.bizsip.common.*;
 import com.bizmda.bizsip.config.*;
 import com.bizmda.bizsip.message.AbstractMessageProcessor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,6 +20,7 @@ import org.springframework.util.RouteMatcher;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
+import java.util.Properties;
 
 /**
  * @author shizhengye
@@ -29,15 +31,19 @@ import java.util.List;
 public class ClientAdaptor {
     @Value("${bizsip.config-path}")
     private String configPath;
-
     @Value("${bizsip.integrator-url}")
     private String integratorUrl;
+    @Value("${spring.cloud.nacos.discovery.server-addr}")
+    private String serverAddr;
 
     @Autowired
     private ClientAdaptorConfigMapping clientAdaptorConfigMapping;
 
     @Autowired
     private RestTemplate restTemplate;
+
+    private String clientAdaptorId;
+    private ConfigService configService;
 
     private AbstractMessageProcessor messageProcessor;
     private List<PredicateRuleConfig> serviceRules;
@@ -46,11 +52,55 @@ public class ClientAdaptor {
      * 客户端适配器初始化，主要包括：
      * 1.初始化消息处理器，装载消息转换配置
      * 2.装载聚合服务定位断言规则
-     * @param adaptorId 客户端适配器Id，在client-adaptor.yml文件中定义
+     * @param clientAdaptorId 客户端适配器Id，在client-adaptor.yml文件中定义
      * @throws BizException
      */
-    public void init(String adaptorId) throws BizException {
-        CommonClientAdaptorConfig clientAdaptorConfig = this.clientAdaptorConfigMapping.getClientAdaptorConfig(adaptorId);
+    public void init(String clientAdaptorId) throws BizException {
+        this.clientAdaptorId = clientAdaptorId;
+        this.load();
+        Properties properties = new Properties();
+        properties.put("serverAddr", this.serverAddr);
+        try {
+            this.configService = NacosFactory.createConfigService(properties);
+//        this.configService.addListener(NacosConstants.REFRESH_SERVER_ADAPTOR_DATA_ID, NacosConstants.NACOS_GROUP, new ClientAdaptorListener(this) {
+//            @Override
+//            public void receiveConfigInfo(String config) {
+//                log.info("刷新服务端适配器配置");
+//            }
+//        });
+            this.configService.addListener(NacosConstants.REFRESH_CLIENT_ADAPTOR_DATA_ID, NacosConstants.NACOS_GROUP, new ClientAdaptorListener(this) {
+                @Override
+                public void receiveConfigInfo(String config) {
+                    log.info("刷新客户端适配器[{}]配置",this.clientAdaptor.clientAdaptorId);
+                    this.clientAdaptor.clientAdaptorConfigMapping = new ClientAdaptorConfigMapping(this.clientAdaptor.configPath);
+                    try {
+                        this.clientAdaptor.load();
+                    } catch (BizException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+        } catch (NacosException e) {
+            throw new BizException(BizResultEnum.NACOS_ERROR,e);
+        }
+//        this.configService.addListener(NacosConstants.REFRESH_SERVICE_DATA_ID, NacosConstants.NACOS_GROUP, new ClientAdaptorListener(this) {
+//            @Override
+//            public void receiveConfigInfo(String config) {
+//                log.info("刷新服务配置");
+//            }
+//        });
+//        this.configService.addListener(NacosConstants.REFRESH_MESSAGE_DATA_ID, NacosConstants.NACOS_GROUP, new ClientAdaptorListener(this) {
+//            @Override
+//            public void receiveConfigInfo(String config) {
+//                log.info("刷新消息配置");
+//            }
+//        });
+        log.info("配置刷新监控初始化成功!");
+
+    }
+
+    public void load() throws BizException {
+        CommonClientAdaptorConfig clientAdaptorConfig = this.clientAdaptorConfigMapping.getClientAdaptorConfig(this.clientAdaptorId);
         String messageType = (String)clientAdaptorConfig.getMessageMap().get("type");
         Class clazz = AbstractMessageProcessor.MESSAGE_TYPE_MAP.get(messageType);
         if (clazz == null) {

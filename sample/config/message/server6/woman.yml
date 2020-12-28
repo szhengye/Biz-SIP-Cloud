@@ -1,12 +1,5 @@
 - name: sex
   length: 1
-#  unpack-functions:
-#    - name: trim
-#  pack-functions:
-#    - name: fill
-#      args:
-#        - left
-#        - "0"
 - name: accountNo
   length: 8
 - name: accountName

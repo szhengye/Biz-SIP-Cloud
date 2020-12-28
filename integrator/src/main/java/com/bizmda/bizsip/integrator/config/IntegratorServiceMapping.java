@@ -20,17 +20,23 @@ import java.util.*;
 @Slf4j
 public class IntegratorServiceMapping {
     private Map<String, AbstractIntegratorService> mappings;
+    private String configPath;
 
     public IntegratorServiceMapping(String configPath) throws BizException {
-        String scriptPath = configPath + "/service";
+        this.configPath = configPath;
+        this.load();
+    }
+
+    public void load() throws BizException {
+        String scriptPath = this.configPath + "/service";
         List<File> fileList = BizUtils.getFileList(scriptPath,".script");
         this.mappings = new HashMap<String,AbstractIntegratorService>();
 
-        if (configPath.endsWith("/")) {
-            scriptPath = configPath + "service";
+        if (this.configPath.endsWith("/")) {
+            scriptPath = this.configPath + "service";
         }
         else {
-            scriptPath = configPath + "/service";
+            scriptPath = this.configPath + "/service";
         }
         String suffix;
         AbstractIntegratorService integratorService = null;

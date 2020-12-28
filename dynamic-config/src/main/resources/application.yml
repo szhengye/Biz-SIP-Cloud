@@ -1,9 +1,8 @@
 server:
-  port: 8080
-
+  port: 8088
 spring:
   application:
-    name: sip-sample-client
+    name: sip-dynamic-config
   cloud:
     nacos:
       discovery:
@@ -11,8 +10,3 @@ spring:
 
 bizsip:
   config-path: /Users/shizhengye/IdeaProjects/Biz-SIP-Cloud/sample/config
-  integrator-url: http://sip-integrator/api/
-
-logging:
-  level:
-    com.bizmda.bizsip: debug

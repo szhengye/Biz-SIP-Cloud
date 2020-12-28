@@ -1,6 +1,6 @@
 package com.bizmda.bizsip.clientadaptor.netty;
 
-import com.bizmda.bizsip.clientadaptor.config.ClientAdaptor;
+import com.bizmda.bizsip.clientadaptor.ClientAdaptor;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.handler.codec.string.StringDecoder;
