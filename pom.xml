@@ -34,6 +34,7 @@
         <velocity.version>1.7</velocity.version>
         <magic-api.version>0.4.7</magic-api.version>
         <netty.version>4.1.43.Final</netty.version>
+        <mysql.version>8.0.15</mysql.version>
     </properties>
 
     <dependencies>
@@ -106,6 +107,11 @@
                 <groupId>io.netty</groupId>
                 <artifactId>netty-all</artifactId>
                 <version>${netty.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>mysql</groupId>
+                <artifactId>mysql-connector-java</artifactId>
+                <version>${mysql.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

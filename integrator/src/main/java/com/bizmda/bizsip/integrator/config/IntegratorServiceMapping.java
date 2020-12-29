@@ -63,6 +63,12 @@ public class IntegratorServiceMapping {
         }
     }
 
+    public void init() {
+        for(String key:this.mappings.keySet()) {
+            AbstractIntegratorService integratorService = this.mappings.get(key);
+            integratorService.init();
+        }
+    }
     public AbstractIntegratorService getIntegratorService(String serviceId) {
         return this.mappings.get(serviceId);
     }

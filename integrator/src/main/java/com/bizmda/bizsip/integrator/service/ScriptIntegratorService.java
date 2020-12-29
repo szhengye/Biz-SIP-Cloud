@@ -10,7 +10,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.ssssssss.magicapi.functions.AssertFunctions;
+import org.ssssssss.magicapi.functions.RedisFunctions;
 import org.ssssssss.magicapi.functions.RequestFunctions;
+import org.ssssssss.magicapi.functions.SQLExecutor;
 import org.ssssssss.magicapi.script.ScriptManager;
 import org.ssssssss.script.MagicModuleLoader;
 import org.ssssssss.script.MagicScript;
@@ -31,14 +33,15 @@ public class ScriptIntegratorService extends AbstractIntegratorService {
 
     @Override
     public void init() {
-        if (!isSetupMagicModules) {
-            this.setupMagicModules();
-            isSetupMagicModules = true;
-        }
+
     }
 
     @Override
     public BizMessage doBizService(BizMessage<JSONObject> message) {
+        if (!isSetupMagicModules) {
+            this.setupMagicModules();
+            isSetupMagicModules = true;
+        }
         MagicScriptContext context = new MagicScriptContext();;
         context.set("bizmessage", message);
         Object result = executeScript(this.getFileContent(), context);
@@ -78,5 +81,13 @@ public class ScriptIntegratorService extends AbstractIntegratorService {
         MagicModuleLoader.addModule("assert", AssertFunctions.class);
         log.info("注册模块:{} -> {}", "server", ServerService.class);
         MagicModuleLoader.addModule("server", ServerService.class);
+
+        SQLExecutor magicSQLExecutor = SpringUtil.getBean(SQLExecutor.class);
+        log.info("注册模块:{} -> {}", "db", SQLExecutor.class);
+        MagicModuleLoader.addModule("db", magicSQLExecutor);
+        RedisFunctions redisFunctions = SpringUtil.getBean(RedisFunctions.class);
+        log.info("注册模块:{} -> {}", "redis", RedisFunctions.class);
+        MagicModuleLoader.addModule("redis", redisFunctions);
+
     }
 }
