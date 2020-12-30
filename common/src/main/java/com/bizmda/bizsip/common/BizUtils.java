@@ -6,15 +6,13 @@ import cn.hutool.core.thread.ThreadUtil;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Future;
+import java.util.concurrent.*;
 
 /**
  * @author 史正烨
  */
 public class BizUtils {
-    private static ExecutorService executorService = ThreadUtil.newExecutor(Runtime.getRuntime().availableProcessors()*2);
+    private static ExecutorService elExecutorService = ThreadUtil.newExecutor(Runtime.getRuntime().availableProcessors());
 
     public static List<File> getFileList(String strPath, String suffix) {
         List<File> filelist = new ArrayList<File>();
@@ -39,7 +37,7 @@ public class BizUtils {
 
     public static String getElStringResult(String express, Object data) throws BizException {
         String result;
-        Future<Object> future = executorService.submit(new ElThread(express,data,false));
+        Future<Object> future = elExecutorService.submit(new ElThread(express,data,false));
         try {
             result = (String)future.get();
         } catch (InterruptedException | ExecutionException e) {
@@ -51,7 +49,7 @@ public class BizUtils {
 
     public static Boolean getElBooleanResult(String express, Object data) throws BizException {
         Boolean result;
-        Future<Object> future = executorService.submit(new ElThread(express,data,true));
+        Future<Object> future = elExecutorService.submit(new ElThread(express,data,true));
         try {
             result = (Boolean)future.get();
         } catch (InterruptedException | ExecutionException e) {
@@ -60,4 +58,6 @@ public class BizUtils {
         }
         return result;
     }
+
+
 }

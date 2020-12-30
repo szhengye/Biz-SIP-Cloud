@@ -1,7 +1,7 @@
 package com.bizmda.bizsip.integrator.config;
 
-import com.alibaba.nacos.api.exception.NacosException;
 import com.bizmda.bizsip.common.BizException;
+import com.bizmda.bizsip.common.fieldrule.FieldRuleConfigMapping;
 import com.bizmda.bizsip.config.ServerAdaptorConfigMapping;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -35,6 +35,16 @@ public class IntegratorConfiguration {
             return new ServerAdaptorConfigMapping(this.configPath);
         } catch (BizException e) {
             log.error("服务端适配器配置文件装载出错!",e);
+            return null;
+        }
+    }
+
+    @Bean
+    public FieldRuleConfigMapping fieldValidateConfigMapping() {
+        try {
+            return new FieldRuleConfigMapping(this.configPath);
+        } catch (BizException e) {
+            log.error("服务消息域校验文件装载出错!",e);
             return null;
         }
     }

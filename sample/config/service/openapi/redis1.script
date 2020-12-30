@@ -1,0 +1,7 @@
+var data = bizmessage.data;
+var value = data.accountNo;
+//通过redis.命令名(命令参数,命令参数,.....,命令参数) 进行调用，其中命令名不区分大小写
+redis.set('key',value); //调用set命令
+//redis.setex('key',10,value);    //调用setex命令
+data.accountName = redis.get('key');    //调用get命令
+return data;

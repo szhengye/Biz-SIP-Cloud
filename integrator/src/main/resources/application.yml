@@ -15,15 +15,16 @@ spring:
 
   redis:
     host: 127.0.0.1  #配置redis的主机地址，需要修改成自己的
-    database: 0
     port: 6379
+    database: 0
+    timeout: 5000
     password: #设置自己的密码
     jedis:
       pool:
         max-active: 50 # 如果赋值为-1，则表示不限制；如果pool已经分配了maxActive个jedis实例，则此时pool 的状态为exhausted(耗尽)
         max-idle: 20 # 连接池中的最大空闲连接，默认值也是8。
         min-idle: 5  # 连接池中的最小空闲连接，默认值也是0。
-        # max-wait: 5 # 等待可用连接的最大时间，单位毫秒，默认值为-1，表示永不超时。如果超过等待时间，则直接 抛出JedisConnectionException
+        max-wait: 10000 # 等待可用连接的最大时间，单位毫秒，默认值为-1，表示永不超时。如果超过等待时间，则直接 抛出JedisConnectionException
 
 bizsip:
   config-path: /Users/shizhengye/IdeaProjects/Biz-SIP-Cloud/sample/config

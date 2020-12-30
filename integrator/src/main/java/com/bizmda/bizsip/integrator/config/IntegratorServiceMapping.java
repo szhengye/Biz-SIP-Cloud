@@ -28,8 +28,7 @@ public class IntegratorServiceMapping {
     }
 
     public void load() throws BizException {
-        String scriptPath = this.configPath + "/service";
-        List<File> fileList = BizUtils.getFileList(scriptPath,".script");
+        String scriptPath;
         this.mappings = new HashMap<String,AbstractIntegratorService>();
 
         if (this.configPath.endsWith("/")) {

@@ -1,30 +1,26 @@
 package com.bizmda.bizsip.integrator.controller;
 
 import cn.hutool.core.text.StrFormatter;
+import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONObject;
 import com.bizmda.bizsip.common.BizException;
 import com.bizmda.bizsip.common.BizMessage;
 import com.bizmda.bizsip.common.BizResultEnum;
+import com.bizmda.bizsip.common.fieldrule.FieldRule;
+import com.bizmda.bizsip.common.fieldrule.FieldRuleConfig;
+import com.bizmda.bizsip.common.fieldrule.FieldRuleConfigMapping;
+import com.bizmda.bizsip.common.fieldrule.FieldRuleHelper;
 import com.bizmda.bizsip.integrator.config.IntegratorServiceMapping;
-import com.bizmda.bizsip.config.ServerAdaptorConfigMapping;
-import com.bizmda.bizsip.integrator.service.script.ServerService;
 import com.bizmda.bizsip.integrator.service.AbstractIntegratorService;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.web.bind.annotation.*;
-import org.ssssssss.magicapi.functions.AssertFunctions;
-import org.ssssssss.magicapi.functions.RequestFunctions;
 import org.ssssssss.magicapi.provider.ResultProvider;
 import org.ssssssss.magicapi.provider.impl.DefaultResultProvider;
-import org.ssssssss.script.MagicModuleLoader;
-import org.ssssssss.script.MagicScript;
 
-import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -36,6 +32,8 @@ import java.util.Map;
 public class IntegratorController {
     @Autowired
     IntegratorServiceMapping integratorServiceMapping;
+    @Autowired
+    FieldRuleConfigMapping fieldRuleConfigMapping;
 
     public static ThreadLocal<BizMessage> currentBizMessage = new ThreadLocal<BizMessage>();
 
@@ -47,14 +45,22 @@ public class IntegratorController {
                                    @RequestBody JSONObject inJsonObject,
                                    @PathVariable(required = false) Map<String, Object> pathVariables,
                                    @RequestParam(required = false) Map<String, Object> parameters) throws BizException {
-        BizMessage<JSONObject> inMessage = BizMessage.createNewTransaction();
-        inMessage.setData(inJsonObject);
-        IntegratorController.currentBizMessage.set(inMessage);
 
         String serviceId = request.getHeader("Biz-Service-Id");
         if (!serviceId.startsWith("/")) {
             serviceId = "/" + serviceId;
         }
+
+        BizMessage<JSONObject> inMessage = BizMessage.createNewTransaction();
+        inMessage.setData(inJsonObject);
+        IntegratorController.currentBizMessage.set(inMessage);
+
+        JSONArray jsonArray = this.checkFieldRule(serviceId,inJsonObject);
+        if (jsonArray != null) {
+            throw new BizException(BizResultEnum.FIELD_VALIDATE_ERROR,jsonArray.toString());
+        }
+
+
         AbstractIntegratorService integratorService = this.integratorServiceMapping.getIntegratorService(serviceId);
         if (integratorService == null) {
             throw new BizException(BizResultEnum.INTEGRATOR_SERVICE_NOT_FOUND,
@@ -67,6 +73,22 @@ public class IntegratorController {
         return outMessage;
     }
 
+    private JSONArray checkFieldRule(String serviceId, JSONObject message) throws BizException {
+        List<FieldRuleConfig> fieldRuleConfigList = this.fieldRuleConfigMapping.getFieldValidateConfigList(serviceId);
+        if (fieldRuleConfigList == null) {
+            return null;
+        }
+        FieldRule fieldRule = FieldRuleHelper.checkFieldRule(message, fieldRuleConfigList);
+        if (fieldRule == null) {
+            return null;
+        }
+        JSONArray jsonArray = new JSONArray();
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.set("field", fieldRule.getField());
+        jsonObject.set("desc", fieldRule.getDesc());
+        jsonArray.add(jsonObject);
+        return jsonArray;
+    }
 //    private void setupMagicModules() {
 //        // 设置脚本import时 class加载策略
 //        MagicModuleLoader.setClassLoader((className) -> {

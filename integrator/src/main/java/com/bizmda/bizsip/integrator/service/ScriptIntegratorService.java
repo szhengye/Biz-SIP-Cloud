@@ -1,6 +1,7 @@
 package com.bizmda.bizsip.integrator.service;
 
 import cn.hutool.extra.spring.SpringUtil;
+import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import com.bizmda.bizsip.common.BizMessage;
@@ -19,6 +20,7 @@ import org.ssssssss.script.MagicScript;
 import org.ssssssss.script.MagicScriptContext;
 
 import javax.script.SimpleScriptContext;
+import java.util.List;
 
 /**
  * @author 史正烨
@@ -37,7 +39,7 @@ public class ScriptIntegratorService extends AbstractIntegratorService {
     }
 
     @Override
-    public BizMessage doBizService(BizMessage<JSONObject> message) {
+    public BizMessage doBizService(BizMessage message) {
         if (!isSetupMagicModules) {
             this.setupMagicModules();
             isSetupMagicModules = true;
@@ -45,9 +47,14 @@ public class ScriptIntegratorService extends AbstractIntegratorService {
         MagicScriptContext context = new MagicScriptContext();;
         context.set("bizmessage", message);
         Object result = executeScript(this.getFileContent(), context);
-        JSONObject jsonObject = JSONUtil.parseObj(result);
-
-        message.success(jsonObject);
+        if (result instanceof List) {
+            JSONArray jsonArray = JSONUtil.parseArray(result);
+            message.success(jsonArray);
+        }
+        else {
+            JSONObject jsonObject = JSONUtil.parseObj(result);
+            message.success(jsonObject);
+        }
         return message;
     }
 
