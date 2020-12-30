@@ -13,7 +13,7 @@ spring:
           enabled: true
           lower-case-service-id: true
       routes:
-        - id: sip-integrator
-          uri: lb://sip-integrator
-          predicates:
-            - Path=/api/**
+#        - id: sip-integrator
+#          uri: lb://sip-integrator
+#          predicates:
+#            - Path=/api/**
