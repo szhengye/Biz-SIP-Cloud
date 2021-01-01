@@ -1,4 +1,4 @@
-package com.bizmda.bizsip.common.fieldrule;
+package com.bizmda.bizsip.integrator.checkrule;
 
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.io.file.FileReader;
@@ -10,7 +10,6 @@ import org.yaml.snakeyaml.Yaml;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,27 +18,27 @@ import java.util.Map;
  * @author 史正烨
  */
 @Slf4j
-public class FieldRuleConfigMapping {
-    private Map<String, List<FieldRuleConfig>> mappings;
+public class CheckRuleConfigMapping {
+    private Map<String, CheckRuleConfig> mappings;
     private String configPath;
 
-    public FieldRuleConfigMapping(String configPath) throws BizException {
+    public CheckRuleConfigMapping(String configPath) throws BizException {
         this.configPath = configPath;
         this.load();
     }
 
     public void load() throws BizException {
         String scriptPath;
-        this.mappings = new HashMap<String,List<FieldRuleConfig>>();
+        this.mappings = new HashMap<String,CheckRuleConfig>();
 
         if (this.configPath.endsWith("/")) {
-            scriptPath = this.configPath + "field-rule";
+            scriptPath = this.configPath + "check-rule";
         }
         else {
-            scriptPath = this.configPath + "/field-rule";
+            scriptPath = this.configPath + "/check-rule";
         }
         String suffix;
-        FieldRuleConfig integratorService = null;
+        FieldCheckRule integratorService = null;
 
         List<File> files = FileUtil.loopFiles(scriptPath);
         Yaml yaml = new Yaml();
@@ -52,18 +51,14 @@ public class FieldRuleConfigMapping {
             String allPath = file.getPath();
             String serviceId = allPath.substring(scriptPath.length(), allPath.length() - suffix.length() - 1);
             log.info("装载聚合服务:{}", serviceId);
-            List<Map> mapList = null;
+            Map map;
             try {
-                mapList = (List<Map>)yaml.load(new FileInputStream(file));
+                map = (Map)yaml.load(new FileInputStream(file));
             } catch (FileNotFoundException e) {
-                throw new BizException(BizResultEnum.SERVER_ADATPOR_FILE_NOTFOUND);
+                throw new BizException(BizResultEnum.CHECK_RULE_FILE_NOTFOUND);
             }
-            List fieldValidateConfigList = new ArrayList<FieldRuleConfig>();
-            for(Map map:mapList) {
-                FieldRuleConfig fieldRuleConfig = new FieldRuleConfig(map);
-                fieldValidateConfigList.add(fieldRuleConfig);
-            }
-            mappings.put(serviceId, fieldValidateConfigList);
+            CheckRuleConfig checkRuleConfig = new CheckRuleConfig(map);
+            mappings.put(serviceId, checkRuleConfig);
         }
     }
 
@@ -74,7 +69,7 @@ public class FieldRuleConfigMapping {
 //        }
 //    }
 
-    public List<FieldRuleConfig> getFieldValidateConfigList(String serviceId) {
+    public CheckRuleConfig getCheckRuleConfig(String serviceId) {
         return this.mappings.get(serviceId);
     }
 }

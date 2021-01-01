@@ -1,4 +1,4 @@
-package com.bizmda.bizsip.common.fieldrule;
+package com.bizmda.bizsip.integrator.checkrule;
 
 import lombok.Data;
 
@@ -6,16 +6,16 @@ import java.util.List;
 import java.util.Map;
 
 @Data
-public class FieldRuleConfig {
+public class FieldCheckRule {
     private String field;
     private String rule;
-    private String desc;
+    private String message;
     private List args;
 
-    public FieldRuleConfig(Map map) {
+    public FieldCheckRule(Map map) {
         this.field = (String)map.get("field");
         this.rule = (String)map.get("rule");
-        this.desc = (String)map.get("desc");
+        this.message = (String)map.get("message");
         this.args = (List)map.get("args");
     }
 }

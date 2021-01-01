@@ -1,10 +1,10 @@
-package com.bizmda.bizsip.common.fieldrule;
+package com.bizmda.bizsip.integrator.checkrule;
 
 import cn.hutool.core.lang.Validator;
 
 import java.util.List;
 
-public class FieldRuleFunction {
+public class FieldCheckRuleFunction {
     public static boolean isCitizenId(Object value, List args) {
         return Validator.isCitizenId((String)value);
     }

@@ -6,10 +6,7 @@ import cn.hutool.json.JSONObject;
 import com.bizmda.bizsip.common.BizException;
 import com.bizmda.bizsip.common.BizMessage;
 import com.bizmda.bizsip.common.BizResultEnum;
-import com.bizmda.bizsip.common.fieldrule.FieldRule;
-import com.bizmda.bizsip.common.fieldrule.FieldRuleConfig;
-import com.bizmda.bizsip.common.fieldrule.FieldRuleConfigMapping;
-import com.bizmda.bizsip.common.fieldrule.FieldRuleHelper;
+import com.bizmda.bizsip.integrator.checkrule.*;
 import com.bizmda.bizsip.integrator.config.IntegratorServiceMapping;
 import com.bizmda.bizsip.integrator.service.AbstractIntegratorService;
 import lombok.extern.slf4j.Slf4j;
@@ -33,7 +30,7 @@ public class IntegratorController {
     @Autowired
     IntegratorServiceMapping integratorServiceMapping;
     @Autowired
-    FieldRuleConfigMapping fieldRuleConfigMapping;
+    CheckRuleConfigMapping checkRuleConfigMapping;
 
     public static ThreadLocal<BizMessage> currentBizMessage = new ThreadLocal<BizMessage>();
 
@@ -56,10 +53,14 @@ public class IntegratorController {
         IntegratorController.currentBizMessage.set(inMessage);
 
         JSONArray jsonArray = this.checkFieldRule(serviceId,inJsonObject);
-        if (jsonArray != null) {
-            throw new BizException(BizResultEnum.FIELD_VALIDATE_ERROR,jsonArray.toString());
+        if (jsonArray.size() > 0) {
+            throw new BizException(BizResultEnum.FIELD_CHECK_ERROR,jsonArray.toString());
         }
 
+        jsonArray = this.checkServiceRule(serviceId,inJsonObject);
+        if (jsonArray.size() > 0) {
+            throw new BizException(BizResultEnum.SERVICE_CHECK_ERROR,jsonArray.toString());
+        }
 
         AbstractIntegratorService integratorService = this.integratorServiceMapping.getIntegratorService(serviceId);
         if (integratorService == null) {
@@ -74,19 +75,43 @@ public class IntegratorController {
     }
 
     private JSONArray checkFieldRule(String serviceId, JSONObject message) throws BizException {
-        List<FieldRuleConfig> fieldRuleConfigList = this.fieldRuleConfigMapping.getFieldValidateConfigList(serviceId);
-        if (fieldRuleConfigList == null) {
-            return null;
-        }
-        FieldRule fieldRule = FieldRuleHelper.checkFieldRule(message, fieldRuleConfigList);
-        if (fieldRule == null) {
-            return null;
-        }
         JSONArray jsonArray = new JSONArray();
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.set("field", fieldRule.getField());
-        jsonObject.set("desc", fieldRule.getDesc());
-        jsonArray.add(jsonObject);
+        CheckRuleConfig checkRuleConfig = this.checkRuleConfigMapping.getCheckRuleConfig(serviceId);
+        if (checkRuleConfig == null) {
+            return jsonArray;
+        }
+        List<FieldCheckRule> fieldCheckRuleList = checkRuleConfig.getFieldCheckRuleList();
+        if (fieldCheckRuleList == null) {
+            return jsonArray;
+        }
+        List<FieldChcekRuleResult> fieldChcekRuleResultList = FieldCheckRuleHelper.checkFieldRule(message, fieldCheckRuleList,checkRuleConfig.getFieldCheckMode());
+
+        for(FieldChcekRuleResult fieldChcekRuleResult:fieldChcekRuleResultList) {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.set("field", fieldChcekRuleResult.getField());
+            jsonObject.set("message", fieldChcekRuleResult.getMessage());
+            jsonArray.add(jsonObject);
+        }
+        return jsonArray;
+    }
+
+    private JSONArray checkServiceRule(String serviceId, JSONObject message) throws BizException {
+        JSONArray jsonArray = new JSONArray();
+        CheckRuleConfig checkRuleConfig = this.checkRuleConfigMapping.getCheckRuleConfig(serviceId);
+        if (checkRuleConfig == null) {
+            return jsonArray;
+        }
+        List<ServiceCheckRule> serviceCheckRuleList = checkRuleConfig.getServiceCheckRuleList();
+        if (serviceCheckRuleList == null) {
+            return jsonArray;
+        }
+        List<ServiceChcekRuleResult> serviceChcekRuleResultList = ServiceCheckRuleHelper.checkServiceRule(message, serviceCheckRuleList,checkRuleConfig.getFieldCheckMode());
+
+        for(ServiceChcekRuleResult serviceChcekRuleResult:serviceChcekRuleResultList) {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.set("message", serviceChcekRuleResult.getResult());
+            jsonArray.add(jsonObject);
+        }
         return jsonArray;
     }
 //    private void setupMagicModules() {

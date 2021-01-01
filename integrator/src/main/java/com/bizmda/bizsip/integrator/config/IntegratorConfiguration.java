@@ -1,7 +1,7 @@
 package com.bizmda.bizsip.integrator.config;
 
 import com.bizmda.bizsip.common.BizException;
-import com.bizmda.bizsip.common.fieldrule.FieldRuleConfigMapping;
+import com.bizmda.bizsip.integrator.checkrule.CheckRuleConfigMapping;
 import com.bizmda.bizsip.config.ServerAdaptorConfigMapping;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -40,9 +40,9 @@ public class IntegratorConfiguration {
     }
 
     @Bean
-    public FieldRuleConfigMapping fieldValidateConfigMapping() {
+    public CheckRuleConfigMapping checkRuleConfigMapping() {
         try {
-            return new FieldRuleConfigMapping(this.configPath);
+            return new CheckRuleConfigMapping(this.configPath);
         } catch (BizException e) {
             log.error("服务消息域校验文件装载出错!",e);
             return null;
