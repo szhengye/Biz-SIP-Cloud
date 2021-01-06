@@ -1,2 +1,2 @@
-var data = db.select("select * from magic_api_info");
+var data = db.select("select * from sample_account where account_no=${bizmessage.data.accountNo}");
 return data;

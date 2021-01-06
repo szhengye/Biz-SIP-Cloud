@@ -33,7 +33,8 @@ public class TmService {
                     StrFormatter.format("聚合服务不存在:{}",serviceId)));
             return bizMessage;
         }
-
+        BizMessage childBizMessage = BizMessage.createChildTransaction(bizMessage);
+        childBizMessage.setData(bizMessage.getData());
 //        JSONObject inJsonObject = (JSONObject)childBizMessage.getData();
         TmContext tmContext = BizUtils.tmContextThreadLocal.get();
 //        int safDelayTime = tmContext.getDelayTime();
@@ -61,7 +62,7 @@ public class TmService {
 //            this.sendDelayQueue(serviceId,childBizMessage,tmContext);
 //            return bizMessage;
 //        }
-        return this.sendDelayQueue(serviceId,bizMessage,tmContext);
+        return this.sendDelayQueue(serviceId,childBizMessage,tmContext);
     }
 
     public BizMessage sendDelayQueue(String serviceId, BizMessage bizMessage, TmContext tmContext) {
@@ -74,12 +75,9 @@ public class TmService {
             return bizMessage;
         }
 
-        BizMessage childBizMessage = BizMessage.createChildTransaction(bizMessage);
-        childBizMessage.setData(bizMessage.getData());
-
         Map map = new HashMap();
         map.put("serviceId",serviceId);
-        map.put("bizmessage",childBizMessage);
+        map.put("bizmessage",bizMessage);
         map.put("retryCount",tmContext.getRetryCount());
         rabbitTemplate.convertAndSend(RabbitmqConfig.TM_DELAY_EXCHANGE, RabbitmqConfig.TM_DELAY_ROUTING_KEY, map,
                 new MessagePostProcessor() {
@@ -92,7 +90,7 @@ public class TmService {
                         return message;
                     }
                 });
-        return childBizMessage;
+        return bizMessage;
     }
 
     public void abortTransaction(int code,String message,BizMessage bizMessage) {

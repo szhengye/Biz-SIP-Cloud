@@ -64,23 +64,27 @@ public class SipFunctions implements MagicModule {
         return outMessage;
     }
 
-    public static void setTmDelayTime(int delayTime) {
+    @Comment("设置SAF服务的延迟执行时间")
+    public static void setTmDelayTime(@Comment("延迟执行时间") int delayTime) {
         TmContext tmContext = BizUtils.tmContextThreadLocal.get();
         tmContext.setDelayTime(delayTime);
         BizUtils.tmContextThreadLocal.set(tmContext);
     }
 
+    @Comment("获取SAF服务的延迟执行时间")
     public static int getTmDelayTime() {
         TmContext tmContext = BizUtils.tmContextThreadLocal.get();
         return tmContext.getDelayTime();
     }
 
+    @Comment("获取SAF服务的当前重试次数")
     public static int getTmRetryCount() {
         TmContext tmContext = BizUtils.tmContextThreadLocal.get();
         return tmContext.getRetryCount();
     }
 
-    public static void setTmServiceStatus(String status) {
+    @Comment("设置当前SAF服务的运行状态")
+    public static void setTmServiceStatus(@Comment("SAF服务运行状态") String status) {
         TmContext tmContext = BizUtils.tmContextThreadLocal.get();
         if (tmContext == null) {
             return;

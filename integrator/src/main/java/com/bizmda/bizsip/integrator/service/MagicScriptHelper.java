@@ -55,7 +55,7 @@ public class MagicScriptHelper {
         log.info("注册模块:{} -> {}", "assert", AssertFunctions.class);
         MagicModuleLoader.addModule("assert", AssertFunctions.class);
         log.info("注册模块:{} -> {}", "sip", SipFunctions.class);
-        MagicModuleLoader.addModule("server", SipFunctions.class);
+        MagicModuleLoader.addModule("sip", SipFunctions.class);
 
         SQLExecutor magicSQLExecutor = SpringUtil.getBean(SQLExecutor.class);
         log.info("注册模块:{} -> {}", "db", SQLExecutor.class);

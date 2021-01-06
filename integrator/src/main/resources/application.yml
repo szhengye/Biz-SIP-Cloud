@@ -8,7 +8,7 @@ spring:
       discovery:
         server-addr: localhost:8848
   datasource:
-    url: jdbc:mysql://localhost/magicapi
+    url: jdbc:mysql://localhost/sip
     username: root
     password: 123456
     driver-class-name: com.mysql.jdbc.Driver
