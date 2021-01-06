@@ -44,6 +44,8 @@ public class ScriptIntegratorService extends AbstractIntegratorService {
         MagicScriptContext context = new MagicScriptContext();;
         context.set("bizmessage", message);
         Object result = MagicScriptHelper.executeScript(this.getFileContent(), context);
+//        BizMessage outMessage = (BizMessage)context.get("bizmessage");
+//        log.info("outMessage***:{}",outMessage);
         if (result instanceof List) {
             JSONArray jsonArray = JSONUtil.parseArray(result);
             message.success(jsonArray);

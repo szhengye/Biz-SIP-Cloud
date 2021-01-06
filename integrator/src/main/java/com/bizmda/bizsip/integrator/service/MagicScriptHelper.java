@@ -28,7 +28,8 @@ public class MagicScriptHelper {
         }
         SimpleScriptContext simpleScriptContext = new SimpleScriptContext();
         simpleScriptContext.setAttribute("ROOT", context, 100);
-        return ScriptManager.compile("MagicScript", script).eval(simpleScriptContext);
+        Object result = ScriptManager.compile("MagicScript", script).eval(simpleScriptContext);
+        return result;
     }
 
     private static void setupMagicModules() {
@@ -53,7 +54,7 @@ public class MagicScriptHelper {
         MagicModuleLoader.addModule("request", new RequestFunctions());
         log.info("注册模块:{} -> {}", "assert", AssertFunctions.class);
         MagicModuleLoader.addModule("assert", AssertFunctions.class);
-        log.info("注册模块:{} -> {}", "server", ServerService.class);
+        log.info("注册模块:{} -> {}", "sip", ServerService.class);
         MagicModuleLoader.addModule("server", ServerService.class);
 
         SQLExecutor magicSQLExecutor = SpringUtil.getBean(SQLExecutor.class);

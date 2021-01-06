@@ -2,6 +2,7 @@ package com.bizmda.bizsip.common;
 
 import cn.hutool.core.text.StrFormatter;
 import cn.hutool.core.thread.ThreadUtil;
+import org.springframework.boot.web.embedded.tomcat.TomcatContextCustomizer;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -12,6 +13,8 @@ import java.util.concurrent.*;
  * @author 史正烨
  */
 public class BizUtils {
+    public static ThreadLocal<BizMessage> bizMessageThreadLocal = new ThreadLocal<BizMessage>();
+    public static ThreadLocal<TmContext> tmContextThreadLocal = new ThreadLocal<TmContext>();
     private static ExecutorService elExecutorService = ThreadUtil.newExecutor(Runtime.getRuntime().availableProcessors());
 
     public static List<File> getFileList(String strPath, String suffix) {

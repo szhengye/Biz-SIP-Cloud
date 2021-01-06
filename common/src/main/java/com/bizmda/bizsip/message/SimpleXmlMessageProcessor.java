@@ -11,6 +11,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
 import java.util.Map;
+import java.util.Set;
 
 /**
  * @author 史正烨
@@ -37,6 +38,13 @@ public class SimpleXmlMessageProcessor<String> extends AbstractMessageProcessor 
     @Override
     protected JSONObject adaptor2json(Object inMessage) throws BizException {
         JSONObject jsonObject = XML.toJSONObject((java.lang.String)inMessage);
+        Object[] keys = jsonObject.keySet().toArray();
+        if (keys.length == 1) {
+            Object jsonObject1 = jsonObject.get(keys[0]);
+            if (jsonObject1 instanceof JSONObject) {
+                return (JSONObject)jsonObject1;
+            }
+        }
         return jsonObject;
     }
 

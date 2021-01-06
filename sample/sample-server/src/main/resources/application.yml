@@ -10,6 +10,7 @@ spring:
 
 bizsip:
   config-path: /Users/shizhengye/IdeaProjects/Biz-SIP-Cloud/sample/config
+
 logging:
   level:
     com.bizmda.bizsip: debug

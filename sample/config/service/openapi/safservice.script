@@ -1,0 +1,13 @@
+var data = bizmessage.data;
+server.setTmDelayTime(1000);
+var result = server.doSafService("/openapi/safservice1",data)
+if (result.code == 0) {
+    return result.data;
+}
+else {
+    var error_result = {
+        code: result.code,
+        message: result.message
+    }
+    return error_result;
+}

@@ -11,10 +11,17 @@ import java.util.Map;
  */
 @Data
 public class BizMessage<T> {
+//    // 缺省为10000毫秒
+//    public static final String FIELD_SAF_DELAY_TIME = "sip_delay_time";
+//    public static final String FIELD_SAF_DONE_NUM = "sip_done_num";
+//    // error：错误，success：成功
+//    public static final String FIELD_SAF_SERVICE_STATUS = "sip_service_status";
+
     private int code;
     private String message;
     private String extMessage;
     private String traceId;
+    private String parentTraceId;
     private long timestamp;
     private T data;
 
@@ -27,6 +34,7 @@ public class BizMessage<T> {
         this.message = (String)jsonObject.get("message");
         this.extMessage = (String)jsonObject.get("extMessage");
         this.traceId = (String)jsonObject.get("traceId");
+        this.parentTraceId = (String)jsonObject.get("parentTraceId");
         this.timestamp = (long)jsonObject.get("timestamp");
         this.data = (T)jsonObject.get("data");
     }
@@ -34,6 +42,14 @@ public class BizMessage<T> {
     public static BizMessage createNewTransaction() {
         BizMessage bizMessage = new BizMessage();
         bizMessage.traceId = IdUtil.fastSimpleUUID();
+        bizMessage.timestamp = System.currentTimeMillis();
+        return bizMessage;
+    }
+
+    public static BizMessage createChildTransaction(BizMessage parentBizMessage) {
+        BizMessage bizMessage = new BizMessage();
+        bizMessage.traceId = IdUtil.fastSimpleUUID();
+        bizMessage.parentTraceId = parentBizMessage.traceId;
         bizMessage.timestamp = System.currentTimeMillis();
         return bizMessage;
     }

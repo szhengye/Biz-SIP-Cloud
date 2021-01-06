@@ -3,9 +3,7 @@ package com.bizmda.bizsip.integrator.controller;
 import cn.hutool.core.text.StrFormatter;
 import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONObject;
-import com.bizmda.bizsip.common.BizException;
-import com.bizmda.bizsip.common.BizMessage;
-import com.bizmda.bizsip.common.BizResultEnum;
+import com.bizmda.bizsip.common.*;
 import com.bizmda.bizsip.integrator.checkrule.*;
 import com.bizmda.bizsip.integrator.config.IntegratorServiceMapping;
 import com.bizmda.bizsip.integrator.service.AbstractIntegratorService;
@@ -25,14 +23,12 @@ import java.util.Map;
  */
 @Slf4j
 @RestController
-@RequestMapping("/")
+//@RequestMapping("/")
 public class IntegratorController {
     @Autowired
     IntegratorServiceMapping integratorServiceMapping;
     @Autowired
     CheckRuleConfigMapping checkRuleConfigMapping;
-
-    public static ThreadLocal<BizMessage> currentBizMessage = new ThreadLocal<BizMessage>();
 
     private ResultProvider resultProvider = new DefaultResultProvider();
     private boolean throwException = false;
@@ -50,7 +46,7 @@ public class IntegratorController {
 
         BizMessage<JSONObject> inMessage = BizMessage.createNewTransaction();
         inMessage.setData(inJsonObject);
-        IntegratorController.currentBizMessage.set(inMessage);
+        BizUtils.bizMessageThreadLocal.set(inMessage);
 
         JSONArray jsonArray = this.checkFieldRule(serviceId,inJsonObject);
         if (jsonArray.size() > 0) {
@@ -68,9 +64,15 @@ public class IntegratorController {
                     StrFormatter.format("聚合服务不存在:{}",serviceId));
         }
 
-        BizMessage outMessage = integratorService.doBizService(inMessage);
-
-        IntegratorController.currentBizMessage.remove();
+        BizUtils.tmContextThreadLocal.set(new TmContext());
+        BizMessage outMessage;
+        try {
+            outMessage = integratorService.doBizService(inMessage);
+        }
+        finally {
+            BizUtils.tmContextThreadLocal.remove();
+            BizUtils.bizMessageThreadLocal.remove();
+        }
         return outMessage;
     }
 

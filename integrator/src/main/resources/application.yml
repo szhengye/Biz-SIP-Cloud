@@ -26,18 +26,20 @@ spring:
         min-idle: 5  # 连接池中的最小空闲连接，默认值也是0。
         max-wait: 10000 # 等待可用连接的最大时间，单位毫秒，默认值为-1，表示永不超时。如果超过等待时间，则直接 抛出JedisConnectionException
 
+  rabbitmq:
+    virtual-host: /
+    host: 127.0.0.1
+    port: 5672
+    username: springcloud
+    password: springcloud
+    listener:
+      simple:
+        concurrency: 5
+        max-concurrency: 15
+        prefetch: 10
 bizsip:
   config-path: /Users/shizhengye/IdeaProjects/Biz-SIP-Cloud/sample/config
-#  integrator:
-#  server-adaptors:
-#    - id: server1
-#      type: rest
-#      url: http://127.0.0.1:8001/server1
 
-#spring:
-#  application:
-#    name: nacos-provider
-#  cloud:
-#    nacos:
-#      discovery:
-#        server-addr: localhost:8848
+logging:
+  level:
+    com.bizmda.bizsip: debug
