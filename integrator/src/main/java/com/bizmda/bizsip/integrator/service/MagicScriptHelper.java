@@ -1,7 +1,7 @@
 package com.bizmda.bizsip.integrator.service;
 
 import cn.hutool.extra.spring.SpringUtil;
-import com.bizmda.bizsip.integrator.service.script.ServerService;
+import com.bizmda.bizsip.integrator.service.script.SipFunctions;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -54,8 +54,8 @@ public class MagicScriptHelper {
         MagicModuleLoader.addModule("request", new RequestFunctions());
         log.info("注册模块:{} -> {}", "assert", AssertFunctions.class);
         MagicModuleLoader.addModule("assert", AssertFunctions.class);
-        log.info("注册模块:{} -> {}", "sip", ServerService.class);
-        MagicModuleLoader.addModule("server", ServerService.class);
+        log.info("注册模块:{} -> {}", "sip", SipFunctions.class);
+        MagicModuleLoader.addModule("server", SipFunctions.class);
 
         SQLExecutor magicSQLExecutor = SpringUtil.getBean(SQLExecutor.class);
         log.info("注册模块:{} -> {}", "db", SQLExecutor.class);

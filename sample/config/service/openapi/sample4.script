@@ -1,4 +1,4 @@
-var result = server.doService("server1",bizmessage.data)
+var result = sip.doService("server1",bizmessage.data)
 if (result.code == 0) {
     bizmessage.data.accountName = result.data.accountName;
 }
@@ -9,7 +9,7 @@ else {
     }
     return error_result;
 }
-result = server.doService("server2",bizmessage.data)
+result = sip.doService("server2",bizmessage.data)
 if (result.code == 0) {
     bizmessage.data.balance = result.data.balance;
 }

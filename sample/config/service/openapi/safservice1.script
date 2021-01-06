@@ -1,4 +1,4 @@
-var result = server.doService("server3",bizmessage.data)
+var result = sip.doService("server3",bizmessage.data)
 if (result.code == 0) {
     if (result.data.step == null) {
         result.data.step = 1;
@@ -6,14 +6,14 @@ if (result.code == 0) {
     else {
         result.data.step = result.data.step + 1;
     }
-    log.info("sip_done_num:{}",server.getTmRetryCount());
-    server.setTmDelayTime(server.getTmRetryCount() * 2000);
-    if (server.getTmRetryCount() > 5) {
+    log.info("sip_done_num:{}",sip.getTmRetryCount());
+    sip.setTmDelayTime(sip.getTmRetryCount() * 2000);
+    if (sip.getTmRetryCount() > 5) {
         if (result.data.sex == "1") {
-            server.setTmServiceStatus("success");
+            sip.setTmServiceStatus("success");
         }
         else {
-            server.setTmServiceStatus("error");
+            sip.setTmServiceStatus("error");
         }
     }
     return result.data;

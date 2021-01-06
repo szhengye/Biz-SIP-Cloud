@@ -20,13 +20,13 @@ import org.ssssssss.script.annotation.Comment;
  */
 @Slf4j
 @Service
-public class ServerService implements MagicModule {
+public class SipFunctions implements MagicModule {
 
     private static ServerAdaptorConfigMapping serverAdaptorConfigMapping = null;
     private static RestTemplate restTemplate = null;
     private static TmService tmService = null;
 
-    public static ServerService serverService = new ServerService();
+    public static SipFunctions sipFunctions = new SipFunctions();
 
     @Comment("执行适配器服务调用")
     public static BizMessage<JSONObject> doService(@Comment("服务ID") String adaptorId, @Comment("调用输入参数") Object inData) {
@@ -99,6 +99,6 @@ public class ServerService implements MagicModule {
 
     @Override
     public String getModuleName() {
-        return "server";
+        return "sip";
     }
 }

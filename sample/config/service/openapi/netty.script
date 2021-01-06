@@ -1,4 +1,4 @@
-var result = server.doService("netty",bizmessage.data)
+var result = sip.doService("netty",bizmessage.data)
 if (result.code == 0) {
     return result.data;
 }
