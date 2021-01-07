@@ -7,6 +7,7 @@ import com.bizmda.bizsip.common.*;
 import com.bizmda.bizsip.integrator.checkrule.*;
 import com.bizmda.bizsip.integrator.config.IntegratorServiceMapping;
 import com.bizmda.bizsip.integrator.service.AbstractIntegratorService;
+import com.bizmda.bizsip.integrator.service.SipServiceLogService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -26,9 +27,11 @@ import java.util.Map;
 //@RequestMapping("/")
 public class IntegratorController {
     @Autowired
-    IntegratorServiceMapping integratorServiceMapping;
+    private IntegratorServiceMapping integratorServiceMapping;
     @Autowired
-    CheckRuleConfigMapping checkRuleConfigMapping;
+    private CheckRuleConfigMapping checkRuleConfigMapping;
+    @Autowired
+    private SipServiceLogService sipServiceLogService;
 
     private ResultProvider resultProvider = new DefaultResultProvider();
     private boolean throwException = false;
@@ -65,13 +68,22 @@ public class IntegratorController {
         }
 
         BizUtils.tmContextThreadLocal.set(new TmContext());
-        BizMessage outMessage;
+        BizMessage outMessage = null;
         try {
             outMessage = integratorService.doBizService(inMessage);
+        }
+        catch (Exception e) {
+            outMessage = BizMessage.buildFailMessage(inMessage,e);
         }
         finally {
             BizUtils.tmContextThreadLocal.remove();
             BizUtils.bizMessageThreadLocal.remove();
+        }
+        if (outMessage.getCode() == 0) {
+            this.sipServiceLogService.saveSuccessServiceLog(inMessage,outMessage);
+        }
+        else {
+            this.sipServiceLogService.saveErrorServiceLog(inMessage,outMessage);
         }
         return outMessage;
     }

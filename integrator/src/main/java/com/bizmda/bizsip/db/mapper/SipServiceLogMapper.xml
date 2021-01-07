@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bizmda.bizsip.db.mapper.SipServiceLogMapper">
+    <sql id="tableName">
+        sip_service_log
+    </sql>
+
+    <sql id="baseColumn">
+        trace_id,parent_trace_id,begin_time,end_time,code,message,ext_message,request_data,response_data,service_status
+    </sql>
+
+</mapper>

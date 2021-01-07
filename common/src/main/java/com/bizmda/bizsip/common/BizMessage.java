@@ -1,5 +1,6 @@
 package com.bizmda.bizsip.common;
 
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.json.JSONObject;
 import lombok.Data;
@@ -48,23 +49,40 @@ public class BizMessage<T> {
 
     public static BizMessage createChildTransaction(BizMessage parentBizMessage) {
         BizMessage bizMessage = new BizMessage();
+        BeanUtil.copyProperties(parentBizMessage,bizMessage);
         bizMessage.traceId = IdUtil.fastSimpleUUID();
         bizMessage.parentTraceId = parentBizMessage.traceId;
         bizMessage.timestamp = System.currentTimeMillis();
         return bizMessage;
     }
 
-    public void success(T data) {
-        this.setCode(0);
-        this.setMessage("success");
-        this.setExtMessage(null);
-        this.setData(data);
+    public static BizMessage buildSuccessMessage(BizMessage inBizMessage,Object data) {
+        BizMessage bizMessage = new BizMessage();
+
+        BeanUtil.copyProperties(inBizMessage,bizMessage);
+
+        bizMessage.setCode(0);
+        bizMessage.setMessage("success");
+        bizMessage.setExtMessage(null);
+        bizMessage.setData(data);
+        return bizMessage;
     }
 
-    public void fail(BizException e) {
-        this.setCode(e.getCode());
-        this.setMessage(e.getMessage());
-        this.setExtMessage(e.getExtMessage());
-        this.data = null;
+    public static BizMessage buildFailMessage(BizMessage inBizMessage,Exception e) {
+        BizMessage bizMessage = new BizMessage();
+
+        BeanUtil.copyProperties(inBizMessage,bizMessage);
+        if (e instanceof BizException) {
+            BizException bizException = (BizException)e;
+            bizMessage.setCode(bizException.getCode());
+            bizMessage.setMessage(bizException.getMessage());
+            bizMessage.setExtMessage(bizException.getExtMessage());
+        }
+        else {
+            bizMessage.setCode(BizResultEnum.OTHER_ERROR.getCode());
+            bizMessage.setMessage(e.getMessage());
+        }
+        bizMessage.data = null;
+        return bizMessage;
     }
 }

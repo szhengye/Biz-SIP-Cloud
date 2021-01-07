@@ -36,6 +36,7 @@
         <magic-api.version>0.4.7</magic-api.version>
         <netty.version>4.1.43.Final</netty.version>
         <mysql.version>8.0.15</mysql.version>
+        <mybatisplus.version>3.3.1</mybatisplus.version>
     </properties>
 
     <dependencies>
@@ -121,6 +122,11 @@
                 <groupId>mysql</groupId>
                 <artifactId>mysql-connector-java</artifactId>
                 <version>${mysql.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.baomidou</groupId>
+                <artifactId>mybatis-plus-boot-starter</artifactId>
+                <version>${mybatisplus.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

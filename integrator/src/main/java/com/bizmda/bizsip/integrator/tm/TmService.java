@@ -6,6 +6,7 @@ import com.bizmda.bizsip.common.*;
 import com.bizmda.bizsip.integrator.config.IntegratorServiceMapping;
 import com.bizmda.bizsip.integrator.config.RabbitmqConfig;
 import com.bizmda.bizsip.integrator.service.AbstractIntegratorService;
+import com.bizmda.bizsip.integrator.service.SipServiceLogService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.AmqpException;
 import org.springframework.amqp.core.Message;
@@ -25,56 +26,27 @@ public class TmService {
     private RabbitTemplate rabbitTemplate;
     @Autowired
     IntegratorServiceMapping integratorServiceMapping;
+    @Autowired
+    private SipServiceLogService sipServiceLogService;
 
     public BizMessage doSafService(String serviceId, BizMessage bizMessage) {
         AbstractIntegratorService integratorService = this.integratorServiceMapping.getIntegratorService(serviceId);
         if (integratorService == null) {
-            bizMessage.fail(new BizException(BizResultEnum.INTEGRATOR_SERVICE_NOT_FOUND,
+            BizMessage outMessage = BizMessage.buildFailMessage(bizMessage,
+                    new BizException(BizResultEnum.INTEGRATOR_SERVICE_NOT_FOUND,
                     StrFormatter.format("聚合服务不存在:{}",serviceId)));
-            return bizMessage;
+            return outMessage;
         }
         BizMessage childBizMessage = BizMessage.createChildTransaction(bizMessage);
-        childBizMessage.setData(bizMessage.getData());
-//        JSONObject inJsonObject = (JSONObject)childBizMessage.getData();
+
         TmContext tmContext = BizUtils.tmContextThreadLocal.get();
-//        int safDelayTime = tmContext.getDelayTime();
-//        if (safDelayTime <= 0) {
-//            // 保存父交易上下文环境
-//            BizMessage<JSONObject> parentBizMessage = BizUtils.bizMessageThreadLocal.get();
-//            int retryCount = tmContext.getRetryCount();
-//            // 设置子交易上下文环境
-//            BizUtils.bizMessageThreadLocal.set(childBizMessage);
-//            tmContext.setRetryCount(retryCount+1);
-//            BizUtils.tmContextThreadLocal.set(tmContext);
-//            BizMessage outMessage = integratorService.doBizService(childBizMessage);
-//            if (outMessage.getCode() != 0) {
-//                tmContext.setServiceStatus(TmContext.SERVICE_STATUS_ERROR);
-//            }
-//            this.sendDelayQueue(serviceId,outMessage,tmContext);
-////            outMessage.setParentTraceId(bizMessage.getParentTraceId());
-//            // 恢复父交易上下文环境
-//            tmContext.setRetryCount(retryCount);
-//            BizUtils.tmContextThreadLocal.set(tmContext);
-//            BizUtils.bizMessageThreadLocal.set(parentBizMessage);
-//            return outMessage;
-//        }
-//        else {
-//            this.sendDelayQueue(serviceId,childBizMessage,tmContext);
-//            return bizMessage;
-//        }
-        return this.sendDelayQueue(serviceId,childBizMessage,tmContext);
+
+        this.sendDelayQueue(serviceId,childBizMessage,tmContext);
+        return childBizMessage;
     }
 
-    public BizMessage sendDelayQueue(String serviceId, BizMessage bizMessage, TmContext tmContext) {
-        if (tmContext.getServiceStatus() == TmContext.SERVICE_STATUS_ERROR) {
-            this.abortTransaction(BizResultEnum.SCRIPT_RETURN_ERROR.getCode()
-                    , BizResultEnum.SCRIPT_RETURN_ERROR.getMessage(), bizMessage);
-            return bizMessage;
-        } else if (tmContext.getServiceStatus() == TmContext.SERVICE_STATUS_SUCCESS) {
-            this.finishTransaction(bizMessage);
-            return bizMessage;
-        }
-
+    public void sendDelayQueue(String serviceId, BizMessage bizMessage, TmContext tmContext) {
+        this.sipServiceLogService.saveProcessingServiceLog(bizMessage);
         Map map = new HashMap();
         map.put("serviceId",serviceId);
         map.put("bizmessage",bizMessage);
@@ -85,21 +57,20 @@ public class TmService {
                     public Message postProcessMessage(Message message) throws AmqpException {
                         //设置消息持久化
                         message.getMessageProperties().setDeliveryMode(MessageDeliveryMode.PERSISTENT);
-                        //message.getMessageProperties().setHeader("x-delay", "6000");
                         message.getMessageProperties().setDelay(tmContext.getDelayTime());
                         return message;
                     }
                 });
-        return bizMessage;
+        return;
     }
 
-    public void abortTransaction(int code,String message,BizMessage bizMessage) {
-        log.error("交易错误:{}-{}\n{}",code,message,bizMessage);
-        // TODO 记录和更新事务日志
-    }
-
-    public void finishTransaction(BizMessage bizMessage) {
-        log.info("交易结束:{}",bizMessage);
-        // TODO 记录和更新事务日志
-    }
+//    public void abortTransaction(int code,String message,BizMessage bizMessage) {
+//        log.error("交易错误:{}-{}\n{}",code,message,bizMessage);
+//        // TODO 记录和更新事务日志
+//    }
+//
+//    public void finishTransaction(BizMessage bizMessage) {
+//        log.info("交易结束:{}",bizMessage);
+//        // TODO 记录和更新事务日志
+//    }
 }

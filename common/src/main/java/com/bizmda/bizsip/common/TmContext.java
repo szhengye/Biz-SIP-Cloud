@@ -10,5 +10,5 @@ public class TmContext {
 
     private int delayTime = 10000;
     private int retryCount = 0;
-    private char serviceStatus = SERVICE_STATUS_RETRY;
+    private char serviceStatus;
 }

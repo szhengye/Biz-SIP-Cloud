@@ -15,9 +15,9 @@ public class IntegratorControllerAdvice {
     @ExceptionHandler({ BizException.class })
     public BizMessage bizException(BizException exception) {
         BizMessage bizMessage = BizUtils.bizMessageThreadLocal.get();
-        bizMessage.fail(exception);
+        BizMessage outMessage = BizMessage.buildFailMessage(bizMessage,exception);
         BizUtils.bizMessageThreadLocal.remove();
-        return bizMessage;
+        return outMessage;
     }
 
 }

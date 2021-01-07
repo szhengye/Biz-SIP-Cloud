@@ -26,22 +26,22 @@ public class ScriptIntegratorService extends AbstractIntegratorService {
     }
 
     @Override
-    public BizMessage doBizService(BizMessage message) {
+    public BizMessage doBizService(BizMessage inBizMessage) {
 
         MagicScriptContext context = new MagicScriptContext();;
-        context.set("bizmessage", message);
+        context.set("bizmessage", inBizMessage);
         Object result = MagicScriptHelper.executeScript(this.getFileContent(), context);
-//        BizMessage outMessage = (BizMessage)context.get("bizmessage");
-//        log.info("outMessage***:{}",outMessage);
+
+        BizMessage outBizMessage;
         if (result instanceof List) {
             JSONArray jsonArray = JSONUtil.parseArray(result);
-            message.success(jsonArray);
+            outBizMessage = BizMessage.buildSuccessMessage(inBizMessage,jsonArray);
         }
         else {
             JSONObject jsonObject = JSONUtil.parseObj(result);
-            message.success(jsonObject);
+            outBizMessage = BizMessage.buildSuccessMessage(inBizMessage,jsonObject);
         }
-        return message;
+        return outBizMessage;
     }
 
 }

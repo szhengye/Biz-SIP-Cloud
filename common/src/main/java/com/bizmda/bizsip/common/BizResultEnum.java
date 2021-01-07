@@ -38,6 +38,7 @@ public enum BizResultEnum {
     CHECK_RULE_FILE_NOTFOUND(1011,"检验规划文件不存在"),
     SERVICE_CHECK_ERROR(1012,"服务规则校验出错"),
 
+    OTHER_ERROR(1099,"其它错误"),
     SUCCESS(0,"成功");
 
     private int code;

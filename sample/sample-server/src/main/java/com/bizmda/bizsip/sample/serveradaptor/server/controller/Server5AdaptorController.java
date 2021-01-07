@@ -37,12 +37,12 @@ public class Server5AdaptorController {
         JSONObject outMessage = null;
         try {
             outMessage = this.serverAdaptor.process(inMessage.getData());
-            inMessage.success(outMessage);
-            return inMessage;
+            BizMessage bizMessage = BizMessage.buildSuccessMessage(inMessage,outMessage);
+            return bizMessage;
         } catch (BizException e) {
             log.error("服务端适配器执行出错",e);
-            inMessage.fail(e);
-            return inMessage;
+            BizMessage bizMessage = BizMessage.buildFailMessage(inMessage,e);
+            return bizMessage;
         }
     }
 }
