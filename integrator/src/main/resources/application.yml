@@ -6,15 +6,15 @@ spring:
   cloud:
     nacos:
       discovery:
-        server-addr: localhost:8848
+        server-addr: test.bizmda.com:8848
   datasource:
-    url: jdbc:mysql://localhost/sip
+    url: jdbc:mysql://test.bizmda.com/sip?serverTimezone=GMT%2B8&useUnicode=true&characterEncoding=utf8&useSSL=false
     username: root
     password: 123456
-    driver-class-name: com.mysql.jdbc.Driver
+    driver-class-name: com.mysql.cj.jdbc.Driver
 
   redis:
-    host: 127.0.0.1  #配置redis的主机地址，需要修改成自己的
+    host: test.bizmda.com  #配置redis的主机地址，需要修改成自己的
     port: 6379
     database: 0
     timeout: 5000
@@ -28,7 +28,7 @@ spring:
 
   rabbitmq:
     virtual-host: /
-    host: 127.0.0.1
+    host: test.bizmda.com
     port: 5672
     username: springcloud
     password: springcloud
