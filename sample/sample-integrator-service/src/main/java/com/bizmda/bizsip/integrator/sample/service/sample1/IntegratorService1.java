@@ -1,4 +1,4 @@
-package com.bizmda.bizsip.integrator.sample.service.server2;
+package com.bizmda.bizsip.integrator.sample.service.sample1;
 
 import cn.hutool.json.JSONObject;
 import com.bizmda.bizsip.common.BizMessage;
@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Slf4j
-@Service("/server2/service1")
+@Service("sample1.service1")
 public class IntegratorService1 extends AbstractJavaIntegratorService {
     @Autowired
     private SipService sipService;
@@ -20,9 +20,9 @@ public class IntegratorService1 extends AbstractJavaIntegratorService {
 
     @Override
     public BizMessage doBizService(BizMessage<JSONObject> message) {
-        BizMessage bizMessage = sipService.doServerService("server3",message.getData());
-        log.info("返回消息:{}",bizMessage);
-        return bizMessage;
+        // 类似"/openapi/sample2.script"
+        BizMessage result = this.sipService.doServerService("server1",message.getData());
 
+        return result;
     }
 }

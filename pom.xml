@@ -18,6 +18,7 @@
         <module>client-adaptor</module>
         <module>dynamic-config</module>
         <module>TM-service</module>
+        <module>integrator-common</module>
     </modules>
 
     <properties>
@@ -30,7 +31,7 @@
         <spring-platform.version>Cairo-SR3</spring-platform.version>
         <spring-cloud-dependencies.version>Hoxton.SR8</spring-cloud-dependencies.version>
         <spring-cloud-alibaba-dependencies.version>2.2.1.RELEASE</spring-cloud-alibaba-dependencies.version>
-        <hutool.version>5.5.4</hutool.version>
+        <hutool.version>5.5.6</hutool.version>
         <snakeyaml.version>1.8</snakeyaml.version>
         <velocity.version>1.7</velocity.version>
         <magic-api.version>0.4.7</magic-api.version>
@@ -105,6 +106,16 @@
             </dependency>
             <dependency>
                 <groupId>com.bizmda.bizsip</groupId>
+                <artifactId>integrator-common</artifactId>
+                <version>${core.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.bizmda.bizsip</groupId>
+                <artifactId>sample-integrator-service</artifactId>
+                <version>${core.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.bizmda.bizsip</groupId>
                 <artifactId>client-adaptor-spring-cloud-starter</artifactId>
                 <version>${core.version}</version>
             </dependency>
@@ -146,4 +157,5 @@
             </plugins>
         </pluginManagement>
     </build>
+
 </project>

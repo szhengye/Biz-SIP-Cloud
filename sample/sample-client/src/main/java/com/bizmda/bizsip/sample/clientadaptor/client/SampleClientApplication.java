@@ -9,8 +9,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  */
 @Slf4j
 @SpringBootApplication
-public class ClientApplication {
+public class SampleClientApplication {
     public static void main(String[] args) {
-        SpringApplication.run(ClientApplication.class, args);
+        SpringApplication.run(SampleClientApplication.class, args);
     }
 }

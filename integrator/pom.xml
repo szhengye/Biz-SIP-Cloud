@@ -22,7 +22,7 @@
         </dependency>
         <dependency>
             <groupId>com.bizmda.bizsip</groupId>
-            <artifactId>integrator-service</artifactId>
+            <artifactId>sample-integrator-service</artifactId>
         </dependency>
         <dependency>
             <groupId>com.alibaba.cloud</groupId>

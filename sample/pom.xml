@@ -14,6 +14,7 @@
     <modules>
         <module>sample-server</module>
         <module>sample-client</module>
+        <module>sample-integrator-service</module>
     </modules>
 
 

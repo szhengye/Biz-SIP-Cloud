@@ -14,6 +14,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+/**
+ * SIP聚合服务API调用用接口
+ */
 @Slf4j
 @Service
 public class SipService {
@@ -24,6 +27,12 @@ public class SipService {
     @Autowired
     private TmService tmService;
 
+    /**
+     * 执行服务适配器服务的调用
+     * @param adaptorId 服务适配器ID
+     * @param inData 传入数据
+     * @return 返回数据，为BizMessage格式
+     */
     public BizMessage<JSONObject> doServerService( String adaptorId, Object inData) {
         JSONObject jsonObject = JSONUtil.parseObj(inData);
 
@@ -41,6 +50,12 @@ public class SipService {
         return outMessage;
     }
 
+    /**
+     * 调用存储转发（SAF）服务
+     * @param serviceId 调用的服务ID
+     * @param inData 传入数据
+     * @return 返回数据，为BizMessage格式
+     */
     public BizMessage<JSONObject> doSafService(String serviceId,Object inData) {
         JSONObject jsonObject = JSONUtil.parseObj(inData);
 
@@ -56,22 +71,38 @@ public class SipService {
         return outMessage;
     }
 
+    /**
+     * 设置SAF服务的延迟执行时间
+     * @param delayTime 延迟执行时间，单位为ms
+     */
     public void setTmDelayTime(int delayTime) {
         TmContext tmContext = BizUtils.tmContextThreadLocal.get();
         tmContext.setDelayTime(delayTime);
         BizUtils.tmContextThreadLocal.set(tmContext);
     }
 
+    /**
+     * 获取设置的SAF服务延迟执行时间，单位为ms
+     * @return
+     */
     public int getTmDelayTime() {
         TmContext tmContext = BizUtils.tmContextThreadLocal.get();
         return tmContext.getDelayTime();
     }
 
+    /**
+     * 获取SAF服务的当前重试次数
+     * @return 重试次数
+     */
     public int getTmRetryCount() {
         TmContext tmContext = BizUtils.tmContextThreadLocal.get();
         return tmContext.getRetryCount();
     }
 
+    /**
+     * 设置当前SAF服务的运行状态
+     * @param status 设置的SAF服务状态，有"success","error"，"retry"三种
+     */
     public void setTmServiceStatus(String status) {
         TmContext tmContext = BizUtils.tmContextThreadLocal.get();
         if (tmContext == null) {
