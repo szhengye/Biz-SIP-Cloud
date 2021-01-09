@@ -12,10 +12,10 @@ import org.springframework.context.annotation.Import;
  */
 @SpringBootApplication
 @EnableDiscoveryClient
+@MapperScan("com.bizmda.bizsip.db.mapper")
 @ComponentScan(value = "cn.hutool.extra.spring")
 @ComponentScan(value = "com.bizmda.bizsip.integrator")
 @ComponentScan(value = "com.bizmda.bizsip.db")
-@MapperScan("com.bizmda.bizsip.db.mapper")
 @Import(cn.hutool.extra.spring.SpringUtil.class)
 public class IntegratorApplication {
 

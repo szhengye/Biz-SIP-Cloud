@@ -1,8 +1,7 @@
-package com.bizmda.bizsip.integrator.service;
+package com.bizmda.bizsip.integrator.executor;
 
 import cn.hutool.json.JSONObject;
 import com.bizmda.bizsip.common.BizMessage;
-import lombok.Builder;
 import lombok.Data;
 
 import java.util.HashMap;
@@ -12,21 +11,21 @@ import java.util.Map;
  * @author 史正烨
  */
 @Data
-public abstract class AbstractIntegratorService {
+public abstract class AbstractIntegratorExecutor {
     public final static Map<String,Class> SERVICE_SCRIPT_SUFFIX_MAP = new HashMap<String,Class>(){{
-        put("script", ScriptIntegratorService.class);
+        put("script", ScriptIntegratorExecutor.class);
     }};
 
     private String serviceId;
     private String type;
-    private String fileContent;
-    public AbstractIntegratorService() {
+    private String content;
+    public AbstractIntegratorExecutor() {
     }
 
-    public AbstractIntegratorService(String serviceId,String type,String fileContent) {
+    public AbstractIntegratorExecutor(String serviceId, String type, String content) {
         this.serviceId = serviceId;
         this.type = type;
-        this.fileContent = fileContent;
+        this.content = content;
     }
 
     /**

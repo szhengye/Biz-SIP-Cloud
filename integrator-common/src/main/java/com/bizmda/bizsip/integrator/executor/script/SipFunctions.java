@@ -1,4 +1,4 @@
-package com.bizmda.bizsip.integrator.service.script;
+package com.bizmda.bizsip.integrator.executor.script;
 
 import cn.hutool.extra.spring.SpringUtil;
 import cn.hutool.json.JSONObject;

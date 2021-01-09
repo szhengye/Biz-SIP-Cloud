@@ -3,7 +3,7 @@ package com.bizmda.bizsip.integrator.checkrule;
 import cn.hutool.json.JSONObject;
 import com.bizmda.bizsip.common.BizException;
 import com.bizmda.bizsip.common.BizMessage;
-import com.bizmda.bizsip.integrator.service.MagicScriptHelper;
+import com.bizmda.bizsip.integrator.executor.MagicScriptHelper;
 import org.ssssssss.script.MagicScriptContext;
 
 import java.util.concurrent.Callable;

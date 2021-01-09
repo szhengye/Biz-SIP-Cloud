@@ -1,12 +1,11 @@
 package com.bizmda.bizsip.integrator.tm;
 
 import cn.hutool.core.text.StrFormatter;
-import cn.hutool.json.JSONObject;
 import com.bizmda.bizsip.common.*;
 import com.bizmda.bizsip.integrator.config.IntegratorServiceMapping;
 import com.bizmda.bizsip.integrator.config.RabbitmqConfig;
-import com.bizmda.bizsip.integrator.service.AbstractIntegratorService;
-import com.bizmda.bizsip.integrator.service.SipServiceLogService;
+import com.bizmda.bizsip.integrator.executor.AbstractIntegratorExecutor;
+import com.bizmda.bizsip.integrator.executor.SipServiceLogService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.AmqpException;
 import org.springframework.amqp.core.Message;
@@ -30,7 +29,7 @@ public class TmService {
     private SipServiceLogService sipServiceLogService;
 
     public BizMessage doSafService(String serviceId, BizMessage bizMessage) {
-        AbstractIntegratorService integratorService = this.integratorServiceMapping.getIntegratorService(serviceId);
+        AbstractIntegratorExecutor integratorService = this.integratorServiceMapping.getIntegratorService(serviceId);
         if (integratorService == null) {
             BizMessage outMessage = BizMessage.buildFailMessage(bizMessage,
                     new BizException(BizResultEnum.INTEGRATOR_SERVICE_NOT_FOUND,

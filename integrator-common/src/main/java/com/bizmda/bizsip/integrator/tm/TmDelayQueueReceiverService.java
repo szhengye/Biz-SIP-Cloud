@@ -6,8 +6,8 @@ import cn.hutool.json.JSONUtil;
 import com.bizmda.bizsip.common.*;
 import com.bizmda.bizsip.integrator.config.IntegratorServiceMapping;
 import com.bizmda.bizsip.integrator.config.RabbitmqConfig;
-import com.bizmda.bizsip.integrator.service.AbstractIntegratorService;
-import com.bizmda.bizsip.integrator.service.SipServiceLogService;
+import com.bizmda.bizsip.integrator.executor.AbstractIntegratorExecutor;
+import com.bizmda.bizsip.integrator.executor.SipServiceLogService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +36,7 @@ public class TmDelayQueueReceiverService {
         JSONObject jsonObject = (JSONObject)JSONUtil.parse(map.get("bizmessage"));
         BizMessage inBizMessage = new BizMessage(jsonObject);
         BizMessage outBizMessage;
-        AbstractIntegratorService integratorService = this.integratorServiceMapping.getIntegratorService(serviceId);
+        AbstractIntegratorExecutor integratorService = this.integratorServiceMapping.getIntegratorService(serviceId);
         if (integratorService == null) {
             outBizMessage = BizMessage.buildFailMessage(inBizMessage
                     ,new BizException(BizResultEnum.INTEGRATOR_SERVICE_NOT_FOUND

@@ -6,8 +6,8 @@ import cn.hutool.json.JSONObject;
 import com.bizmda.bizsip.common.*;
 import com.bizmda.bizsip.integrator.checkrule.*;
 import com.bizmda.bizsip.integrator.config.IntegratorServiceMapping;
-import com.bizmda.bizsip.integrator.service.AbstractIntegratorService;
-import com.bizmda.bizsip.integrator.service.SipServiceLogService;
+import com.bizmda.bizsip.integrator.executor.AbstractIntegratorExecutor;
+import com.bizmda.bizsip.integrator.executor.SipServiceLogService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -36,16 +36,20 @@ public class IntegratorController {
     private ResultProvider resultProvider = new DefaultResultProvider();
     private boolean throwException = false;
 
+//    @PostConstruct
+//    public void init() {
+//        this.integratorServiceMapping.loadJavaService();
+//    }
+
     @PostMapping(value="/api",consumes = "application/json", produces = "application/json")
     public BizMessage<JSONObject> doApiService(HttpServletRequest request, HttpServletResponse response,
                                    @RequestBody JSONObject inJsonObject,
                                    @PathVariable(required = false) Map<String, Object> pathVariables,
                                    @RequestParam(required = false) Map<String, Object> parameters) throws BizException {
-
         String serviceId = request.getHeader("Biz-Service-Id");
-        if (!serviceId.startsWith("/")) {
-            serviceId = "/" + serviceId;
-        }
+//        if (!serviceId.startsWith("/")) {
+//            serviceId = "/" + serviceId;
+//        }
 
         BizMessage<JSONObject> inMessage = BizMessage.createNewTransaction();
         inMessage.setData(inJsonObject);
@@ -61,7 +65,7 @@ public class IntegratorController {
             throw new BizException(BizResultEnum.SERVICE_CHECK_ERROR,jsonArray.toString());
         }
 
-        AbstractIntegratorService integratorService = this.integratorServiceMapping.getIntegratorService(serviceId);
+        AbstractIntegratorExecutor integratorService = this.integratorServiceMapping.getIntegratorService(serviceId);
         if (integratorService == null) {
             throw new BizException(BizResultEnum.INTEGRATOR_SERVICE_NOT_FOUND,
                     StrFormatter.format("聚合服务不存在:{}",serviceId));

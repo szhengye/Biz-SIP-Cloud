@@ -1,4 +1,4 @@
-package com.bizmda.bizsip.integrator.service;
+package com.bizmda.bizsip.integrator.executor;
 
 import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONObject;
@@ -13,10 +13,10 @@ import java.util.List;
  * @author 史正烨
  */
 @Slf4j
-public class ScriptIntegratorService extends AbstractIntegratorService {
+public class ScriptIntegratorExecutor extends AbstractIntegratorExecutor {
 
 
-    public ScriptIntegratorService(String serviceId,String type,String fileContent) {
+    public ScriptIntegratorExecutor(String serviceId, String type, String fileContent) {
         super(serviceId, type, fileContent);
     }
 
@@ -30,7 +30,7 @@ public class ScriptIntegratorService extends AbstractIntegratorService {
 
         MagicScriptContext context = new MagicScriptContext();;
         context.set("bizmessage", inBizMessage);
-        Object result = MagicScriptHelper.executeScript(this.getFileContent(), context);
+        Object result = MagicScriptHelper.executeScript(this.getContent(), context);
 
         BizMessage outBizMessage;
         if (result instanceof List) {

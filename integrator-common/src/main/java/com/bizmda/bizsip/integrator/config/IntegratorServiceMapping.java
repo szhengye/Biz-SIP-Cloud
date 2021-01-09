@@ -2,11 +2,12 @@ package com.bizmda.bizsip.integrator.config;
 
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.io.file.FileReader;
+import cn.hutool.extra.spring.SpringUtil;
 import com.bizmda.bizsip.common.BizException;
 import com.bizmda.bizsip.common.BizResultEnum;
-import com.bizmda.bizsip.common.BizUtils;
-import com.bizmda.bizsip.integrator.service.AbstractIntegratorService;
-import com.bizmda.bizsip.integrator.service.ScriptIntegratorService;
+import com.bizmda.bizsip.integrator.executor.AbstractIntegratorExecutor;
+import com.bizmda.bizsip.integrator.service.AbstractJavaIntegratorService;
+import com.bizmda.bizsip.integrator.executor.JavaIntegratorExecutor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
@@ -19,8 +20,9 @@ import java.util.*;
  */
 @Slf4j
 public class IntegratorServiceMapping {
-    private Map<String, AbstractIntegratorService> mappings;
+    private Map<String, AbstractIntegratorExecutor> integratorExecutorMap;
     private String configPath;
+    private Map<String, AbstractJavaIntegratorService> javaIntegratorServiceMap = null;
 
     public IntegratorServiceMapping(String configPath) throws BizException {
         this.configPath = configPath;
@@ -29,7 +31,7 @@ public class IntegratorServiceMapping {
 
     public void load() throws BizException {
         String scriptPath;
-        this.mappings = new HashMap<String,AbstractIntegratorService>();
+        this.integratorExecutorMap = new HashMap<String, AbstractIntegratorExecutor>();
 
         if (this.configPath.endsWith("/")) {
             scriptPath = this.configPath + "service";
@@ -38,12 +40,12 @@ public class IntegratorServiceMapping {
             scriptPath = this.configPath + "/service";
         }
         String suffix;
-        AbstractIntegratorService integratorService = null;
+        AbstractIntegratorExecutor integratorService = null;
 
         List<File> files = FileUtil.loopFiles(scriptPath);
         for(File file:files) {
             suffix = FileUtil.getSuffix(file).toLowerCase();
-            Class integratorClazz = AbstractIntegratorService.SERVICE_SCRIPT_SUFFIX_MAP.get(suffix);
+            Class integratorClazz = AbstractIntegratorExecutor.SERVICE_SCRIPT_SUFFIX_MAP.get(suffix);
             if (integratorClazz != null) {
                 FileReader fileReader = new FileReader(file);
                 String fileContent = fileReader.readString();
@@ -52,23 +54,36 @@ public class IntegratorServiceMapping {
                 log.info("装载聚合服务:{}",serviceId);
                 try {
                     Constructor constructor=integratorClazz.getDeclaredConstructor(String.class,String.class,String.class);
-                    integratorService = (AbstractIntegratorService) constructor.newInstance(serviceId,suffix,fileContent);
+                    integratorService = (AbstractIntegratorExecutor) constructor.newInstance(serviceId,suffix,fileContent);
                 } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
                     throw new BizException(BizResultEnum.INTEGRATOR_SERVICE_CLASS_LOAD_ERROR,e);
                 }
                 integratorService.init();
-                mappings.put(serviceId,integratorService);
+                integratorExecutorMap.put(serviceId,integratorService);
             }
         }
     }
 
-    public void init() {
-        for(String key:this.mappings.keySet()) {
-            AbstractIntegratorService integratorService = this.mappings.get(key);
-            integratorService.init();
+    private void loadJavaService() {
+        this.javaIntegratorServiceMap = SpringUtil.getBeansOfType(AbstractJavaIntegratorService.class);
+//        this.javaIntegratorServiceMap = SpringUtil.getBeansOfType(null);
+        for(String key:this.javaIntegratorServiceMap.keySet()) {
+            AbstractJavaIntegratorService javaIntegratorService = this.javaIntegratorServiceMap.get(key);
+            JavaIntegratorExecutor javaIntegratorExecutor = new JavaIntegratorExecutor(key,"java",null);
+            this.integratorExecutorMap.put(key,javaIntegratorExecutor);
         }
+
     }
-    public AbstractIntegratorService getIntegratorService(String serviceId) {
-        return this.mappings.get(serviceId);
+//    public void init() {
+//        for(String key:this.mappings.keySet()) {
+//            AbstractIntegratorService integratorService = this.mappings.get(key);
+//            integratorService.init();
+//        }
+//    }
+    public AbstractIntegratorExecutor getIntegratorService(String serviceId) {
+        if (this.javaIntegratorServiceMap == null) {
+            this.loadJavaService();
+        }
+        return this.integratorExecutorMap.get(serviceId);
     }
 }
