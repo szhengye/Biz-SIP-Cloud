@@ -16,7 +16,7 @@ public class FieldCheckRuleThread implements Callable<FieldChcekRuleResult> {
     private FieldCheckRule fieldCheckRule;
     private JSONObject jsonObject;
 
-    public FieldCheckRuleThread(JSONObject jsonObject, FieldCheckRule fieldCheckRule) throws BizException {
+    public FieldCheckRuleThread(JSONObject jsonObject, FieldCheckRule fieldCheckRule) {
         this.fieldCheckRule = fieldCheckRule;
         this.jsonObject = jsonObject;
     }

@@ -1,6 +1,5 @@
 package com.bizmda.bizsip.common;
 
-import cn.hutool.json.JSONObject;
 import org.springframework.expression.EvaluationContext;
 import org.springframework.expression.Expression;
 import org.springframework.expression.ExpressionParser;
@@ -15,14 +14,12 @@ import java.util.concurrent.Callable;
  */
 public class ElThread implements Callable<Object> {
     private String express;
-    private Object data;
     private boolean isBooleanResult;
     private ExpressionParser parser;
     private EvaluationContext context;
 
     public ElThread(String express, Object data, boolean isBooleanResult) {
         this.express = express;
-        this.data = data;
         this.isBooleanResult = isBooleanResult;
         this.parser = new SpelExpressionParser();
         this.context = new StandardEvaluationContext();
@@ -33,12 +30,10 @@ public class ElThread implements Callable<Object> {
     public Object call() throws Exception {
         Expression expression = this.parser.parseExpression(this.express, new TemplateParserContext());
         if (this.isBooleanResult) {
-            Boolean result = expression.getValue(this.context, Boolean.class);
-            return result;
+            return expression.getValue(this.context, Boolean.class);
         }
         else {
-            String result = expression.getValue(this.context, String.class);
-            return result;
+            return expression.getValue(this.context, String.class);
         }
     }
 }

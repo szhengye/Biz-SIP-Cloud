@@ -17,10 +17,10 @@ import java.util.Map;
 public class FieldFunction {
 
     private String name;
-    private List<String> args;
+    private List<Object> args;
     private Method method;
 
-    public FieldFunction(Map map) throws BizException {
+    public FieldFunction(Map<String,Object> map) throws BizException {
         this.name = (String)map.get("name");
         try {
             this.method = FieldFunctionImpl.class.getMethod(name, Object.class,int.class,List.class);
@@ -28,9 +28,9 @@ public class FieldFunction {
             throw new BizException(BizResultEnum.NO_FIELD_FUNCTION_IMPL,"域处理方法没实现:"+name);
         }
 
-        this.args = (List<String>)map.get("args");
+        this.args = (List<Object>)map.get("args");
         if (this.args == null) {
-            this.args = new ArrayList<String>();
+            this.args = new ArrayList<>();
         }
     }
 

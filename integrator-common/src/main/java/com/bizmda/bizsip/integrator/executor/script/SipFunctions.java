@@ -26,8 +26,6 @@ public class SipFunctions implements MagicModule {
     private static RestTemplate restTemplate = null;
     private static TmService tmService = null;
 
-    public static SipFunctions sipFunctions = new SipFunctions();
-
     @Comment("执行适配器服务调用")
     public static BizMessage<JSONObject> doService(@Comment("服务ID") String adaptorId, @Comment("调用输入参数") Object inData) {
         JSONObject jsonObject = JSONUtil.parseObj(inData);
@@ -43,7 +41,7 @@ public class SipFunctions implements MagicModule {
 
         RestServerAdaptorConfig serverAdaptorConfig = (RestServerAdaptorConfig) serverAdaptorConfigMapping.getServerAdaptorConfig(adaptorId);
         log.debug("doService()请求:\n{}",inMessage);
-        BizMessage<JSONObject> outMessage = (BizMessage)restTemplate.postForObject(serverAdaptorConfig.getUrl(), inMessage, BizMessage.class);
+        BizMessage<JSONObject> outMessage = restTemplate.postForObject(serverAdaptorConfig.getUrl(), inMessage, BizMessage.class);
         log.debug("doService()响应:\n{}",outMessage);
         return outMessage;
     }
@@ -59,7 +57,7 @@ public class SipFunctions implements MagicModule {
         }
 
         log.debug("doSafService()请求:\n{}",inMessage);
-        BizMessage outMessage = tmService.doSafService(serviceId,inMessage);
+        BizMessage<JSONObject> outMessage = tmService.doSafService(serviceId,inMessage);
         log.debug("doSafService()响应:\n{}",outMessage);
         return outMessage;
     }

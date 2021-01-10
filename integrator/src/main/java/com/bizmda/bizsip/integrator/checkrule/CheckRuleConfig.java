@@ -13,7 +13,7 @@ public class CheckRuleConfig {
     private CheckMode serviceCheckMode = CheckMode.ONE;
     private List<ServiceCheckRule> serviceCheckRuleList;
 
-    public CheckRuleConfig(Map checkRuleConfigmap) {
+    public CheckRuleConfig(Map<String,Object> checkRuleConfigmap) {
         String mode = (String)checkRuleConfigmap.get("field-check-mode");
         if("all".equalsIgnoreCase(mode)) {
             this.fieldCheckMode = CheckMode.ALL;
@@ -23,16 +23,16 @@ public class CheckRuleConfig {
             this.serviceCheckMode = CheckMode.ALL;
         }
 
-        List<Map> mapList = (List<Map>)checkRuleConfigmap.get("field-check-rules");
-        this.fieldCheckRuleList = new ArrayList<FieldCheckRule>();
-        for(Map map:mapList) {
+        List<Map<String,Object>> mapList = (List<Map<String,Object>>)checkRuleConfigmap.get("field-check-rules");
+        this.fieldCheckRuleList = new ArrayList<>();
+        for(Map<String,Object> map:mapList) {
             FieldCheckRule fieldCheckRule = new FieldCheckRule(map);
             this.fieldCheckRuleList.add(fieldCheckRule);
         }
 
-        mapList = (List<Map>)checkRuleConfigmap.get("service-check-rules");
-        this.serviceCheckRuleList = new ArrayList<ServiceCheckRule>();
-        for(Map map:mapList) {
+        mapList = (List<Map<String,Object>>)checkRuleConfigmap.get("service-check-rules");
+        this.serviceCheckRuleList = new ArrayList<>();
+        for(Map<String,Object> map:mapList) {
             ServiceCheckRule serviceCheckRule = new ServiceCheckRule(map);
             this.serviceCheckRuleList.add(serviceCheckRule);
         }

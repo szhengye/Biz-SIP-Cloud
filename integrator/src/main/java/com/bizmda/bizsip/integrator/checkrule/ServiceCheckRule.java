@@ -9,11 +9,11 @@ public class ServiceCheckRule {
     private String script;
     private String message;
 
-    public ServiceCheckRule(Map map) {
+    public ServiceCheckRule(Map<String,Object> map) {
         this.message = (String)map.get("message");
-        String script = (String)map.get("script");
-        if (script != null) {
-            this.script = script;
+        String var = (String)map.get("script");
+        if (var != null) {
+            this.script = var;
             return;
         }
         String file = (String)map.get("file");

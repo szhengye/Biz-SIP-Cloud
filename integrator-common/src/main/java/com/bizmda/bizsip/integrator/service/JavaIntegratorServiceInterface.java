@@ -4,9 +4,9 @@ import cn.hutool.json.JSONObject;
 import com.bizmda.bizsip.common.BizMessage;
 
 /**
- * Java聚合服务抽象父类
+ * Java聚合服务抽象接口
  */
-public abstract class AbstractJavaIntegratorService {
+public interface JavaIntegratorServiceInterface {
     /**
      * 聚合服务类的初始化
      */
@@ -17,5 +17,5 @@ public abstract class AbstractJavaIntegratorService {
      * @param message 传入的消息
      * @return 返回的消息
      */
-    public abstract BizMessage doBizService(BizMessage<JSONObject> message);
+    public abstract BizMessage<JSONObject> doBizService(BizMessage<JSONObject> message);
 }

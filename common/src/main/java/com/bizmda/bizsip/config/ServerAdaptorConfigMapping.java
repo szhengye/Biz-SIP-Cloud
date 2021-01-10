@@ -25,15 +25,15 @@ public class ServerAdaptorConfigMapping {
 
     public void load() throws BizException {
         Yaml yaml = new Yaml();
-        List<Map> serverAdaptorList = null;
+        List<Map<String,Object>> serverAdaptorList = null;
         try {
-            serverAdaptorList = (List<Map>)yaml.load(new FileInputStream(new File(this.configPath+"/server-adaptor.yml")));
+            serverAdaptorList = (List<Map<String,Object>>)yaml.load(new FileInputStream(new File(this.configPath+"/server-adaptor.yml")));
         } catch (FileNotFoundException e) {
             throw new BizException(BizResultEnum.SERVER_ADATPOR_FILE_NOTFOUND);
         }
         AbstractServerAdaptorConfig serverAdaptor = null;
-        this.serverAdaptorConfigMap = new HashMap<String, AbstractServerAdaptorConfig>();
-        for (Map serverAdaptorMap:serverAdaptorList) {
+        this.serverAdaptorConfigMap = new HashMap<>();
+        for (Map<String,Object> serverAdaptorMap:serverAdaptorList) {
             String type = (String)serverAdaptorMap.get("type");
             if ("rest".equalsIgnoreCase(type)) {
                 serverAdaptor = new RestServerAdaptorConfig(serverAdaptorMap);

@@ -1,9 +1,5 @@
 package com.bizmda.bizsip.config;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-
 import java.util.Map;
 
 /**

@@ -17,7 +17,6 @@
         <module>api-gateway</module>
         <module>client-adaptor</module>
         <module>dynamic-config</module>
-        <module>TM-service</module>
         <module>integrator-common</module>
     </modules>
 
@@ -157,5 +156,6 @@
             </plugins>
         </pluginManagement>
     </build>
+
 
 </project>

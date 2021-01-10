@@ -1,7 +1,6 @@
 package com.bizmda.bizsip.clientadaptor;
 
 import cn.hutool.json.JSONObject;
-import cn.hutool.json.JSONUtil;
 import com.alibaba.nacos.api.NacosFactory;
 import com.alibaba.nacos.api.config.ConfigService;
 import com.alibaba.nacos.api.exception.NacosException;
@@ -16,9 +15,9 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
-import org.springframework.util.RouteMatcher;
 import org.springframework.web.client.RestTemplate;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.Properties;
 
@@ -43,9 +42,8 @@ public class ClientAdaptor {
     private RestTemplate restTemplate;
 
     private String clientAdaptorId;
-    private ConfigService configService;
 
-    private AbstractMessageProcessor messageProcessor;
+    private AbstractMessageProcessor<Object> messageProcessor;
     private List<PredicateRuleConfig> serviceRules;
 
     /**
@@ -60,15 +58,11 @@ public class ClientAdaptor {
         this.load();
         Properties properties = new Properties();
         properties.put("serverAddr", this.serverAddr);
+        ConfigService configService;
         try {
-            this.configService = NacosFactory.createConfigService(properties);
-//        this.configService.addListener(NacosConstants.REFRESH_SERVER_ADAPTOR_DATA_ID, NacosConstants.NACOS_GROUP, new ClientAdaptorListener(this) {
-//            @Override
-//            public void receiveConfigInfo(String config) {
-//                log.info("刷新服务端适配器配置");
-//            }
-//        });
-            this.configService.addListener(NacosConstants.REFRESH_CLIENT_ADAPTOR_DATA_ID, NacosConstants.NACOS_GROUP, new ClientAdaptorListener(this) {
+            configService = NacosFactory.createConfigService(properties);
+
+            configService.addListener(BizConstant.REFRESH_CLIENT_ADAPTOR_DATA_ID, BizConstant.NACOS_GROUP, new ClientAdaptorListener(this) {
                 @Override
                 public void receiveConfigInfo(String config) {
                     log.info("刷新客户端适配器[{}]配置",this.clientAdaptor.clientAdaptorId);
@@ -83,18 +77,7 @@ public class ClientAdaptor {
         } catch (NacosException e) {
             throw new BizException(BizResultEnum.NACOS_ERROR,e);
         }
-//        this.configService.addListener(NacosConstants.REFRESH_SERVICE_DATA_ID, NacosConstants.NACOS_GROUP, new ClientAdaptorListener(this) {
-//            @Override
-//            public void receiveConfigInfo(String config) {
-//                log.info("刷新服务配置");
-//            }
-//        });
-//        this.configService.addListener(NacosConstants.REFRESH_MESSAGE_DATA_ID, NacosConstants.NACOS_GROUP, new ClientAdaptorListener(this) {
-//            @Override
-//            public void receiveConfigInfo(String config) {
-//                log.info("刷新消息配置");
-//            }
-//        });
+
         log.info("配置刷新监控初始化成功!");
 
     }
@@ -102,16 +85,15 @@ public class ClientAdaptor {
     public void load() throws BizException {
         CommonClientAdaptorConfig clientAdaptorConfig = this.clientAdaptorConfigMapping.getClientAdaptorConfig(this.clientAdaptorId);
         String messageType = (String)clientAdaptorConfig.getMessageMap().get("type");
-        Class clazz = AbstractMessageProcessor.MESSAGE_TYPE_MAP.get(messageType);
+        Class<? extends AbstractMessageProcessor> clazz = (Class<? extends AbstractMessageProcessor>)AbstractMessageProcessor.MESSAGE_TYPE_MAP.get(messageType);
         if (clazz == null) {
             throw new BizException(BizResultEnum.NO_MESSAGE_PROCESSOR);
         }
 
         try {
-            this.messageProcessor = (AbstractMessageProcessor)clazz.newInstance();
-        } catch (InstantiationException e) {
-            throw new BizException(BizResultEnum.MESSAGE_CREATE_ERROR,e);
-        } catch (IllegalAccessException e) {
+            this.messageProcessor = clazz.getDeclaredConstructor().newInstance();
+        } catch (InstantiationException |IllegalAccessException
+                | InvocationTargetException | NoSuchMethodException e) {
             throw new BizException(BizResultEnum.MESSAGE_CREATE_ERROR,e);
         }
 
@@ -130,24 +112,19 @@ public class ClientAdaptor {
      * @return
      * @throws BizException
      */
-    public BizMessage process(Object inMessage) throws BizException {
+    public BizMessage<Object> process(Object inMessage) throws BizException {
         log.debug("Client-Adaptor传入消息:{}",inMessage);
         JSONObject message = this.messageProcessor.unpack(inMessage);
         log.debug("解包后消息:{}",message);
-        BizMessage<Object> bizMessage = this.doBizService(message);
-        if (!(bizMessage.getData() instanceof JSONObject)) {
-            JSONObject jsonObject = JSONUtil.parseObj(bizMessage.getData());
-            bizMessage.setData(jsonObject);
-        }
-        Object outMessage = this.messageProcessor.pack((JSONObject)bizMessage.getData());
-        bizMessage.setData(outMessage);
-        log.debug("打包后消息:{}",bizMessage);
-        return bizMessage;
+        BizMessage<JSONObject> bizMessage = this.doBizService(message);
+        Object outMessage = this.messageProcessor.pack(bizMessage.getData());
+        BizMessage<Object> outBizMessage = BizMessage.buildSuccessMessage(bizMessage,outMessage);
+        log.debug("打包后消息:{}",outBizMessage);
+        return outBizMessage;
     }
 
-    private BizMessage doBizService(JSONObject inData) throws BizException {
-//        RestTemplate restTemplate = new RestTemplate();
-        String rule = this.matchServicePredicateRule((JSONObject)inData);
+    private BizMessage<JSONObject> doBizService(JSONObject inData) throws BizException {
+        String rule = this.matchServicePredicateRule(inData);
         if (this.integratorUrl.endsWith("/")) {
             this.integratorUrl = this.integratorUrl.substring(0,integratorUrl.length()-1);
         }
@@ -155,7 +132,11 @@ public class ClientAdaptor {
         header.add("Biz-Service-Id",rule);
         HttpEntity<JSONObject> httpEntity = new HttpEntity<>(inData, header);
 
-        BizMessage outMessage = (BizMessage)this.restTemplate.postForObject(this.integratorUrl, httpEntity, BizMessage.class);
+        BizMessage<JSONObject> outMessage = this.restTemplate.postForObject(this.integratorUrl, httpEntity, BizMessage.class);
+        if (outMessage == null) {
+            log.debug("Integrator返回为null");
+            throw new BizException(BizResultEnum.CLIENT_RETURN_NULL);
+        }
         if (outMessage.getCode() == 0) {
             log.debug("Integrator返回成功:{}",outMessage.getData());
         }
@@ -172,7 +153,7 @@ public class ClientAdaptor {
                     predicateRuleConfig.getPredicate().isEmpty()) {
                 return BizUtils.getElStringResult(predicateRuleConfig.getRule(),inData);
             }
-            Boolean predicateFlag = BizUtils.getElBooleanResult(predicateRuleConfig.getPredicate(),inData);
+            boolean predicateFlag = BizUtils.getElBooleanResult(predicateRuleConfig.getPredicate(),inData);
             if (predicateFlag) {
                 return BizUtils.getElStringResult(predicateRuleConfig.getRule(),inData);
             }

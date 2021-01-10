@@ -15,7 +15,7 @@ public class PredicateRuleConfig {
     private String predicate;
     private String rule;
 
-    public PredicateRuleConfig(Map ruleMap) {
+    public PredicateRuleConfig(Map<String,Object> ruleMap) {
         this.predicate = (String)ruleMap.get("predicate");
         this.rule = (String)ruleMap.get("rule");
     }
@@ -24,7 +24,7 @@ public class PredicateRuleConfig {
         if (this.predicate == null || this.predicate.isEmpty()) {
             return BizUtils.getElStringResult(this.rule,data);
         }
-        Boolean predicateFlag = BizUtils.getElBooleanResult(this.predicate,data);
+        boolean predicateFlag = BizUtils.getElBooleanResult(this.predicate,data);
         if (predicateFlag) {
             return BizUtils.getElStringResult(this.rule,data);
         }

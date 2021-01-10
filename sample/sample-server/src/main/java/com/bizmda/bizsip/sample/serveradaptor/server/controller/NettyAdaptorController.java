@@ -6,7 +6,6 @@ import com.bizmda.bizsip.common.BizMessage;
 import com.bizmda.bizsip.serveradaptor.ServerAdaptor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -33,15 +32,16 @@ public class NettyAdaptorController {
     }
 
     @PostMapping(value = "/netty", consumes = "application/json", produces = "application/json")
-    public BizMessage doService(@RequestBody BizMessage<JSONObject> inMessage, HttpServletResponse response) {
+    public BizMessage<Object> doService(@RequestBody BizMessage<JSONObject> inMessage, HttpServletResponse response) {
         JSONObject outMessage = null;
+        BizMessage<Object> bizMessage;
         try {
             outMessage = this.serverAdaptor.process(inMessage.getData());
-            BizMessage bizMessage = BizMessage.buildSuccessMessage(inMessage,outMessage);
+            bizMessage = BizMessage.buildSuccessMessage(inMessage,outMessage);
             return bizMessage;
         } catch (BizException e) {
             log.error("服务端适配器执行出错",e);
-            BizMessage bizMessage = BizMessage.buildFailMessage(inMessage,e);
+            bizMessage = BizMessage.buildFailMessage(inMessage,e);
             return bizMessage;
         }
     }

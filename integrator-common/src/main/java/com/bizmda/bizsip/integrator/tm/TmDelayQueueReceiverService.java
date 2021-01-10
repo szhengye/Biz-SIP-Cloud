@@ -29,13 +29,13 @@ public class TmDelayQueueReceiverService {
     private SipServiceLogService sipServiceLogService;
 
     @RabbitListener(queues = RabbitmqConfig.TM_DELAY_QUEUE, containerFactory = "multiListenerContainer")
-    public void TmDelayQueueListener(Map map) {
+    public void tmDelayQueueListener(Map<String,Object> map) {
         log.info("收到:{}",map);
         String serviceId = (String)map.get("serviceId");
         int retryCount = (int)map.get("retryCount");
         JSONObject jsonObject = (JSONObject)JSONUtil.parse(map.get("bizmessage"));
-        BizMessage inBizMessage = new BizMessage(jsonObject);
-        BizMessage outBizMessage;
+        BizMessage<JSONObject> inBizMessage = new BizMessage<>(jsonObject);
+        BizMessage<JSONObject> outBizMessage;
         AbstractIntegratorExecutor integratorService = this.integratorServiceMapping.getIntegratorService(serviceId);
         if (integratorService == null) {
             outBizMessage = BizMessage.buildFailMessage(inBizMessage
@@ -58,7 +58,6 @@ public class TmDelayQueueReceiverService {
             BizUtils.tmContextThreadLocal.remove();
             BizUtils.bizMessageThreadLocal.remove();
         }
-//        JSONObject jsonObject1 = (JSONObject)outBizMessage.getData();
 
         if (outBizMessage.getCode() != 0) {
             tmContext.setServiceStatus(TmContext.SERVICE_STATUS_ERROR);

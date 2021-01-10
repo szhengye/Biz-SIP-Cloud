@@ -14,11 +14,19 @@ public class ConfigWatchMonitor {
     public ConfigWatchMonitor(String serverAddr,String configPath) {
         Path path = Paths.get(configPath);
 
-//        WatchMonitor watchMonitor = WatchMonitor.create(path, WatchMonitor.EVENTS_ALL);
-        WatchMonitor watchMonitor = WatchMonitor.createAll(path, new DelayWatcher(new ConfigWatcher(serverAddr,configPath),1000));
-//        watchMonitor.setWatcher(new ConfigWatcher(serverAddr,configPath));
+        WatchMonitor watchMonitor = null;
+        try {
+            watchMonitor = WatchMonitor.createAll(path, new DelayWatcher(new ConfigWatcher(serverAddr,configPath),1000));
+            watchMonitor.setMaxDepth(7);
+            watchMonitor.start();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        finally {
+            if (watchMonitor != null) {
+                watchMonitor.close();
+            }
+        }
 
-        watchMonitor.setMaxDepth(7);
-        watchMonitor.start();
     }
 }

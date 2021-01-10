@@ -11,9 +11,6 @@ import com.bizmda.bizsip.integrator.executor.SipServiceLogService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import org.ssssssss.magicapi.provider.ResultProvider;
-import org.ssssssss.magicapi.provider.impl.DefaultResultProvider;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
@@ -33,35 +30,24 @@ public class IntegratorController {
     @Autowired
     private SipServiceLogService sipServiceLogService;
 
-    private ResultProvider resultProvider = new DefaultResultProvider();
-    private boolean throwException = false;
-
-//    @PostConstruct
-//    public void init() {
-//        this.integratorServiceMapping.loadJavaService();
-//    }
-
     @PostMapping(value="/api",consumes = "application/json", produces = "application/json")
     public BizMessage<JSONObject> doApiService(HttpServletRequest request, HttpServletResponse response,
                                    @RequestBody JSONObject inJsonObject,
                                    @PathVariable(required = false) Map<String, Object> pathVariables,
                                    @RequestParam(required = false) Map<String, Object> parameters) throws BizException {
         String serviceId = request.getHeader("Biz-Service-Id");
-//        if (!serviceId.startsWith("/")) {
-//            serviceId = "/" + serviceId;
-//        }
 
         BizMessage<JSONObject> inMessage = BizMessage.createNewTransaction();
         inMessage.setData(inJsonObject);
         BizUtils.bizMessageThreadLocal.set(inMessage);
 
         JSONArray jsonArray = this.checkFieldRule(serviceId,inJsonObject);
-        if (jsonArray.size() > 0) {
+        if (!jsonArray.isEmpty()) {
             throw new BizException(BizResultEnum.FIELD_CHECK_ERROR,jsonArray.toString());
         }
 
         jsonArray = this.checkServiceRule(serviceId,inJsonObject);
-        if (jsonArray.size() > 0) {
+        if (!jsonArray.isEmpty()) {
             throw new BizException(BizResultEnum.SERVICE_CHECK_ERROR,jsonArray.toString());
         }
 
@@ -72,7 +58,7 @@ public class IntegratorController {
         }
 
         BizUtils.tmContextThreadLocal.set(new TmContext());
-        BizMessage outMessage = null;
+        BizMessage<JSONObject> outMessage = null;
         try {
             outMessage = integratorService.doBizService(inMessage);
         }
@@ -132,28 +118,5 @@ public class IntegratorController {
         }
         return jsonArray;
     }
-//    private void setupMagicModules() {
-//        // 设置脚本import时 class加载策略
-//        MagicModuleLoader.setClassLoader((className) -> {
-//            try {
-//                return springContext.getBean(className);
-//            } catch (Exception e) {
-//                Class<?> clazz = null;
-//                try {
-//                    clazz = Class.forName(className);
-//                    return springContext.getBean(clazz);
-//                } catch (Exception ex) {
-//                    return clazz;
-//                }
-//            }
-//        });
-//        log.info("注册模块:{} -> {}", "log", Logger.class);
-//        MagicModuleLoader.addModule("log", LoggerFactory.getLogger(MagicScript.class));
-//        log.info("注册模块:{} -> {}", "request", RequestFunctions.class);
-//        MagicModuleLoader.addModule("request", new RequestFunctions());
-//        log.info("注册模块:{} -> {}", "assert", AssertFunctions.class);
-//        MagicModuleLoader.addModule("assert", AssertFunctions.class);
-//        log.info("注册模块:{} -> {}", "server", ServerService.class);
-//        MagicModuleLoader.addModule("server", ServerService.class);
-//    }
+
 }

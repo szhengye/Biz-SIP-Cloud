@@ -1,7 +1,6 @@
 package com.bizmda.bizsip.message;
 
 import cn.hutool.json.JSONObject;
-import cn.hutool.json.JSONUtil;
 import cn.hutool.json.XML;
 import com.bizmda.bizsip.common.BizException;
 import com.bizmda.bizsip.common.BizResultEnum;
@@ -9,6 +8,7 @@ import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
 import org.apache.velocity.app.VelocityEngine;
+import org.apache.velocity.runtime.RuntimeConstants;
 
 import java.io.StringWriter;
 import java.util.HashMap;
@@ -19,14 +19,14 @@ import java.util.Properties;
 /**
  * @author 史正烨
  */
-public class VelocityXmlMessageProcessor extends AbstractMessageProcessor {
+public class VelocityXmlMessageProcessor extends AbstractMessageProcessor<String> {
     @Override
     public void init(String configPath,Map messageMap) throws BizException {
         super.init(configPath,messageMap);
         Properties properties = new Properties();
-        properties.setProperty(VelocityEngine.FILE_RESOURCE_LOADER_PATH, this.configPath + "/message");
-        properties.setProperty(Velocity.ENCODING_DEFAULT, "UTF-8");
-        properties.setProperty(Velocity.OUTPUT_ENCODING, "UTF-8");
+        properties.setProperty(RuntimeConstants.FILE_RESOURCE_LOADER_PATH, this.configPath + "/message");
+        properties.setProperty(RuntimeConstants.ENCODING_DEFAULT, "UTF-8");
+        properties.setProperty(RuntimeConstants.OUTPUT_ENCODING, "UTF-8");
         Velocity.init(properties);
         VelocityEngine velocityEngine = new VelocityEngine();
         velocityEngine.init();
@@ -38,9 +38,9 @@ public class VelocityXmlMessageProcessor extends AbstractMessageProcessor {
     }
 
     @Override
-    protected Object json2adaptor(JSONObject inMessage) throws BizException {
+    protected String json2adaptor(JSONObject inMessage) throws BizException {
 
-        Map map = new HashMap();
+        Map<String,Object> map = new HashMap<>();
         map.put("data",inMessage);
         VelocityContext velocityContext = new VelocityContext(map);
         StringWriter stringWriter = new StringWriter();
@@ -50,14 +50,12 @@ public class VelocityXmlMessageProcessor extends AbstractMessageProcessor {
         }
         Template template = Velocity.getTemplate(templateFileName, "UTF-8" );
         template.merge(velocityContext, stringWriter);
-        String result = stringWriter.toString();
-        return result;
+        return stringWriter.toString();
     }
 
     @Override
-    protected JSONObject adaptor2json(Object inMessage) throws BizException {
-        JSONObject jsonObject = XML.toJSONObject((java.lang.String)inMessage);
-        return jsonObject;
+    protected JSONObject adaptor2json(String inMessage) throws BizException {
+        return XML.toJSONObject(inMessage);
     }
 
     @Override

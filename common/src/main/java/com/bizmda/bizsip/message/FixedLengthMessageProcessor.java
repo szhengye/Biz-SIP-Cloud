@@ -1,6 +1,6 @@
 package com.bizmda.bizsip.message;
 
-import cn.hutool.core.util.StrUtil;
+import cn.hutool.core.text.CharSequenceUtil;
 import cn.hutool.json.JSONObject;
 import com.bizmda.bizsip.common.BizException;
 import com.bizmda.bizsip.common.BizResultEnum;
@@ -20,16 +20,16 @@ import java.util.Map;
 /**
  * @author 史正烨
  */
-public class FixedLengthMessageProcessor<String> extends AbstractMessageProcessor {
-    private Map<java.lang.String, List<FixedLengthConfig>> fixedLengthConfigsMap = new HashMap<java.lang.String,List<FixedLengthConfig>>();
+public class FixedLengthMessageProcessor extends AbstractMessageProcessor<String> {
+    private Map<java.lang.String, List<FixedLengthConfig>> fixedLengthConfigsMap = new HashMap<>();
     private List<PreUnpackConfig> preUnpackConfigList;
 
     @Override
     public void init(java.lang.String configPath, Map messageMap) throws BizException {
         super.init(configPath,messageMap);
-        List<Map> preUnpackConfigMapList = (List<Map>)messageMap.get("pre-unpack");
-        this.preUnpackConfigList = new ArrayList<PreUnpackConfig>();
-        for(Map map:preUnpackConfigMapList) {
+        List<Map<String,Object>> preUnpackConfigMapList = (List<Map<String,Object>>)messageMap.get("pre-unpack");
+        this.preUnpackConfigList = new ArrayList<>();
+        for(Map<String,Object> map:preUnpackConfigMapList) {
             PreUnpackConfig preUnpackConfig = new PreUnpackConfig(map);
             this.preUnpackConfigList.add(preUnpackConfig);
         }
@@ -41,7 +41,7 @@ public class FixedLengthMessageProcessor<String> extends AbstractMessageProcesso
     }
 
     @Override
-    protected Object json2adaptor(JSONObject inMessage) throws BizException {
+    protected String json2adaptor(JSONObject inMessage) throws BizException {
         java.lang.String configFileName = this.matchMessagePredicateRule(this.packRules,inMessage);
         if (configFileName == null) {
             throw new BizException(BizResultEnum.NO_MESSAGE_MATCH_RULE);
@@ -74,7 +74,7 @@ public class FixedLengthMessageProcessor<String> extends AbstractMessageProcesso
             }
             stringBuffer.append(jsonFieldValue);
             if (strValue.length()<fixedLengthConfig.getLength()) {
-                stringBuffer.append(StrUtil.repeat(" ",fixedLengthConfig.getLength()-strValue.length()));
+                stringBuffer.append(CharSequenceUtil.repeat(" ",fixedLengthConfig.getLength()-strValue.length()));
             }
         }
 
@@ -82,8 +82,7 @@ public class FixedLengthMessageProcessor<String> extends AbstractMessageProcesso
     }
 
     @Override
-    protected JSONObject adaptor2json(Object inMessage) throws BizException {
-        java.lang.String inStr = (java.lang.String)inMessage;
+    protected JSONObject adaptor2json(String inMessage) throws BizException {
 
         JSONObject jsonObject = new JSONObject();
         int offset = 0;
@@ -92,7 +91,7 @@ public class FixedLengthMessageProcessor<String> extends AbstractMessageProcesso
                 offset = offset + preUnpackConfig.getLength();
                 continue;
             }
-            java.lang.String fieldStr = inStr.substring(offset,offset+preUnpackConfig.getLength());
+            java.lang.String fieldStr = inMessage.substring(offset,offset+preUnpackConfig.getLength());
             for(FieldFunction fieldFunction:preUnpackConfig.getFunctions()) {
                 fieldStr = fieldFunction.invoke(fieldStr,preUnpackConfig.getLength());
             }
@@ -107,12 +106,11 @@ public class FixedLengthMessageProcessor<String> extends AbstractMessageProcesso
         List<FixedLengthConfig> fixedLengthConfigList = this.getFixedLengthConfigList(configFileName);
         offset = 0;
         for(FixedLengthConfig fixedLengthConfig:fixedLengthConfigList) {
-            Object jsonFieldValue = null;
             if (fixedLengthConfig.getName() == null || fixedLengthConfig.getName().isEmpty()) {
                 offset = offset + fixedLengthConfig.getLength();
                 continue;
             }
-            java.lang.String fieldStr = inStr.substring(offset,offset+fixedLengthConfig.getLength());
+            java.lang.String fieldStr = inMessage.substring(offset,offset+fixedLengthConfig.getLength());
             for(FieldFunction fieldFunction:fixedLengthConfig.getUnpackFunctions()) {
                 fieldStr = fieldFunction.invoke(fieldStr,fixedLengthConfig.getLength());
             }
@@ -134,14 +132,14 @@ public class FixedLengthMessageProcessor<String> extends AbstractMessageProcesso
             return fixedLengthConfigList;
         }
         Yaml yaml = new Yaml();
-        List<Map> mapList = null;
+        List<Map<String,Object>> mapList = null;
         try {
-            mapList = (List<Map>)yaml.load(new FileInputStream(new File(this.configPath + "/message/" +fileName)));
+            mapList = (List<Map<String,Object>>)yaml.load(new FileInputStream(new File(this.configPath + "/message/" +fileName)));
         } catch (FileNotFoundException e) {
             throw new BizException(BizResultEnum.NO_MESSAGE_CONFIG_FILE,"消息配置文件找不到:"+fileName);
         }
-        fixedLengthConfigList = new ArrayList<FixedLengthConfig>();
-        for(Map map:mapList) {
+        fixedLengthConfigList = new ArrayList<>();
+        for(Map<String,Object> map:mapList) {
             FixedLengthConfig fixedLengthConfig = new FixedLengthConfig(map);
             fixedLengthConfigList.add(fixedLengthConfig);
         }

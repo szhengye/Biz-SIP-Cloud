@@ -11,17 +11,12 @@ import java.util.*;
 public class AbstractServerAdaptorConfig {
     private String id;
     private String type;
-    private Map messageMap;
-    private Map protocolMap;
+    private Map<String,Object> messageMap;
+    private Map<String,Object> protocolMap;
 
-    public AbstractServerAdaptorConfig(Map map) {
+    public AbstractServerAdaptorConfig(Map<String,Object> map) {
         this.id = (String)map.get("id");
-        this.messageMap = (Map)map.get("message");
-
-        this.protocolMap = (Map)map.get("protocol");
-//        String type = (String)protocolMap.get("type");
-//        if (type.equalsIgnoreCase("java")) {
-//            this.protocol = new JavaServerAdaptorProtocolConfig(protocolMap);
-//        }
+        this.messageMap = (Map<String, Object>)map.get("message");
+        this.protocolMap = (Map<String, Object>)map.get("protocol");
     }
 }

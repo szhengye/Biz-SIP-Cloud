@@ -21,6 +21,10 @@ import javax.script.SimpleScriptContext;
 public class MagicScriptHelper {
     private static boolean isSetupMagicModules = false;
 
+    private MagicScriptHelper() {
+
+    }
+
     public static Object executeScript(String script, MagicScriptContext context) {
         if (!isSetupMagicModules) {
             setupMagicModules();
@@ -28,14 +32,13 @@ public class MagicScriptHelper {
         }
         SimpleScriptContext simpleScriptContext = new SimpleScriptContext();
         simpleScriptContext.setAttribute("ROOT", context, 100);
-        Object result = ScriptManager.compile("MagicScript", script).eval(simpleScriptContext);
-        return result;
+        return ScriptManager.compile("MagicScript", script).eval(simpleScriptContext);
     }
 
     private static void setupMagicModules() {
         // 设置脚本import时 class加载策略
         ApplicationContext springContext = SpringUtil.getApplicationContext();
-        MagicModuleLoader.setClassLoader((className) -> {
+        MagicModuleLoader.setClassLoader(className -> {
             try {
                 return springContext.getBean(className);
             } catch (Exception e) {

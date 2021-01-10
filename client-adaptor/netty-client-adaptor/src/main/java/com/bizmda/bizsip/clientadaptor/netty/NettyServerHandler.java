@@ -32,7 +32,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         //TODO:TCP传输过程中的分包拆包问题有待后期解决，建议采用添加不同解码器的方式来处理
         log.debug("服务器收到消息: {}", msg.toString());
-        BizMessage outMessage = null;
+        BizMessage<Object> outMessage = null;
         try {
             outMessage = this.clientAdaptor.process(msg);
         } catch (BizException e) {

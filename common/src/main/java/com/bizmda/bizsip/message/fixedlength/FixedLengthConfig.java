@@ -18,21 +18,21 @@ public class FixedLengthConfig {
     private List<FieldFunction> packFunctions;
     private List<FieldFunction> unpackFunctions;
 
-    public FixedLengthConfig(Map map) throws BizException {
+    public FixedLengthConfig(Map<String,Object> map) throws BizException {
         this.name = (String)map.get("name");
         this.length = (int)map.get("length");
-        List<Map> mapList = (List<Map>)map.get("pack-functions");
-        this.packFunctions = new ArrayList<FieldFunction>();
+        List<Map<String,Object>> mapList = (List<Map<String,Object>>)map.get("pack-functions");
+        this.packFunctions = new ArrayList<>();
         if (mapList != null) {
-            for(Map functionMap:mapList) {
+            for(Map<String,Object> functionMap:mapList) {
                 FieldFunction fieldFunction = new FieldFunction(functionMap);
                 this.packFunctions.add(fieldFunction);
             }
         }
-        mapList = (List<Map>)map.get("unpack-functions");
-        this.unpackFunctions = new ArrayList<FieldFunction>();
+        mapList = (List<Map<String,Object>>)map.get("unpack-functions");
+        this.unpackFunctions = new ArrayList<>();
         if (mapList != null) {
-            for(Map functionMap:mapList) {
+            for(Map<String,Object> functionMap:mapList) {
                 FieldFunction fieldFunction = new FieldFunction(functionMap);
                 this.unpackFunctions.add(fieldFunction);
             }

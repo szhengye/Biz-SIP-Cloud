@@ -4,7 +4,7 @@ import cn.hutool.core.io.watch.Watcher;
 import com.alibaba.nacos.api.NacosFactory;
 import com.alibaba.nacos.api.config.ConfigService;
 import com.alibaba.nacos.api.exception.NacosException;
-import com.bizmda.bizsip.common.NacosConstants;
+import com.bizmda.bizsip.common.BizConstant;
 import lombok.extern.slf4j.Slf4j;
 
 import java.nio.file.Path;
@@ -16,10 +16,10 @@ import java.util.Properties;
  */
 @Slf4j
 public class ConfigWatcher implements Watcher {
-    private static int CREATE_FLAG = 1;
-    private static int MODIFY_FLAG = 2;
-    private static int DELETE_FLAG = 3;
-    private static int OVERFLOW_FLAG = 4;
+    private static final int CREATE_FLAG = 1;
+    private static final int MODIFY_FLAG = 2;
+    private static final int DELETE_FLAG = 3;
+    private static final int OVERFLOW_FLAG = 4;
 
     private String configPath;
     private ConfigService configService;
@@ -67,28 +67,28 @@ public class ConfigWatcher implements Watcher {
         log.info("配置文件变更:{}-{}",flag,file);
         if("server-adaptor.yml".equalsIgnoreCase(file)) {
             try {
-                boolean isPublishOk = configService.publishConfig(NacosConstants.REFRESH_SERVER_ADAPTOR_DATA_ID, NacosConstants.NACOS_GROUP, Long.toString(System.currentTimeMillis()));
+                configService.publishConfig(BizConstant.REFRESH_SERVER_ADAPTOR_DATA_ID, BizConstant.NACOS_GROUP, Long.toString(System.currentTimeMillis()));
             } catch (NacosException e) {
                 e.printStackTrace();
             }
         }
         if("client-adaptor.yml".equalsIgnoreCase(file)) {
             try {
-                boolean isPublishOk = configService.publishConfig(NacosConstants.REFRESH_CLIENT_ADAPTOR_DATA_ID, NacosConstants.NACOS_GROUP, Long.toString(System.currentTimeMillis()));
+                configService.publishConfig(BizConstant.REFRESH_CLIENT_ADAPTOR_DATA_ID, BizConstant.NACOS_GROUP, Long.toString(System.currentTimeMillis()));
             } catch (NacosException e) {
                 e.printStackTrace();
             }
         }
         if(file.startsWith("service")) {
             try {
-                boolean isPublishOk = configService.publishConfig(NacosConstants.REFRESH_SERVICE_DATA_ID, NacosConstants.NACOS_GROUP, Long.toString(System.currentTimeMillis()));
+                configService.publishConfig(BizConstant.REFRESH_SERVICE_DATA_ID, BizConstant.NACOS_GROUP, Long.toString(System.currentTimeMillis()));
             } catch (NacosException e) {
                 e.printStackTrace();
             }
         }
         if(file.startsWith("message")) {
             try {
-                boolean isPublishOk = configService.publishConfig(NacosConstants.REFRESH_MESSAGE_DATA_ID, NacosConstants.NACOS_GROUP, Long.toString(System.currentTimeMillis()));
+                configService.publishConfig(BizConstant.REFRESH_MESSAGE_DATA_ID, BizConstant.NACOS_GROUP, Long.toString(System.currentTimeMillis()));
             } catch (NacosException e) {
                 e.printStackTrace();
             }

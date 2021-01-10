@@ -32,17 +32,15 @@ public class Server6AdaptorController {
     }
 
     @PostMapping(value = "/server6", consumes = "application/json", produces = "application/json")
-    public BizMessage doService(@RequestBody BizMessage<JSONObject> inMessage, HttpServletResponse response) {
+    public BizMessage<JSONObject> doService(@RequestBody BizMessage<JSONObject> inMessage, HttpServletResponse response) {
         log.debug("inMessage:{}", inMessage);
         JSONObject outMessage = null;
         try {
             outMessage = this.serverAdaptor.process(inMessage.getData());
-            BizMessage bizMessage = BizMessage.buildSuccessMessage(inMessage,outMessage);
-            return bizMessage;
+            return BizMessage.buildSuccessMessage(inMessage,outMessage);
         } catch (BizException e) {
             log.error("服务端适配器执行出错",e);
-            BizMessage bizMessage = BizMessage.buildFailMessage(inMessage,e);
-            return bizMessage;
+            return BizMessage.buildFailMessage(inMessage,e);
         }
     }
 }

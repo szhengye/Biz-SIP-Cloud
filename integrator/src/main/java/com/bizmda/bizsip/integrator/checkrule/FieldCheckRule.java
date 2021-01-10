@@ -10,12 +10,12 @@ public class FieldCheckRule {
     private String field;
     private String rule;
     private String message;
-    private List args;
+    private List<Object> args;
 
-    public FieldCheckRule(Map map) {
+    public FieldCheckRule(Map<String,Object> map) {
         this.field = (String)map.get("field");
         this.rule = (String)map.get("rule");
         this.message = (String)map.get("message");
-        this.args = (List)map.get("args");
+        this.args = (List<Object>)map.get("args");
     }
 }

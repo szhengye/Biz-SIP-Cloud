@@ -20,14 +20,9 @@ public class RabbitmqConfig {
     public static final String TM_DELAY_EXCHANGE = "exchange.direct.bizsip.tm";
     public static final String TM_DELAY_QUEUE = "queue.delay.bizsip.tm";
     public static final String TM_DELAY_ROUTING_KEY = "queue.delay.routing.key";
-    @Autowired
-    private Environment env;
 
     @Autowired
     private CachingConnectionFactory connectionFactory;
-
-    @Autowired
-    private SimpleRabbitListenerContainerFactoryConfigurer factoryConfigurer;
 
     @Bean
     public DirectExchange delayExchange(){
@@ -67,7 +62,8 @@ public class RabbitmqConfig {
      * @return
      */
     @Bean(name = "multiListenerContainer")
-    public SimpleRabbitListenerContainerFactory multiListenerContainer(){
+    public SimpleRabbitListenerContainerFactory multiListenerContainer(Environment env,
+                                                                       SimpleRabbitListenerContainerFactoryConfigurer factoryConfigurer){
         SimpleRabbitListenerContainerFactory factory = new SimpleRabbitListenerContainerFactory();
         factoryConfigurer.configure(factory,connectionFactory);
         factory.setMessageConverter(new Jackson2JsonMessageConverter());
@@ -91,6 +87,7 @@ public class RabbitmqConfig {
 
             @Override
             public void confirm(CorrelationData correlationData, boolean ack, String cause) {
+                // TODO
             }
 
 

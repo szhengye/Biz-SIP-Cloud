@@ -17,15 +17,15 @@ public class ClientAdaptorConfigMapping {
 
     public ClientAdaptorConfigMapping(String configPath) {
         Yaml yaml = new Yaml();
-        List<Map> clientAdaptorList = null;
+        List<Map<String,Object>> clientAdaptorList = null;
         try {
-            clientAdaptorList = (List<Map>)yaml.load(new FileInputStream(new File(configPath+"/client-adaptor.yml")));
+            clientAdaptorList = (List<Map<String,Object>>)yaml.load(new FileInputStream(new File(configPath+"/client-adaptor.yml")));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
         CommonClientAdaptorConfig clientAdaptor = null;
-        this.clientAdaptorConfigMap = new HashMap<String, CommonClientAdaptorConfig>();
-        for (Map clientAdaptorMap:clientAdaptorList) {
+        this.clientAdaptorConfigMap = new HashMap<>();
+        for (Map<String,Object> clientAdaptorMap:clientAdaptorList) {
             clientAdaptor = new CommonClientAdaptorConfig(clientAdaptorMap);
             this.clientAdaptorConfigMap.put(clientAdaptor.getId(),clientAdaptor);
         }

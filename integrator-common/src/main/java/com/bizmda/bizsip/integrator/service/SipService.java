@@ -45,7 +45,7 @@ public class SipService {
 
         RestServerAdaptorConfig serverAdaptorConfig = (RestServerAdaptorConfig) serverAdaptorConfigMapping.getServerAdaptorConfig(adaptorId);
         log.debug("doService()请求:\n{}",inMessage);
-        BizMessage<JSONObject> outMessage = (BizMessage)restTemplate.postForObject(serverAdaptorConfig.getUrl(), inMessage, BizMessage.class);
+        BizMessage<JSONObject> outMessage = restTemplate.postForObject(serverAdaptorConfig.getUrl(), inMessage, BizMessage.class);
         log.debug("doService()响应:\n{}",outMessage);
         return outMessage;
     }
@@ -66,7 +66,7 @@ public class SipService {
         }
 
         log.debug("doSafService()请求:\n{}",inMessage);
-        BizMessage outMessage = tmService.doSafService(serviceId,inMessage);
+        BizMessage<JSONObject> outMessage = tmService.doSafService(serviceId,inMessage);
         log.debug("doSafService()响应:\n{}",outMessage);
         return outMessage;
     }

@@ -42,11 +42,10 @@ public class RestClientController {
             outMessage = this.clientAdaptor.process(inMessage);
             return outMessage;
         } catch (BizException e) {
-            JSONObject result = JSONUtil.createObj()
+            return JSONUtil.createObj()
                     .set("code", e.getCode())
                     .set("message", e.getMessage())
                     .set("extMessage", e.getExtMessage());
-            return result;
         }
     }
 }

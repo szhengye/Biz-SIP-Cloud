@@ -15,5 +15,6 @@ public class ServerAdaptorListener extends AbstractListener {
 
     @Override
     public void receiveConfigInfo(String s) {
+        // TODO
     }
 }

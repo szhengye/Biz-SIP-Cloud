@@ -1,9 +1,7 @@
 package com.bizmda.bizsip.serveradaptor.protocol;
 
 import com.bizmda.bizsip.common.BizException;
-import com.bizmda.bizsip.common.BizResultEnum;
 import com.bizmda.bizsip.config.AbstractServerAdaptorConfig;
-import com.bizmda.bizsip.serveradaptor.protocol.java.JavaProtocolInterface;
 import com.bizmda.bizsip.serveradaptor.protocol.netty.NettyClient;
 
 /**

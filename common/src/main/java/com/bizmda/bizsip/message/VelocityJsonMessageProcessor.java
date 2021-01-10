@@ -8,6 +8,7 @@ import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
 import org.apache.velocity.app.VelocityEngine;
+import org.apache.velocity.runtime.RuntimeConstants;
 
 import java.io.StringWriter;
 import java.util.HashMap;
@@ -18,14 +19,14 @@ import java.util.Properties;
 /**
  * @author 史正烨
  */
-public class VelocityJsonMessageProcessor extends AbstractMessageProcessor {
+public class VelocityJsonMessageProcessor extends AbstractMessageProcessor<String> {
     @Override
     public void init(String configPath,Map messageMap) throws BizException {
         super.init(configPath,messageMap);
         Properties properties = new Properties();
-        properties.setProperty(VelocityEngine.FILE_RESOURCE_LOADER_PATH, this.configPath + "/message");
-        properties.setProperty(Velocity.ENCODING_DEFAULT, "UTF-8");
-        properties.setProperty(Velocity.OUTPUT_ENCODING, "UTF-8");
+        properties.setProperty(RuntimeConstants.FILE_RESOURCE_LOADER_PATH, this.configPath + "/message");
+        properties.setProperty(RuntimeConstants.ENCODING_DEFAULT, "UTF-8");
+        properties.setProperty(RuntimeConstants.OUTPUT_ENCODING, "UTF-8");
         Velocity.init(properties);
         VelocityEngine velocityEngine = new VelocityEngine();
         velocityEngine.init();
@@ -37,8 +38,8 @@ public class VelocityJsonMessageProcessor extends AbstractMessageProcessor {
     }
 
     @Override
-    protected Object json2adaptor(JSONObject inMessage) throws BizException {
-        Map map = new HashMap();
+    protected String json2adaptor(JSONObject inMessage) throws BizException {
+        Map<String,Object> map = new HashMap<>();
         map.put("data",inMessage);
         VelocityContext velocityContext = new VelocityContext(map);
         StringWriter stringWriter = new StringWriter();
@@ -48,13 +49,12 @@ public class VelocityJsonMessageProcessor extends AbstractMessageProcessor {
         }
         Template template = Velocity.getTemplate(templateFileName, "UTF-8" );
         template.merge(velocityContext, stringWriter);
-        String result = stringWriter.toString();
-        return result;
+        return stringWriter.toString();
     }
 
     @Override
-    protected JSONObject adaptor2json(Object inMessage) throws BizException {
-        return JSONUtil.parseObj((String)inMessage);
+    protected JSONObject adaptor2json(String inMessage) throws BizException {
+        return JSONUtil.parseObj(inMessage);
     }
 
     @Override

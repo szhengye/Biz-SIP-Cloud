@@ -5,19 +5,11 @@ import cn.hutool.core.util.IdUtil;
 import cn.hutool.json.JSONObject;
 import lombok.Data;
 
-import java.util.Map;
-
 /**
  * @author 史正烨
  */
 @Data
 public class BizMessage<T> {
-//    // 缺省为10000毫秒
-//    public static final String FIELD_SAF_DELAY_TIME = "sip_delay_time";
-//    public static final String FIELD_SAF_DONE_NUM = "sip_done_num";
-//    // error：错误，success：成功
-//    public static final String FIELD_SAF_SERVICE_STATUS = "sip_service_status";
-
     private int code;
     private String message;
     private String extMessage;
@@ -40,15 +32,15 @@ public class BizMessage<T> {
         this.data = (T)jsonObject.get("data");
     }
 
-    public static BizMessage createNewTransaction() {
-        BizMessage bizMessage = new BizMessage();
+    public static BizMessage<JSONObject> createNewTransaction() {
+        BizMessage<JSONObject> bizMessage = new BizMessage<>();
         bizMessage.traceId = IdUtil.fastSimpleUUID();
         bizMessage.timestamp = System.currentTimeMillis();
         return bizMessage;
     }
 
-    public static BizMessage createChildTransaction(BizMessage parentBizMessage) {
-        BizMessage bizMessage = new BizMessage();
+    public static BizMessage<JSONObject> createChildTransaction(BizMessage<JSONObject> parentBizMessage) {
+        BizMessage<JSONObject> bizMessage = new BizMessage<>();
         BeanUtil.copyProperties(parentBizMessage,bizMessage);
         bizMessage.traceId = IdUtil.fastSimpleUUID();
         bizMessage.parentTraceId = parentBizMessage.traceId;
@@ -57,7 +49,7 @@ public class BizMessage<T> {
     }
 
     public static BizMessage buildSuccessMessage(BizMessage inBizMessage,Object data) {
-        BizMessage bizMessage = new BizMessage();
+        BizMessage<Object> bizMessage = new BizMessage<>();
 
         BeanUtil.copyProperties(inBizMessage,bizMessage);
 
@@ -69,7 +61,7 @@ public class BizMessage<T> {
     }
 
     public static BizMessage buildFailMessage(BizMessage inBizMessage,Exception e) {
-        BizMessage bizMessage = new BizMessage();
+        BizMessage<Object> bizMessage = new BizMessage<>();
 
         BeanUtil.copyProperties(inBizMessage,bizMessage);
         if (e instanceof BizException) {

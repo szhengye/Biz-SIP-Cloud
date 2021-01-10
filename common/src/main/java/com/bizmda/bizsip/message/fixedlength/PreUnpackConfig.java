@@ -17,13 +17,13 @@ public class PreUnpackConfig {
     private int length;
     private List<FieldFunction> functions;
 
-    public PreUnpackConfig(Map map) throws BizException {
+    public PreUnpackConfig(Map<String,Object> map) throws BizException {
         this.name = (String)map.get("name");
         this.length = (int)map.get("length");
-        List<Map> mapList = (List<Map>)map.get("functions");
-        this.functions = new ArrayList<FieldFunction>();
+        List<Map<String,Object>> mapList = (List<Map<String,Object>>)map.get("functions");
+        this.functions = new ArrayList<>();
         if (mapList != null) {
-            for(Map functionMap:mapList) {
+            for(Map<String,Object> functionMap:mapList) {
                 FieldFunction fieldFunction = new FieldFunction(functionMap);
                 this.functions.add(fieldFunction);
             }

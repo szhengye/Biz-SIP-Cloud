@@ -1,9 +1,8 @@
 package com.bizmda.bizsip.message;
 
-import cn.hutool.json.JSON;
 import cn.hutool.json.JSONObject;
 import com.bizmda.bizsip.common.BizException;
-import com.bizmda.bizsip.config.AbstractServerAdaptorConfig;
+import com.bizmda.bizsip.common.BizResultEnum;
 import com.bizmda.bizsip.config.PredicateRuleConfig;
 import lombok.extern.slf4j.Slf4j;
 
@@ -22,14 +21,15 @@ public abstract class AbstractMessageProcessor<T> {
     protected List<PredicateRuleConfig> packRules;
     protected List<PredicateRuleConfig> unpackRules;
 
-    public final static Map<String,Class> MESSAGE_TYPE_MAP = new HashMap<String,Class>(){{
-        put("simple-json",SimpleJsonMessageProcessor.class);
-        put("simple-xml",SimpleXmlMessageProcessor.class);
-        put("velocity-json",VelocityJsonMessageProcessor.class);
-        put("velocity-xml",VelocityXmlMessageProcessor.class);
-        put("fixed-length",FixedLengthMessageProcessor.class);
-        put("velocity-split",VelocitySplitMessageProcessor.class);
-    }};
+    public static final Map<String,Object> MESSAGE_TYPE_MAP = new HashMap<>();
+    static {
+        MESSAGE_TYPE_MAP.put("simple-json",SimpleJsonMessageProcessor.class);
+        MESSAGE_TYPE_MAP.put("simple-xml",SimpleXmlMessageProcessor.class);
+        MESSAGE_TYPE_MAP.put("velocity-json",VelocityJsonMessageProcessor.class);
+        MESSAGE_TYPE_MAP.put("velocity-xml",VelocityXmlMessageProcessor.class);
+        MESSAGE_TYPE_MAP.put("fixed-length",FixedLengthMessageProcessor.class);
+        MESSAGE_TYPE_MAP.put("velocity-split",VelocitySplitMessageProcessor.class);
+    }
 
     /**
      * 根据传入JSONObject打包断言规则选择规则，根据规则打包成JSONObject对象。
@@ -53,7 +53,7 @@ public abstract class AbstractMessageProcessor<T> {
      * @return
      * @throws BizException
      */
-    protected abstract JSONObject adaptor2json(Object inMessage) throws BizException;
+    protected abstract JSONObject adaptor2json(T inMessage) throws BizException;
 
     /**
      * 根据传入预解包JSONObject解包断言规则选择规则，根据规则打包成JSONObject对象
@@ -72,24 +72,27 @@ public abstract class AbstractMessageProcessor<T> {
         return this.json2biz(message);
     }
 
-    public void init(String configPath,Map messageMap) throws BizException {
+    public void init(String configPath,Map<String,Object> messageMap) throws BizException {
         this.type = (String)messageMap.get("type");
-        this.configPath = configPath;
-        List<Map> packRules = (List<Map>)messageMap.get("pack-rules");
-        if (packRules == null ) {
-            packRules = new ArrayList<Map>();
+        if (this.type == null) {
+            throw new BizException(BizResultEnum.NO_MESSAGE_PROCESSOR);
         }
-        this.packRules = new ArrayList<PredicateRuleConfig>();
-        for(Map ruleMap:packRules) {
+        this.configPath = configPath;
+        List<Map<String,Object>> packRuleMaps = (List<Map<String,Object>>)messageMap.get("pack-rules");
+        if (packRuleMaps == null ) {
+            packRuleMaps = new ArrayList<>();
+        }
+        this.packRules = new ArrayList<>();
+        for(Map<String,Object> ruleMap:packRuleMaps) {
             PredicateRuleConfig predicateRuleConfig = new PredicateRuleConfig(ruleMap);
             this.packRules.add(predicateRuleConfig);
         }
-        List<Map> unpackRules = (List<Map>)messageMap.get("unpack-rules");
-        if (unpackRules == null) {
-            unpackRules = new ArrayList<Map>();
+        List<Map<String,Object>> unpackRuleMaps = (List<Map<String,Object>>)messageMap.get("unpack-rules");
+        if (unpackRuleMaps == null) {
+            unpackRuleMaps = new ArrayList<>();
         }
-        this.unpackRules = new ArrayList<PredicateRuleConfig>();
-        for(Map ruleMap:unpackRules) {
+        this.unpackRules = new ArrayList<>();
+        for(Map<String,Object> ruleMap:unpackRuleMaps) {
             PredicateRuleConfig predicateRuleConfig = new PredicateRuleConfig(ruleMap);
             this.unpackRules.add(predicateRuleConfig);
         }

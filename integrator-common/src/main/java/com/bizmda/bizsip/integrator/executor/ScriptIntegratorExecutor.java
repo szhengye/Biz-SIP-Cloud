@@ -22,17 +22,17 @@ public class ScriptIntegratorExecutor extends AbstractIntegratorExecutor {
 
     @Override
     public void init() {
-
+        // 没有初始化内容
     }
 
     @Override
     public BizMessage doBizService(BizMessage inBizMessage) {
 
-        MagicScriptContext context = new MagicScriptContext();;
+        MagicScriptContext context = new MagicScriptContext();
         context.set("bizmessage", inBizMessage);
         Object result = MagicScriptHelper.executeScript(this.getContent(), context);
 
-        BizMessage outBizMessage;
+        BizMessage<Object> outBizMessage;
         if (result instanceof List) {
             JSONArray jsonArray = JSONUtil.parseArray(result);
             outBizMessage = BizMessage.buildSuccessMessage(inBizMessage,jsonArray);

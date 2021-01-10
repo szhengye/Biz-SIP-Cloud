@@ -14,11 +14,12 @@ import java.util.Map;
  */
 @Slf4j
 public class CrmServer implements JavaProtocolInterface {
-    public final static Map<String,String> ID_NAME_MAP = new HashMap<String,String>(){{
-        put("003","张三");
-        put("004","李四");
-        put("005","王五");
-    }};
+    private static final Map<String,String> ID_NAME_MAP = new HashMap<>();
+    static {
+        ID_NAME_MAP.put("003","张三");
+        ID_NAME_MAP.put("004","李四");
+        ID_NAME_MAP.put("005","王五");
+    }
 
     @Override
     public Object process(Object inMessage) throws BizException {

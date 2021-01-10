@@ -3,9 +3,7 @@ package com.bizmda.bizsip.integrator.config.magicapi;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.NestedConfigurationProperty;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
-
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -74,21 +72,11 @@ public class MagicAPIProperties {
 	 */
 	private int threadPoolExecutorSize = 0;
 
-
-//	@NestedConfigurationProperty
-//	private SecurityConfig securityConfig = new SecurityConfig();
-
 	@NestedConfigurationProperty
 	private PageConfig pageConfig = new PageConfig();
 
 	@NestedConfigurationProperty
 	private CacheConfig cacheConfig = new CacheConfig();
-
-//	@NestedConfigurationProperty
-//	private DebugConfig debugConfig = new DebugConfig();
-
-//	@NestedConfigurationProperty
-//	private SwaggerConfig swaggerConfig = new SwaggerConfig();
 
 	public String getWeb() {
 		if (StringUtils.isBlank(web)) {
@@ -150,22 +138,6 @@ public class MagicAPIProperties {
 		this.cacheConfig = cacheConfig;
 	}
 
-//	public DebugConfig getDebugConfig() {
-//		return debugConfig;
-//	}
-//
-//	public void setDebugConfig(DebugConfig debugConfig) {
-//		this.debugConfig = debugConfig;
-//	}
-//
-//	public SecurityConfig getSecurityConfig() {
-//		return securityConfig;
-//	}
-//
-//	public void setSecurityConfig(SecurityConfig securityConfig) {
-//		this.securityConfig = securityConfig;
-//	}
-
 	public String getPrefix() {
 		return prefix;
 	}
@@ -181,14 +153,6 @@ public class MagicAPIProperties {
 	public void setDatasource(String datasource) {
 		this.datasource = datasource;
 	}
-
-//	public SwaggerConfig getSwaggerConfig() {
-//		return swaggerConfig;
-//	}
-//
-//	public void setSwaggerConfig(SwaggerConfig swaggerConfig) {
-//		this.swaggerConfig = swaggerConfig;
-//	}
 
 	public String getAutoImportModule() {
 		return autoImportModule;

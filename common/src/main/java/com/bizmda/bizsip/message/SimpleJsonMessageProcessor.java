@@ -4,17 +4,10 @@ import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import com.bizmda.bizsip.common.BizException;
 
-import java.util.Map;
-
 /**
  * @author 史正烨
  */
-public class SimpleJsonMessageProcessor<String> extends AbstractMessageProcessor {
-//    @Override
-//    public void init(Map messageMap) throws BizException{
-//        super.init(messageMap);
-//    }
-
+public class SimpleJsonMessageProcessor extends AbstractMessageProcessor<String> {
     @Override
     protected JSONObject biz2json(JSONObject inMessage) throws BizException {
         return inMessage;
@@ -22,12 +15,12 @@ public class SimpleJsonMessageProcessor<String> extends AbstractMessageProcessor
 
     @Override
     protected String json2adaptor(JSONObject inMessage) throws BizException {
-        return (String)JSONUtil.toJsonStr(inMessage);
+        return JSONUtil.toJsonStr(inMessage);
     }
 
     @Override
-    protected JSONObject adaptor2json(Object inMessage) throws BizException {
-        return JSONUtil.parseObj((String)inMessage);
+    protected JSONObject adaptor2json(String inMessage) throws BizException {
+        return JSONUtil.parseObj(inMessage);
     }
 
     @Override

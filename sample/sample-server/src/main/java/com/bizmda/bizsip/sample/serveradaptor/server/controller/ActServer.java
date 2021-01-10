@@ -12,11 +12,12 @@ import java.util.Map;
  * @author 史正烨
  */
 public class ActServer implements JavaProtocolInterface {
-    public final static Map<String,Integer> ID_BALANCE_MAP = new HashMap<String,Integer>(){{
-        put("003",300);
-        put("004",400);
-        put("005",500);
-    }};
+    private static final Map<String,Integer> ID_BALANCE_MAP = new HashMap<>();
+    static {
+        ID_BALANCE_MAP.put("003",300);
+        ID_BALANCE_MAP.put("004",400);
+        ID_BALANCE_MAP.put("005",500);
+    }
 
     @Override
     public Object process(Object inMessage) throws BizException {

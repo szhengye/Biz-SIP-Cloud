@@ -17,10 +17,10 @@ import java.util.Map;
 @Data
 @ConfigurationProperties(prefix = "bizsip")
 public class ServerAdaptorsConfig {
-    private List<Map> serverAdaptors;
-    private Map<String,Map> serverAdaptorMap = null;
+    private List<Map<String,Object>> serverAdaptors;
+    private Map<String,Map<String,Object>> serverAdaptorMap = null;
 
-    public Map getServerAdaptor(String id) {
+    public Map<String,Object> getServerAdaptor(String id) {
         if (this.serverAdaptorMap == null) {
             this.setupServerAdaptorMap();
         }
@@ -30,7 +30,7 @@ public class ServerAdaptorsConfig {
     private void setupServerAdaptorMap() {
         log.info("serverAdaptor:{}",this.serverAdaptors);
         this.serverAdaptorMap = new HashMap<>();
-        for (Map map:this.serverAdaptors) {
+        for (Map<String,Object> map:this.serverAdaptors) {
             this.serverAdaptorMap.put((String)map.get("id"),map);
         }
     }

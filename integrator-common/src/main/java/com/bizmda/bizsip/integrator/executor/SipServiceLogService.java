@@ -1,6 +1,7 @@
 package com.bizmda.bizsip.integrator.executor;
 
 import cn.hutool.core.date.DateUtil;
+import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import com.bizmda.bizsip.common.BizConstant;
 import com.bizmda.bizsip.common.BizMessage;
@@ -14,7 +15,7 @@ public class SipServiceLogService {
     @Autowired
     private SipServiceLogDao sipServiceLogDao;
 
-    public void saveSuccessServiceLog(BizMessage inBizMessage,BizMessage outBizMessage) {
+    public void saveSuccessServiceLog(BizMessage<JSONObject> inBizMessage, BizMessage<JSONObject> outBizMessage) {
         SipServiceLog sipServiceLog = new SipServiceLog();
         sipServiceLog.setTraceId(inBizMessage.getTraceId());
         sipServiceLog.setBeginTime(DateUtil.date(inBizMessage.getTimestamp()));
@@ -29,7 +30,7 @@ public class SipServiceLogService {
         this.sipServiceLogDao.saveOrUpdate(sipServiceLog);
     }
 
-    public void saveProcessingServiceLog(BizMessage inBizMessage) {
+    public void saveProcessingServiceLog(BizMessage<JSONObject> inBizMessage) {
         SipServiceLog sipServiceLog = new SipServiceLog();
         sipServiceLog.setTraceId(inBizMessage.getTraceId());
         sipServiceLog.setBeginTime(DateUtil.date(inBizMessage.getTimestamp()));
@@ -40,7 +41,7 @@ public class SipServiceLogService {
         this.sipServiceLogDao.saveOrUpdate(sipServiceLog);
     }
 
-    public void saveErrorServiceLog(BizMessage inBizMessage,BizMessage outBizMessage) {
+    public void saveErrorServiceLog(BizMessage<JSONObject> inBizMessage,BizMessage<JSONObject> outBizMessage) {
         SipServiceLog sipServiceLog = new SipServiceLog();
         sipServiceLog.setTraceId(inBizMessage.getTraceId());
         sipServiceLog.setBeginTime(DateUtil.date(inBizMessage.getTimestamp()));
@@ -69,7 +70,10 @@ public class SipServiceLogService {
             return;
         }
         SipServiceLog parentSipServiceLog = this.sipServiceLogDao.getById(parentTraceId);
-        if (parentSipServiceLog != null && parentSipServiceLog.getServiceStatus().equals(BizConstant.SERVICE_STATUS_SUCCESS)) {
+        if (parentSipServiceLog == null) {
+            return;
+        }
+        if (parentSipServiceLog.getServiceStatus().equals(BizConstant.SERVICE_STATUS_SUCCESS)) {
             parentSipServiceLog.setServiceStatus(BizConstant.SERVICE_STATUS_ERROR);
             this.sipServiceLogDao.updateById(parentSipServiceLog);
         }

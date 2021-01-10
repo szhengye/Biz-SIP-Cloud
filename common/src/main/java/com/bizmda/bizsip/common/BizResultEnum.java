@@ -1,8 +1,5 @@
 package com.bizmda.bizsip.common;
 
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  * @author 史正烨
  */
@@ -14,6 +11,7 @@ public enum BizResultEnum {
     INTEGRATOR_SERVICE_CLASS_LOAD_ERROR(2,"聚合服务实现类装载失败"),
     SCRIPT_RETURN_ERROR(3,"脚本主动返回服务失败"),
     // 客户端适配器错误（100-199）
+    CLIENT_RETURN_NULL(101,"服务整合器返回为空"),
     // 服务端适配器错误（200-299）
     SERVER_PROTOCOL_CREATE_ERROR(200,"服务端适配器协议处理Java类创建失败"),
     SERVER_NO_PROTOCOL_PROCESSOR(202,"没有设置协议接入处理器"),
@@ -53,15 +51,8 @@ public enum BizResultEnum {
         return code;
     }
 
-    public void setCode(int code) {
-        this.code = code;
-    }
-
     public String getMessage() {
         return message;
     }
 
-    public void setMessage(String message) {
-        this.message = message;
-    }
 }

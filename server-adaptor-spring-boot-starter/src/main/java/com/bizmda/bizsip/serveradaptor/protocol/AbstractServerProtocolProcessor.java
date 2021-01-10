@@ -10,12 +10,11 @@ import java.util.Map;
  * @author 史正烨
  */
 public abstract class AbstractServerProtocolProcessor {
-    public final static Map<String,Class> PROTOCOL_TYPE_MAP = new HashMap<String,Class>() {{
-        put("java",com.bizmda.bizsip.serveradaptor.protocol.JavaServerProtocolProcessor.class);
-        put("netty",com.bizmda.bizsip.serveradaptor.protocol.NettyServerProtocolProcessor.class);
-    }};
-
-    private AbstractServerAdaptorConfig serverAdaptorConfig;
+    public static final Map<String,Object> PROTOCOL_TYPE_MAP = new HashMap<>();
+    static {
+        PROTOCOL_TYPE_MAP.put("java",com.bizmda.bizsip.serveradaptor.protocol.JavaServerProtocolProcessor.class);
+        PROTOCOL_TYPE_MAP.put("netty",com.bizmda.bizsip.serveradaptor.protocol.NettyServerProtocolProcessor.class);
+    }
 
     /**
      * 协议适配处理模块的对外协议对接实现
@@ -26,6 +25,5 @@ public abstract class AbstractServerProtocolProcessor {
     public abstract Object process(Object inMessage) throws BizException;
 
     public void init(AbstractServerAdaptorConfig serverAdaptorConfig) throws BizException {
-        this.serverAdaptorConfig = serverAdaptorConfig;
     }
 }
