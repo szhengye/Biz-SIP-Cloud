@@ -42,7 +42,7 @@ public class BizUtils {
         } catch (InterruptedException e) {
             log.error("EL表达式计算被中断:{}",express,e);
             Thread.currentThread().interrupt();
-            return null;
+            return false;
         } catch (ExecutionException e) {
             throw new BizException(BizResultEnum.EL_CALCULATE_ERROR,e,
                     StrFormatter.format("EL表达式计算出错:{}",express));

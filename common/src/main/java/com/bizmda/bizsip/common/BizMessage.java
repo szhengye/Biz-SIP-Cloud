@@ -48,7 +48,7 @@ public class BizMessage<T> {
         return bizMessage;
     }
 
-    public static BizMessage buildSuccessMessage(BizMessage inBizMessage,Object data) {
+    public static BizMessage buildSuccessMessage(BizMessage<? extends Object> inBizMessage,Object data) {
         BizMessage<Object> bizMessage = new BizMessage<>();
 
         BeanUtil.copyProperties(inBizMessage,bizMessage);
@@ -60,7 +60,7 @@ public class BizMessage<T> {
         return bizMessage;
     }
 
-    public static BizMessage buildFailMessage(BizMessage inBizMessage,Exception e) {
+    public static BizMessage buildFailMessage(BizMessage<? extends Object> inBizMessage,Exception e) {
         BizMessage<Object> bizMessage = new BizMessage<>();
 
         BeanUtil.copyProperties(inBizMessage,bizMessage);

@@ -8,7 +8,6 @@ import com.bizmda.bizsip.integrator.config.RabbitmqConfig;
 import com.bizmda.bizsip.integrator.executor.AbstractIntegratorExecutor;
 import com.bizmda.bizsip.integrator.executor.SipServiceLogService;
 import lombok.extern.slf4j.Slf4j;
-import netscape.javascript.JSObject;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.core.MessageDeliveryMode;
 import org.springframework.amqp.core.MessagePostProcessor;
