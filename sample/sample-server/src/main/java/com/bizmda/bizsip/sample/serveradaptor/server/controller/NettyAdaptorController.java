@@ -32,9 +32,9 @@ public class NettyAdaptorController {
     }
 
     @PostMapping(value = "/netty", consumes = "application/json", produces = "application/json")
-    public BizMessage<Object> doService(@RequestBody BizMessage<JSONObject> inMessage, HttpServletResponse response) {
+    public BizMessage<JSONObject> doService(@RequestBody BizMessage<JSONObject> inMessage, HttpServletResponse response) {
         JSONObject outMessage = null;
-        BizMessage<Object> bizMessage;
+        BizMessage<JSONObject> bizMessage;
         try {
             outMessage = this.serverAdaptor.process(inMessage.getData());
             bizMessage = BizMessage.buildSuccessMessage(inMessage,outMessage);

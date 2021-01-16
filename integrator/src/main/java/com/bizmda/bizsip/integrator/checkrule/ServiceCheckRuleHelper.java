@@ -25,39 +25,46 @@ public class ServiceCheckRuleHelper {
             Future<ServiceChcekRuleResult> future = service.submit(new ServiceCheckRuleThread(jsonObject, serviceCheckRule));
             futureList.add(future);
         }
-        List<ServiceChcekRuleResult> serviceChcekRuleResultList = new ArrayList<>();
+        List<ServiceChcekRuleResult> serviceCheckRuleResultList = new ArrayList<>();
         for (int i = 0; i < serviceCheckRuleList.size(); i++) {
-            Future<ServiceChcekRuleResult> take = null;
-            try {
-                take = service.take();
-            } catch (InterruptedException e) {
-                log.error("服务校验计算被中断:",e);
-                Thread.currentThread().interrupt();
-                throw new BizException(BizResultEnum.SERVICE_CHECK_THREAD_ERROR, e);
-            }
-            ServiceChcekRuleResult serviceChcekRuleResult = null;
-            try {
-                serviceChcekRuleResult = take.get();
-            } catch (InterruptedException e) {
-                log.error("服务校验计算被中断:",e);
-                Thread.currentThread().interrupt();
-                throw new BizException(BizResultEnum.SERVICE_CHECK_THREAD_ERROR, e);
-            } catch (ExecutionException e) {
-                throw new BizException(BizResultEnum.SERVICE_CHECK_THREAD_ERROR, e);
-            }
-            if (serviceChcekRuleResult.getResult() != null) {
-                if (checkMode == CheckMode.ONE) {
-                    for (Future<ServiceChcekRuleResult> future : futureList) {
-                        future.cancel(true);
-                    }
-                    serviceChcekRuleResultList.add(serviceChcekRuleResult);
-                    return serviceChcekRuleResultList;
-                }
-                else {
-                    serviceChcekRuleResultList.add(serviceChcekRuleResult);
-                }
+            if (takeServiceCheckRuleResult(checkMode, service, futureList, serviceCheckRuleResultList)) {
+                return serviceCheckRuleResultList;
             }
         }
-        return serviceChcekRuleResultList;
+        return serviceCheckRuleResultList;
+    }
+
+    private static boolean takeServiceCheckRuleResult(CheckMode checkMode, CompletionService<ServiceChcekRuleResult> service, List<Future<ServiceChcekRuleResult>> futureList, List<ServiceChcekRuleResult> serviceChcekRuleResultList) throws BizException {
+        Future<ServiceChcekRuleResult> take = null;
+        try {
+            take = service.take();
+        } catch (InterruptedException e) {
+            log.error("服务校验计算被中断:",e);
+            Thread.currentThread().interrupt();
+            throw new BizException(BizResultEnum.SERVICE_CHECK_THREAD_ERROR, e);
+        }
+        ServiceChcekRuleResult serviceChcekRuleResult = null;
+        try {
+            serviceChcekRuleResult = take.get();
+        } catch (InterruptedException e) {
+            log.error("服务校验计算被中断:",e);
+            Thread.currentThread().interrupt();
+            throw new BizException(BizResultEnum.SERVICE_CHECK_THREAD_ERROR, e);
+        } catch (ExecutionException e) {
+            throw new BizException(BizResultEnum.SERVICE_CHECK_THREAD_ERROR, e);
+        }
+        if (serviceChcekRuleResult.getResult() != null) {
+            if (checkMode == CheckMode.ONE) {
+                for (Future<ServiceChcekRuleResult> future : futureList) {
+                    future.cancel(true);
+                }
+                serviceChcekRuleResultList.add(serviceChcekRuleResult);
+                return true;
+            }
+            else {
+                serviceChcekRuleResultList.add(serviceChcekRuleResult);
+            }
+        }
+        return false;
     }
 }

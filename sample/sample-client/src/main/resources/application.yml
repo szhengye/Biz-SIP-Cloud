@@ -7,12 +7,18 @@ spring:
   cloud:
     nacos:
       discovery:
-        server-addr: test.bizmda.com:8848
+        server-addr: ${BIZSIP_NACOS:127.0.0.1:8848}
 
 bizsip:
-  config-path: /Users/shizhengye/IdeaProjects/Biz-SIP-Cloud/sample/config
+  config-path: ${BIZSIP_CONFIG:/bizsip/config}
   integrator-url: http://sip-integrator/api/
 
 logging:
   level:
     com.bizmda.bizsip: debug
+  file:
+    name: ${BIZSIP_LOG_FILENAME}
+
+graceful:
+  shutdown:
+    enabled: true

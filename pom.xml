@@ -18,6 +18,7 @@
         <module>client-adaptor</module>
         <module>dynamic-config</module>
         <module>integrator-common</module>
+        <module>redis-spring-boot-starter</module>
     </modules>
 
     <properties>
@@ -37,6 +38,9 @@
         <netty.version>4.1.43.Final</netty.version>
         <mysql.version>8.0.16</mysql.version>
         <mybatisplus.version>3.3.1</mybatisplus.version>
+        <redssion.version>3.11.6</redssion.version>
+        <docker.host>http://106.12.61.145:2375</docker.host>
+        <docker.image.prefix>bizsip</docker.image.prefix>
     </properties>
 
     <dependencies>
@@ -55,6 +59,36 @@
     </dependencies>
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>com.bizmda.bizsip</groupId>
+                <artifactId>common</artifactId>
+                <version>${core.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.bizmda.bizsip</groupId>
+                <artifactId>integrator-common</artifactId>
+                <version>${core.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.bizmda.bizsip</groupId>
+                <artifactId>sample-integrator-service</artifactId>
+                <version>${core.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.bizmda.bizsip</groupId>
+                <artifactId>client-adaptor-spring-cloud-starter</artifactId>
+                <version>${core.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.bizmda.bizsip</groupId>
+                <artifactId>server-adaptor-spring-boot-starter</artifactId>
+                <version>${core.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.bizmda.bizsip</groupId>
+                <artifactId>redis-spring-boot-starter</artifactId>
+                <version>${core.version}</version>
+            </dependency>
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-dependencies</artifactId>
@@ -99,31 +133,6 @@
                 <version>${magic-api.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.bizmda.bizsip</groupId>
-                <artifactId>common</artifactId>
-                <version>${core.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.bizmda.bizsip</groupId>
-                <artifactId>integrator-common</artifactId>
-                <version>${core.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.bizmda.bizsip</groupId>
-                <artifactId>sample-integrator-service</artifactId>
-                <version>${core.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.bizmda.bizsip</groupId>
-                <artifactId>client-adaptor-spring-cloud-starter</artifactId>
-                <version>${core.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.bizmda.bizsip</groupId>
-                <artifactId>server-adaptor-spring-boot-starter</artifactId>
-                <version>${core.version}</version>
-            </dependency>
-            <dependency>
                 <groupId>io.netty</groupId>
                 <artifactId>netty-all</artifactId>
                 <version>${netty.version}</version>
@@ -137,6 +146,11 @@
                 <groupId>com.baomidou</groupId>
                 <artifactId>mybatis-plus-boot-starter</artifactId>
                 <version>${mybatisplus.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.redisson</groupId>
+                <artifactId>redisson</artifactId>
+                <version>${redssion.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

@@ -2,18 +2,21 @@ package com.bizmda.bizsip.message.fieldfunction;
 
 import cn.hutool.core.text.CharSequenceUtil;
 import cn.hutool.core.util.NumberUtil;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
 
 /**
  * @author 史正烨
  */
+@Slf4j
 public class FieldFunctionImpl {
     private FieldFunctionImpl() {
 
     }
 
     public static String fill(Object fieldValue, int fieldLen, List<Object> args) {
+        log.debug("fill({},{},{})",fieldValue,fieldLen,args);
         if (fieldLen == 0) {
             if (args.size() >= 3) {
                 fieldLen = (Integer)args.get(2);
@@ -43,6 +46,7 @@ public class FieldFunctionImpl {
     }
 
     public static String trim(Object fieldValue, int fieldLen, List<Object> args) {
+        log.debug("trim({},{},{})",fieldValue,fieldLen,args);
         if (args.isEmpty()) {
             return fieldValue.toString().trim();
         }
@@ -57,6 +61,7 @@ public class FieldFunctionImpl {
     }
 
     public static String decimalFormat(Object fieldValue, int fieldLen, List<Object> args) {
+        log.debug("decimalFormat({},{},{})",fieldValue,fieldLen,args);
         if (args.isEmpty()) {
             return fieldValue.toString().trim();
         }

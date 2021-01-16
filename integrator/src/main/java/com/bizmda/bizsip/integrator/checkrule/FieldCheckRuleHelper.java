@@ -27,39 +27,45 @@ public class FieldCheckRuleHelper {
         }
         List<FieldChcekRuleResult> fieldChcekRuleResultList = new ArrayList<>();
         for (int i = 0; i < fieldCheckRuleList.size(); i++) {
-            Future<FieldChcekRuleResult> take = null;
-            try {
-                take = service.take();
-            } catch (InterruptedException e) {
-                log.error("域校验计算被中断",e);
-                Thread.currentThread().interrupt();
-                throw new BizException(BizResultEnum.FIELD_CHECK_THREAD_ERROR, e);
-            }
-            FieldChcekRuleResult fieldChcekRuleResult = null;
-            try {
-                fieldChcekRuleResult = take.get();
-            }
-            catch (InterruptedException e) {
-                log.error("域校验计算被中断",e);
-                Thread.currentThread().interrupt();
-                throw new BizException(BizResultEnum.FIELD_CHECK_THREAD_ERROR, e);
-            }
-            catch (ExecutionException e) {
-                throw new BizException(BizResultEnum.FIELD_CHECK_THREAD_ERROR, e);
-            }
-            if (fieldChcekRuleResult != null) {
-                if (checkMode == CheckMode.ONE) {
-                    for (Future<FieldChcekRuleResult> future : futureList) {
-                        future.cancel(true);
-                    }
-                    fieldChcekRuleResultList.add(fieldChcekRuleResult);
-                    return fieldChcekRuleResultList;
-                }
-                else {
-                    fieldChcekRuleResultList.add(fieldChcekRuleResult);
-                }
-            }
+            if (takeFieldCheckRuleResult(checkMode, service, futureList, fieldChcekRuleResultList))
+                return fieldChcekRuleResultList;
         }
         return fieldChcekRuleResultList;
+    }
+
+    private static boolean takeFieldCheckRuleResult(CheckMode checkMode, CompletionService<FieldChcekRuleResult> service, List<Future<FieldChcekRuleResult>> futureList, List<FieldChcekRuleResult> fieldChcekRuleResultList) throws BizException {
+        Future<FieldChcekRuleResult> take = null;
+        try {
+            take = service.take();
+        } catch (InterruptedException e) {
+            log.error("域校验计算被中断",e);
+            Thread.currentThread().interrupt();
+            throw new BizException(BizResultEnum.FIELD_CHECK_THREAD_ERROR, e);
+        }
+        FieldChcekRuleResult fieldChcekRuleResult = null;
+        try {
+            fieldChcekRuleResult = take.get();
+        }
+        catch (InterruptedException e) {
+            log.error("域校验计算被中断",e);
+            Thread.currentThread().interrupt();
+            throw new BizException(BizResultEnum.FIELD_CHECK_THREAD_ERROR, e);
+        }
+        catch (ExecutionException e) {
+            throw new BizException(BizResultEnum.FIELD_CHECK_THREAD_ERROR, e);
+        }
+        if (fieldChcekRuleResult != null) {
+            if (checkMode == CheckMode.ONE) {
+                for (Future<FieldChcekRuleResult> future : futureList) {
+                    future.cancel(true);
+                }
+                fieldChcekRuleResultList.add(fieldChcekRuleResult);
+                return true;
+            }
+            else {
+                fieldChcekRuleResultList.add(fieldChcekRuleResult);
+            }
+        }
+        return false;
     }
 }

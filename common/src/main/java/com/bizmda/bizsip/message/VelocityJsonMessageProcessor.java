@@ -2,6 +2,7 @@ package com.bizmda.bizsip.message;
 
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
+import com.bizmda.bizsip.common.BizConstant;
 import com.bizmda.bizsip.common.BizException;
 import com.bizmda.bizsip.common.BizResultEnum;
 import org.apache.velocity.Template;
@@ -25,8 +26,8 @@ public class VelocityJsonMessageProcessor extends AbstractMessageProcessor<Strin
         super.init(configPath,messageMap);
         Properties properties = new Properties();
         properties.setProperty(RuntimeConstants.FILE_RESOURCE_LOADER_PATH, this.configPath + "/message");
-        properties.setProperty(RuntimeConstants.ENCODING_DEFAULT, "UTF-8");
-        properties.setProperty(RuntimeConstants.OUTPUT_ENCODING, "UTF-8");
+        properties.setProperty(RuntimeConstants.ENCODING_DEFAULT, BizConstant.DEFAULT_CHARSET_NAME);
+        properties.setProperty(RuntimeConstants.OUTPUT_ENCODING, BizConstant.DEFAULT_CHARSET_NAME);
         Velocity.init(properties);
         VelocityEngine velocityEngine = new VelocityEngine();
         velocityEngine.init();

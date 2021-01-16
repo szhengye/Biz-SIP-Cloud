@@ -7,16 +7,22 @@ spring:
   cloud:
     nacos:
       discovery:
-        server-addr: localhost:8848
+        server-addr: ${BIZSIP_NACOS:127.0.0.1:8848}
 
 bizsip:
-  config-path: /Users/shizhengye/IdeaProjects/Biz-SIP-Cloud/sample/config
+  config-path: ${BIZSIP_CONFIG:/bizsip/config}
   integrator-url: http://sip-integrator/api/
   client-adaptor-id: client1
+
+netty:
+  port: ${BIZSIP_NETTY_PORT:10002}
 
 logging:
   level:
     com.bizmda.bizsip: debug
+  file:
+    name: ${BIZSIP_LOG_FILENAME}
 
-netty:
-  port: 10002
+graceful:
+  shutdown:
+    enabled: true

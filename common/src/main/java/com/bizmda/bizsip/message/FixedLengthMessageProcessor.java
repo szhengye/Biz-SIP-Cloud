@@ -47,38 +47,42 @@ public class FixedLengthMessageProcessor extends AbstractMessageProcessor<String
             throw new BizException(BizResultEnum.NO_MESSAGE_MATCH_RULE);
         }
 
-        StringBuffer stringBuffer = new StringBuffer();
+        StringBuilder stringBuilder = new StringBuilder();
         List<FixedLengthConfig> fixedLengthConfigList = this.getFixedLengthConfigList(configFileName);
         for(FixedLengthConfig fixedLengthConfig:fixedLengthConfigList) {
-            Object jsonFieldValue = null;
-            if (!(fixedLengthConfig.getName() == null || fixedLengthConfig.getName().isEmpty())) {
-                jsonFieldValue = inMessage.get(fixedLengthConfig.getName());
-            }
-
-            for(FieldFunction fieldFunction:fixedLengthConfig.getPackFunctions()) {
-                jsonFieldValue = fieldFunction.invoke(jsonFieldValue,fixedLengthConfig.getLength());
-            }
-            if (jsonFieldValue == null) {
-                jsonFieldValue = "";
-            }
-
-            java.lang.String strValue;
-            if (!(jsonFieldValue instanceof java.lang.String)) {
-                strValue = jsonFieldValue.toString();
-            }
-            else {
-                strValue = (java.lang.String)jsonFieldValue;
-            }
-            if (strValue.length()>fixedLengthConfig.getLength()) {
-                strValue = strValue.substring(0,fixedLengthConfig.getLength());
-            }
-            stringBuffer.append(jsonFieldValue);
-            if (strValue.length()<fixedLengthConfig.getLength()) {
-                stringBuffer.append(CharSequenceUtil.repeat(" ",fixedLengthConfig.getLength()-strValue.length()));
-            }
+            buildFixedLengthField(inMessage, stringBuilder, fixedLengthConfig);
         }
 
-        return stringBuffer.toString();
+        return stringBuilder.toString();
+    }
+
+    private void buildFixedLengthField(JSONObject inMessage, StringBuilder stringBuilder, FixedLengthConfig fixedLengthConfig) throws BizException {
+        Object jsonFieldValue = null;
+        if (!(fixedLengthConfig.getName() == null || fixedLengthConfig.getName().isEmpty())) {
+            jsonFieldValue = inMessage.get(fixedLengthConfig.getName());
+        }
+
+        for(FieldFunction fieldFunction:fixedLengthConfig.getPackFunctions()) {
+            jsonFieldValue = fieldFunction.invoke(jsonFieldValue,fixedLengthConfig.getLength());
+        }
+        if (jsonFieldValue == null) {
+            jsonFieldValue = "";
+        }
+
+        String strValue;
+        if (!(jsonFieldValue instanceof String)) {
+            strValue = jsonFieldValue.toString();
+        }
+        else {
+            strValue = (String)jsonFieldValue;
+        }
+        if (strValue.length()>fixedLengthConfig.getLength()) {
+            strValue = strValue.substring(0,fixedLengthConfig.getLength());
+        }
+        stringBuilder.append(jsonFieldValue);
+        if (strValue.length()<fixedLengthConfig.getLength()) {
+            stringBuilder.append(CharSequenceUtil.repeat(" ",fixedLengthConfig.getLength()-strValue.length()));
+        }
     }
 
     @Override

@@ -31,7 +31,7 @@ public class ClientAdaptorController {
     }
 
     @PostMapping(value = "/client1", consumes = "application/json", produces = "application/json")
-    public Object doService(@RequestBody JSONObject inMessage, HttpServletResponse response) {
+    public Object doService(@RequestBody String inMessage, HttpServletResponse response) {
         Object outMessage = null;
         try {
             outMessage = this.clientAdaptor.process(inMessage);

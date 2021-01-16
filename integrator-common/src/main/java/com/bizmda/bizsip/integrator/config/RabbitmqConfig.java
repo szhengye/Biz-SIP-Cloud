@@ -84,13 +84,10 @@ public class RabbitmqConfig {
         rabbitTemplate.setMessageConverter(new Jackson2JsonMessageConverter());
 
         rabbitTemplate.setConfirmCallback(new RabbitTemplate.ConfirmCallback() {
-
             @Override
             public void confirm(CorrelationData correlationData, boolean ack, String cause) {
                 // TODO
             }
-
-
         });
         rabbitTemplate.setReturnCallback(new RabbitTemplate.ReturnCallback() {
             @Override

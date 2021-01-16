@@ -1,6 +1,7 @@
 package com.bizmda.bizsip.clientadaptor;
 
 import cn.hutool.json.JSONObject;
+import cn.hutool.json.JSONUtil;
 import com.alibaba.nacos.api.NacosFactory;
 import com.alibaba.nacos.api.config.ConfigService;
 import com.alibaba.nacos.api.exception.NacosException;
@@ -132,7 +133,7 @@ public class ClientAdaptor {
         header.add("Biz-Service-Id",rule);
         HttpEntity<JSONObject> httpEntity = new HttpEntity<>(inData, header);
 
-        BizMessage<JSONObject> outMessage = this.restTemplate.postForObject(this.integratorUrl, httpEntity, BizMessage.class);
+        BizMessage<Object> outMessage = this.restTemplate.postForObject(this.integratorUrl, httpEntity, BizMessage.class);
         if (outMessage == null) {
             log.debug("Integrator返回为null");
             throw new BizException(BizResultEnum.CLIENT_RETURN_NULL);
@@ -144,7 +145,7 @@ public class ClientAdaptor {
             log.debug("Integrator返回错误:{}-{}",outMessage.getCode(),outMessage.getMessage());
             throw new BizException(outMessage.getCode(),outMessage.getMessage());
         }
-        return outMessage;
+        return BizMessage.buildSuccessMessage(outMessage,JSONUtil.parseObj(outMessage.getData()));
     }
 
     private String matchServicePredicateRule(JSONObject inData) throws BizException {

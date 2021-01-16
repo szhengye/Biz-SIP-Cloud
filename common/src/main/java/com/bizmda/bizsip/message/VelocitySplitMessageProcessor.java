@@ -3,6 +3,7 @@ package com.bizmda.bizsip.message;
 import cn.hutool.core.text.StrSpliter;
 import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONObject;
+import com.bizmda.bizsip.common.BizConstant;
 import com.bizmda.bizsip.common.BizException;
 import com.bizmda.bizsip.common.BizResultEnum;
 import org.apache.velocity.Template;
@@ -28,8 +29,8 @@ public class VelocitySplitMessageProcessor extends AbstractMessageProcessor<Stri
         this.separators = (List<String>)messageMap.get("separators");
         Properties properties = new Properties();
         properties.setProperty(RuntimeConstants.FILE_RESOURCE_LOADER_PATH, this.configPath + "/message");
-        properties.setProperty(RuntimeConstants.ENCODING_DEFAULT, "UTF-8");
-        properties.setProperty(RuntimeConstants.OUTPUT_ENCODING, "UTF-8");
+        properties.setProperty(RuntimeConstants.ENCODING_DEFAULT, BizConstant.DEFAULT_CHARSET_NAME);
+        properties.setProperty(RuntimeConstants.OUTPUT_ENCODING, BizConstant.DEFAULT_CHARSET_NAME);
         Velocity.init(properties);
         VelocityEngine velocityEngine = new VelocityEngine();
         velocityEngine.init();
@@ -57,14 +58,13 @@ public class VelocitySplitMessageProcessor extends AbstractMessageProcessor<Stri
 
     @Override
     protected JSONObject adaptor2json(String inMessage) throws BizException {
-        String message = inMessage;
         JSONObject jsonObject = new JSONObject();
-        JSONArray jsonArray = this.createArray(0,message);
+        JSONArray jsonArray = this.createArray(0,inMessage);
         if (jsonArray == null) {
-            jsonObject.set("data",inMessage);
+            jsonObject.set("array",inMessage);
         }
         else {
-            jsonObject.set("data", jsonArray);
+            jsonObject.set("array", jsonArray);
         }
         return jsonObject;
     }

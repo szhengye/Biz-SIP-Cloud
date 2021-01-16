@@ -10,7 +10,8 @@ public class BizConstant {
     public static final String REFRESH_CLIENT_ADAPTOR_DATA_ID="bizsip.refresh.client-adaptor";
     public static final String REFRESH_SERVICE_DATA_ID="bizsip.refresh.service";
     public static final String REFRESH_MESSAGE_DATA_ID="bizsip.refresh.message";
-    
+
+    public static final String DEFAULT_CHARSET_NAME="UTF-8";
     private BizConstant() {
     }
 }

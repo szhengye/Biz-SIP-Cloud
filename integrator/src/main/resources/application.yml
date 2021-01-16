@@ -6,17 +6,17 @@ spring:
   cloud:
     nacos:
       discovery:
-        server-addr: test.bizmda.com:8848
+        server-addr: ${BIZSIP_NACOS:127.0.0.1:8848}
   datasource:
-    url: jdbc:mysql://test.bizmda.com/sip?serverTimezone=GMT%2B8&useUnicode=true&characterEncoding=utf8&useSSL=false
-    username: root
-    password: 123456
+    url: ${BIZSIP_DB_URL:jdbc:mysql://127.0.0.1/sip?serverTimezone=GMT%2B8&useUnicode=true&characterEncoding=utf8&useSSL=false}
+    username: ${BIZSIP_DB_USERNAME:root}
+    password: ${BIZSIP_DB_PASSWORD:123456}
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   redis:
-    host: test.bizmda.com  #配置redis的主机地址，需要修改成自己的
-    port: 6379
-    database: 0
+    host: ${BIZSIP_REDIS_HOST:127.0.0.1}
+    port: ${BIZSIP_REDIS_PORT:6379}
+    database: ${BIZSIP_REDIS_DATABASE:0}
     timeout: 5000
     password: #设置自己的密码
     jedis:
@@ -28,18 +28,24 @@ spring:
 
   rabbitmq:
     virtual-host: /
-    host: test.bizmda.com
+    host: ${BIZSIP_MQ_HOST:127.0.0.1}
     port: 5672
-    username: springcloud
-    password: springcloud
+    username: ${BIZSIP_MQ_USERNAME:springcloud}
+    password: ${BIZSIP_MQ_PASSWORD:springcloud}
     listener:
       simple:
         concurrency: 5
         max-concurrency: 15
         prefetch: 10
 bizsip:
-  config-path: /Users/shizhengye/IdeaProjects/Biz-SIP-Cloud/sample/config
+  config-path: ${BIZSIP_CONFIG:/bizsip/config}
 
 logging:
   level:
     com.bizmda.bizsip: debug
+  file:
+    name: ${BIZSIP_LOG_FILENAME}
+
+graceful:
+  shutdown:
+    enabled: true

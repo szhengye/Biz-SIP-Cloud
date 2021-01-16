@@ -1,0 +1,98 @@
+version: '3.1'
+services:
+  api-gateway:
+    restart: always
+    image: bizsip/api-gateway:latest
+    container_name: api-gateway
+    volumes:
+      - /bizsip:/bizsip
+    ports:
+      - 8000:8000
+    environment:
+      TZ: Asia/Shanghai
+      BIZSIP_LOG_FILENAME: /bizsip/logs/api-gateway.log
+    env_file:
+      - ./bizsip.env
+
+  integrator:
+    restart: always
+    image: bizsip/integrator:latest
+    container_name: integrator
+    volumes:
+      - /bizsip:/bizsip
+    ports:
+      - 8888:8888
+    environment:
+      TZ: Asia/Shanghai
+      BIZSIP_LOG_FILENAME: /bizsip/logs/integrator.log
+    env_file:
+      - ./bizsip.env
+
+  dynamic-config:
+    restart: always
+    image: bizsip/dynamic-config:latest
+    container_name: dynamic-config
+    volumes:
+      - /bizsip:/bizsip
+    environment:
+      TZ: Asia/Shanghai
+      BIZSIP_LOG_FILENAME: /bizsip/logs/dynamic-config.log
+    env_file:
+      - ./bizsip.env
+
+  sample-client:
+    restart: always
+    image: bizsip/sample-client:latest
+    container_name: sample-client
+    volumes:
+      - /bizsip:/bizsip
+    ports:
+      - 8080:8080
+    environment:
+      TZ: Asia/Shanghai
+      BIZSIP_LOG_FILENAME: /bizsip/logs/sample-client.log
+    env_file:
+      - ./bizsip.env
+
+  sample-server:
+    restart: always
+    image: bizsip/sample-server:latest
+    container_name: sample-server
+    volumes:
+      - /bizsip:/bizsip
+    ports:
+      - 8001:8001
+    environment:
+      TZ: Asia/Shanghai
+      BIZSIP_LOG_FILENAME: /bizsip/logs/sample-server.log
+    env_file:
+      - ./bizsip.env
+
+  netty-client-adaptor:
+    restart: always
+    image: bizsip/netty-client-adaptor:latest
+    container_name: netty-client-adaptor
+    volumes:
+      - /bizsip:/bizsip
+    ports:
+      - 10002:10002
+    environment:
+      TZ: Asia/Shanghai
+      BIZSIP_LOG_FILENAME: /bizsip/logs/netty-client-adaptor.log
+    env_file:
+      - ./bizsip.env
+
+#  rest-client-adaptor:
+#    restart: always
+#    image: bizsip/rest-client-adaptor:latest
+#    container_name: rest-client-adaptor
+#    volumes:
+#      - /bizsip:/bizsip
+#    ports:
+#      - 8080:8080
+#    environment:
+#      TZ: Asia/Shanghai
+#      BIZSIP_LOG_FILENAME: /bizsip/logs/rest-client-adaptor.log
+#    env_file:
+#      - ./bizsip.env
+

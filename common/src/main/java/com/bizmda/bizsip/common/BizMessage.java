@@ -2,8 +2,12 @@ package com.bizmda.bizsip.common;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.IdUtil;
+import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONObject;
+import cn.hutool.json.JSONUtil;
 import lombok.Data;
+
+import java.util.List;
 
 /**
  * @author 史正烨
@@ -76,5 +80,21 @@ public class BizMessage<T> {
         }
         bizMessage.data = null;
         return bizMessage;
+    }
+
+    public static BizMessage<JSONObject> buildJSONObjectMessage(BizMessage<? extends Object> bizMessage,Object data) {
+        if (data instanceof JSONObject || data == null) {
+            return BizMessage.buildSuccessMessage(bizMessage,data);
+        }
+        else if (data instanceof List) {
+            JSONArray jsonArray = JSONUtil.parseArray(data);
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.set("array",jsonArray);
+            return BizMessage.buildSuccessMessage(bizMessage,jsonObject);
+        }
+        else {
+            JSONObject jsonObject = JSONUtil.parseObj(data);
+            return BizMessage.buildSuccessMessage(bizMessage,jsonObject);
+        }
     }
 }

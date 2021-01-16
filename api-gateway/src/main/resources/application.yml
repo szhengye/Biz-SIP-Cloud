@@ -6,7 +6,8 @@ spring:
   cloud:
     nacos:
       discovery:
-        server-addr: test.bizmda.com:8848
+        server-addr: ${BIZSIP_NACOS:127.0.0.1:8848}
+#        server-addr: 127.0.0.1:8848
     gateway:
       discovery:
         locator:
@@ -17,3 +18,13 @@ spring:
 #          uri: lb://sip-integrator
 #          predicates:
 #            - Path=/api/**
+
+logging:
+  level:
+    com.bizmda.bizsip: debug
+  file:
+    name: ${BIZSIP_LOG_FILENAME}
+
+graceful:
+  shutdown:
+    enabled: true

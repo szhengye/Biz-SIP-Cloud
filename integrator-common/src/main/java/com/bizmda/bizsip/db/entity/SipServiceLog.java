@@ -55,11 +55,11 @@ public class SipServiceLog extends Model<SipServiceLog> implements Serializable 
     /**
      * 请求数据
      */
-    private Object requestData;
+    private String requestData;
     /**
      * 响应数据
      */
-    private Object responseData;
+    private String responseData;
     /**
      * 服务状态
      */

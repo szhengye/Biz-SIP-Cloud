@@ -19,7 +19,8 @@ public class JavaIntegratorExecutor extends AbstractIntegratorExecutor {
     }
 
     @Override
-    public BizMessage doBizService(BizMessage<JSONObject> message) {
-        return this.javaIntegratorService.doBizService(message);
+    public BizMessage<JSONObject> doBizService(BizMessage<JSONObject> message) {
+        BizMessage<JSONObject> bizMessage = this.javaIntegratorService.doBizService(message);
+        return BizMessage.buildJSONObjectMessage(bizMessage,bizMessage.getData());
     }
 }

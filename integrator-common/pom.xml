@@ -16,6 +16,10 @@
             <groupId>com.bizmda.bizsip</groupId>
             <artifactId>common</artifactId>
         </dependency>
+<!--        <dependency>-->
+<!--            <groupId>com.bizmda.bizsip</groupId>-->
+<!--            <artifactId>redis-spring-boot-starter</artifactId>-->
+<!--        </dependency>-->
         <dependency>
             <groupId>com.alibaba.cloud</groupId>
             <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
@@ -36,5 +40,13 @@
             <groupId>org.ssssssss</groupId>
             <artifactId>magic-api</artifactId>
         </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.springframework.boot</groupId>-->
+<!--            <artifactId>spring-boot-starter-data-redis</artifactId>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>redis.clients</groupId>-->
+<!--            <artifactId>jedis</artifactId>-->
+<!--        </dependency>-->
     </dependencies>
 </project>

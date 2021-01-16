@@ -10,6 +10,7 @@ public enum BizResultEnum {
     INTEGRATOR_SERVICE_NOT_FOUND(1,"聚合服务不存在"),
     INTEGRATOR_SERVICE_CLASS_LOAD_ERROR(2,"聚合服务实现类装载失败"),
     SCRIPT_RETURN_ERROR(3,"脚本主动返回服务失败"),
+    ASYNC_SERVICE_PARENT_TRANCTION_BINDDING_EOORO(4,"异步回调服务父服务绑定失败"),
     // 客户端适配器错误（100-199）
     CLIENT_RETURN_NULL(101,"服务整合器返回为空"),
     // 服务端适配器错误（200-299）
