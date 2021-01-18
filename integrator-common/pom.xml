@@ -16,10 +16,10 @@
             <groupId>com.bizmda.bizsip</groupId>
             <artifactId>common</artifactId>
         </dependency>
-<!--        <dependency>-->
-<!--            <groupId>com.bizmda.bizsip</groupId>-->
-<!--            <artifactId>redis-spring-boot-starter</artifactId>-->
-<!--        </dependency>-->
+        <dependency>
+            <groupId>com.bizmda.bizsip</groupId>
+            <artifactId>redis-spring-boot-starter</artifactId>
+        </dependency>
         <dependency>
             <groupId>com.alibaba.cloud</groupId>
             <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
