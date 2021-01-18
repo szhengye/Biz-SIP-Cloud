@@ -20,8 +20,6 @@ services:
     container_name: integrator
     volumes:
       - /bizsip:/bizsip
-    ports:
-      - 8888:8888
     environment:
       TZ: Asia/Shanghai
       BIZSIP_LOG_FILENAME: /bizsip/logs/integrator.log
@@ -60,8 +58,6 @@ services:
     container_name: sample-server
     volumes:
       - /bizsip:/bizsip
-    ports:
-      - 8001:8001
     environment:
       TZ: Asia/Shanghai
       BIZSIP_LOG_FILENAME: /bizsip/logs/sample-server.log
