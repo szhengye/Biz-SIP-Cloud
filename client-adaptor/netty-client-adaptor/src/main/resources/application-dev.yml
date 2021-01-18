@@ -1,0 +1,26 @@
+server:
+  port: 8090
+
+spring:
+  application:
+    name: sip-netty-client-adaptor
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
+
+bizsip:
+  config-path: /var/bizsip/config
+  integrator-url: http://sip-integrator/api/
+  client-adaptor-id: client1
+
+netty:
+  port: 10002
+
+logging:
+  level:
+    com.bizmda.bizsip: debug
+
+graceful:
+  shutdown:
+    enabled: true

@@ -1,0 +1,79 @@
+server:
+  port: 8888
+spring:
+  application:
+    name: sip-integrator
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
+  datasource:
+    url: jdbc:mysql://127.0.0.1/sip?serverTimezone=GMT%2B8&useUnicode=true&characterEncoding=utf8&useSSL=false
+    username: root
+    password: 123456
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+#  redis:
+#    host: ${BIZSIP_REDIS_HOST:test.bizmda.com}
+#    port: ${BIZSIP_REDIS_PORT:6379}
+#    database: ${BIZSIP_REDIS_DATABASE:0}
+#    timeout: 5000
+#    password: #设置自己的密码
+#    jedis:
+#      pool:
+#        max-active: 50 # 如果赋值为-1，则表示不限制；如果pool已经分配了maxActive个jedis实例，则此时pool 的状态为exhausted(耗尽)
+#        max-idle: 20 # 连接池中的最大空闲连接，默认值也是8。
+#        min-idle: 5  # 连接池中的最小空闲连接，默认值也是0。
+#        max-wait: 10000 # 等待可用连接的最大时间，单位毫秒，默认值为-1，表示永不超时。如果超过等待时间，则直接 抛出JedisConnectionException
+
+  redis:
+    redisson:
+      enable: true
+    ################### redis 单机版 start ##########################
+    host: 127.0.0.1
+    port: 6379
+    timeout: 6000
+    database: 0
+    lettuce:
+      pool:
+        max-active: 10 # 连接池最大连接数（使用负值表示没有限制）,如果赋值为-1，则表示不限制；如果pool已经分配了maxActive个jedis实例，则此时pool的状态为exhausted(耗尽)
+        max-idle: 8   # 连接池中的最大空闲连接 ，默认值也是8
+        max-wait: 100 # # 等待可用连接的最大时间，单位毫秒，默认值为-1，表示永不超时。如果超过等待时间，则直接抛出JedisConnectionException
+        min-idle: 2    # 连接池中的最小空闲连接 ，默认值也是0
+      shutdown-timeout: 100ms
+  ################### redis 单机版 end ##########################
+  #    cluster:
+  #      nodes: 130.75.131.237:7000,130.75.131.238:7000,130.75.131.239:7000,130.75.131.237:7001,130.75.131.238:7001,130.75.131.239:7001
+  #        #130.75.131.237:7000,130.75.131.238:7000,130.75.131.239:7000,130.75.131.237:7001,130.75.131.238:7001,130.75.131.239:7001
+  #        #192.168.3.157:7000,192.168.3.158:7000,192.168.3.159:7000,192.168.3.157:7001,192.168.3.158:7001,192.168.3.159:7001
+  #    timeout: 1000 # 连接超时时间（毫秒）
+  #    lettuce:
+  #      pool:
+  #        max-active: 10 # 连接池最大连接数（使用负值表示没有限制）,如果赋值为-1，则表示不限制；如果pool已经分配了maxActive个jedis实例，则此时pool的状态为exhausted(耗尽)
+  #        max-idle: 8   # 连接池中的最大空闲连接 ，默认值也是8
+  #        max-wait: 100 # # 等待可用连接的最大时间，单位毫秒，默认值为-1，表示永不超时。如果超过等待时间，则直接抛出JedisConnectionException
+  #        min-idle: 2    # 连接池中的最小空闲连接 ，默认值也是0
+  #      shutdown-timeout: 100ms
+
+
+  rabbitmq:
+    virtual-host: /
+    host: 127.0.0.1
+    port: 5672
+    username: springcloud
+    password: springcloud
+    listener:
+      simple:
+        concurrency: 5
+        max-concurrency: 15
+        prefetch: 10
+bizsip:
+  config-path: /var/bizsip/config
+
+logging:
+  level:
+    com.bizmda.bizsip: debug
+
+graceful:
+  shutdown:
+    enabled: true

@@ -1,0 +1,27 @@
+server:
+  port: 8000
+spring:
+  application:
+    name: sip-api-gaetway
+  cloud:
+    nacos:
+      discovery:
+        server-addr: test.bizmda.com:8848
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
+      routes:
+#        - id: sip-integrator
+#          uri: lb://sip-integrator
+#          predicates:
+#            - Path=/api/**
+
+logging:
+  level:
+    com.bizmda.bizsip: info
+
+graceful:
+  shutdown:
+    enabled: true

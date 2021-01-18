@@ -1,22 +1,4 @@
-server:
-  port: 8001
 spring:
-  application:
-    name: sip-sample-server
-  cloud:
-    nacos:
-      discovery:
-        server-addr: ${BIZSIP_NACOS:127.0.0.1:8848}
-
-bizsip:
-  config-path: ${BIZSIP_CONFIG:/bizsip/config}
-
-logging:
-  level:
-    com.bizmda.bizsip: debug
-  file:
-    name: ${BIZSIP_LOG_FILENAME}
-
-graceful:
-  shutdown:
-    enabled: true
+  # 环境 dev:开发环境|test:测试环境|prod:生产环境
+  profiles:
+    active: test

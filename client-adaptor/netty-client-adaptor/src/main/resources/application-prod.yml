@@ -1,0 +1,28 @@
+server:
+  port: 8090
+
+spring:
+  application:
+    name: sip-netty-client-adaptor
+  cloud:
+    nacos:
+      discovery:
+        server-addr: ${BIZSIP_NACOS}
+
+bizsip:
+  config-path: ${BIZSIP_CONFIG}
+  integrator-url: http://sip-integrator/api/
+  client-adaptor-id: client1
+
+netty:
+  port: ${BIZSIP_NETTY_PORT}
+
+logging:
+  level:
+    com.bizmda.bizsip: info
+  file:
+    name: ${BIZSIP_LOG_FILENAME}
+
+graceful:
+  shutdown:
+    enabled: true

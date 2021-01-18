@@ -1,0 +1,24 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: sip-sample-client
+  cloud:
+    nacos:
+      discovery:
+        server-addr: ${BIZSIP_NACOS}
+
+bizsip:
+  config-path: ${BIZSIP_CONFIG}
+  integrator-url: http://sip-integrator/api/
+
+logging:
+  level:
+    com.bizmda.bizsip: info
+  file:
+    name: ${BIZSIP_LOG_FILENAME:}
+
+graceful:
+  shutdown:
+    enabled: true

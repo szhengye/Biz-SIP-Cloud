@@ -1,0 +1,22 @@
+server:
+  port: 8088
+spring:
+  application:
+    name: sip-dynamic-config
+  cloud:
+    nacos:
+      discovery:
+        server-addr: ${BIZSIP_NACOS}
+
+bizsip:
+  config-path: ${BIZSIP_CONFIG}
+
+logging:
+  level:
+    com.bizmda.bizsip: info
+  file:
+    name: ${BIZSIP_LOG_FILENAME:}
+
+graceful:
+  shutdown:
+    enabled: true
