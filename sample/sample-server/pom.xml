@@ -24,6 +24,10 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.bizmda.bizsip</groupId>
+            <artifactId>log-spring-boot-starter</artifactId>
+        </dependency>
     </dependencies>
     <build>
         <plugins>

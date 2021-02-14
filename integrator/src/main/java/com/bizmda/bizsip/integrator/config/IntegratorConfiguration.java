@@ -3,12 +3,17 @@ package com.bizmda.bizsip.integrator.config;
 import com.bizmda.bizsip.common.BizException;
 import com.bizmda.bizsip.integrator.checkrule.CheckRuleConfigMapping;
 import com.bizmda.bizsip.config.ServerAdaptorConfigMapping;
+import com.bizmda.log.trace.RestTemplateTraceInterceptor;
+import com.bizmda.log.trace.WebTraceFilter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
+
+import java.util.Collections;
 
 /**
  * @author 史正烨
@@ -53,6 +58,13 @@ public class IntegratorConfiguration {
     @LoadBalanced
     public RestTemplate restTemplate()
     {
-        return new RestTemplate();
+        RestTemplate restTemplate = new RestTemplate();
+        restTemplate.setInterceptors(Collections.singletonList(new RestTemplateTraceInterceptor()));
+        return restTemplate;
     }
+
+//    @Bean
+//    public WebTraceFilter webTraceFilter() {
+//        return new WebTraceFilter();
+//    }
 }

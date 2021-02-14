@@ -12,6 +12,16 @@ public class BizConstant {
     public static final String REFRESH_MESSAGE_DATA_ID="bizsip.refresh.message";
 
     public static final String DEFAULT_CHARSET_NAME="UTF-8";
+
+    /**
+     * 日志链路追踪id信息头
+     */
+    public static final String TRACE_ID_HEADER = "x-traceId-header";
+    /**
+     * 日志链路追踪id日志标志
+     */
+    public static final String LOG_TRACE_ID = "traceId";
+
     private BizConstant() {
     }
 }

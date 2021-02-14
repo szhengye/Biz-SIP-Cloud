@@ -19,6 +19,7 @@
         <module>dynamic-config</module>
         <module>integrator-common</module>
         <module>redis-spring-boot-starter</module>
+        <module>log-spring-boot-starter</module>
     </modules>
 
     <properties>
@@ -41,6 +42,7 @@
         <redssion.version>3.11.6</redssion.version>
         <docker.host>http://106.12.61.145:2375</docker.host>
         <docker.image.prefix>bizsip</docker.image.prefix>
+        <transmittable.version>2.12.0</transmittable.version>
     </properties>
 
     <dependencies>
@@ -87,6 +89,11 @@
             <dependency>
                 <groupId>com.bizmda.bizsip</groupId>
                 <artifactId>redis-spring-boot-starter</artifactId>
+                <version>${core.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.bizmda.bizsip</groupId>
+                <artifactId>log-spring-boot-starter</artifactId>
                 <version>${core.version}</version>
             </dependency>
             <dependency>
@@ -151,6 +158,16 @@
                 <groupId>org.redisson</groupId>
                 <artifactId>redisson</artifactId>
                 <version>${redssion.version}</version>
+            </dependency>
+            <dependency>
+                <artifactId>velocity</artifactId>
+                <groupId>org.apache.velocity</groupId>
+                <version>${velocity.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>transmittable-thread-local</artifactId>
+                <version>${transmittable.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

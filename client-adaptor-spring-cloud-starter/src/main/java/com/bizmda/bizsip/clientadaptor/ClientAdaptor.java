@@ -85,6 +85,9 @@ public class ClientAdaptor {
 
     public void load() throws BizException {
         CommonClientAdaptorConfig clientAdaptorConfig = this.clientAdaptorConfigMapping.getClientAdaptorConfig(this.clientAdaptorId);
+        if (clientAdaptorConfig == null) {
+            throw new BizException(BizResultEnum.CLIENT_ADAPTOR_ID_NOTFOUND,"客户端适配器ID:"+this.clientAdaptorId);
+        }
         String messageType = (String)clientAdaptorConfig.getMessageMap().get("type");
         Class<? extends AbstractMessageProcessor> clazz = (Class<? extends AbstractMessageProcessor>)AbstractMessageProcessor.MESSAGE_TYPE_MAP.get(messageType);
         if (clazz == null) {

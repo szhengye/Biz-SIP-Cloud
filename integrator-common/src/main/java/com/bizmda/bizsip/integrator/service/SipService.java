@@ -8,6 +8,7 @@ import com.bizmda.bizsip.config.RestServerAdaptorConfig;
 import com.bizmda.bizsip.config.ServerAdaptorConfigMapping;
 import com.bizmda.bizsip.integrator.tm.TmService;
 //import com.open.capacity.redis.util.RedisUtil;
+import com.open.capacity.redis.util.RedisUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,8 +30,8 @@ public class SipService {
     private ServerAdaptorConfigMapping serverAdaptorConfigMapping;
     @Autowired
     private TmService tmService;
-//    @Autowired
-//    private RedisUtil redisUtil ;
+    @Autowired
+    private RedisUtil redisUtil ;
 
     /**
      * 执行服务适配器服务的调用
@@ -129,37 +130,37 @@ public class SipService {
      * 保存异步服务上下文
      * @param transactionKey 异步回调的全局唯一交易索引键
      * @param context 注入回调聚合服务的上下文变量
-     * @param timeout 异步服务超时时间
+     * @param timeout 异步服务超时时间，单位（秒）
      */
-//    public void saveAsyncContext(String transactionKey,Object context,long timeout) {
-//        BizMessage bizMessage = BizUtils.bizMessageThreadLocal.get();
-//        Map<String,Object> map = new HashMap<>();
-//        map.put("traceId",bizMessage.getTraceId());
-//        map.put("context",context);
-//        this.redisUtil.set(PREFIX_SIP_ASYNCLOG +transactionKey, context, timeout);
-//    }
+    public void saveAsyncContext(String transactionKey,Object context,long timeout) {
+        BizMessage bizMessage = BizUtils.bizMessageThreadLocal.get();
+        Map<String,Object> map = new HashMap<>();
+        map.put("traceId",bizMessage.getTraceId());
+        map.put("context",context);
+        this.redisUtil.set(PREFIX_SIP_ASYNCLOG +transactionKey, context, timeout);
+    }
 
     /**
      * 恢复异步服务上下文
      * @param transactionKey 异步回调的全局唯一交易索引键
-     * @return
+     * @return 异步服务上下文
      */
-//    public Object loadAsyncContext(String transactionKey) throws BizException {
-//        Map<String, Object> map = (Map<String, Object>) this.redisUtil.get(PREFIX_SIP_ASYNCLOG + transactionKey);
-//        if (map == null) {
-//            return null;
-//        }
-//        String traceId = (String) map.get("traceId");
-//        Object context = map.get("context");
-//        BizMessage bizMessage = BizUtils.bizMessageThreadLocal.get();
-//        if (bizMessage.getParentTraceId() == null) {
-//            bizMessage.setParentTraceId(traceId);
-//            BizUtils.bizMessageThreadLocal.set(bizMessage);
-//            return context;
-//        } else if (bizMessage.getParentTraceId() == traceId) {
-//            return context;
-//        } else {
-//            throw new BizException(BizResultEnum.ASYNC_SERVICE_PARENT_TRANCTION_BINDDING_EOORO);
-//        }
-//    }
+    public Object loadAsyncContext(String transactionKey) throws BizException {
+        Map<String, Object> map = (Map<String, Object>) this.redisUtil.get(PREFIX_SIP_ASYNCLOG + transactionKey);
+        if (map == null) {
+            throw new BizException(BizResultEnum.ASYNC_SERVICE_CONTEXT_NOT_FOUND);
+        }
+        String traceId = (String) map.get("traceId");
+        Object context = map.get("context");
+        BizMessage bizMessage = BizUtils.bizMessageThreadLocal.get();
+        if (bizMessage.getParentTraceId() == null) {
+            bizMessage.setParentTraceId(traceId);
+            BizUtils.bizMessageThreadLocal.set(bizMessage);
+            return context;
+        } else if (bizMessage.getParentTraceId() == traceId) {
+            return context;
+        } else {
+            throw new BizException(BizResultEnum.ASYNC_SERVICE_PARENT_TRANCTION_BINDDING_EOORO);
+        }
+    }
 }

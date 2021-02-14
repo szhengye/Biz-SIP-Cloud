@@ -20,6 +20,15 @@
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-gateway</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.bizmda.bizsip</groupId>
+            <artifactId>common</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.bizmda.bizsip</groupId>
+            <artifactId>log-spring-boot-starter</artifactId>
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -48,7 +57,7 @@
                         <resource>
                             <targetPath>/</targetPath>
                             <directory>${project.build.directory}</directory>
-<!--                            <include>${project.build.finalName}.jar</include>-->
+                            <!--                            <include>${project.build.finalName}.jar</include>-->
                             <include>${project.artifactId}.jar</include>
                         </resource>
                     </resources>

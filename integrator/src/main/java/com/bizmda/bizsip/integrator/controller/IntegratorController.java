@@ -36,7 +36,7 @@ public class IntegratorController {
                                    @PathVariable(required = false) Map<String, Object> pathVariables,
                                    @RequestParam(required = false) Map<String, Object> parameters) throws BizException {
         String serviceId = request.getHeader("Biz-Service-Id");
-
+        log.info("Biz-Service-id:{},{},{}",serviceId,request.getHeaderNames(),request.getHeader(BizConstant.TRACE_ID_HEADER));
         BizMessage<JSONObject> inMessage = BizMessage.createNewTransaction();
         inMessage.setData(inJsonObject);
         BizUtils.bizMessageThreadLocal.set(inMessage);
