@@ -4,13 +4,11 @@ import com.bizmda.bizsip.common.BizException;
 import com.bizmda.bizsip.integrator.checkrule.CheckRuleConfigMapping;
 import com.bizmda.bizsip.config.ServerAdaptorConfigMapping;
 import com.bizmda.log.trace.RestTemplateTraceInterceptor;
-import com.bizmda.log.trace.WebTraceFilter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Collections;

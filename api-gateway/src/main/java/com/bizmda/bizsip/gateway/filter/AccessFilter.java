@@ -2,6 +2,7 @@ package com.bizmda.bizsip.gateway.filter;
 
 import cn.hutool.core.util.IdUtil;
 import com.bizmda.bizsip.common.BizConstant;
+import com.bizmda.log.trace.MDCTraceUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
@@ -22,9 +23,9 @@ public class AccessFilter implements GatewayFilter, Ordered {
         List<String> bizServiceId = exchange.getRequest().getHeaders().get("Biz-Service-Id");
         //链路追踪id
         String traceId = IdUtil.fastSimpleUUID();
-        MDC.put(BizConstant.LOG_TRACE_ID, traceId);
+        MDC.put(MDCTraceUtils.KEY_TRACE_ID, traceId);
         ServerHttpRequest serverHttpRequest = exchange.getRequest().mutate()
-                .headers(h -> h.add(BizConstant.TRACE_ID_HEADER, traceId))
+                .headers(h -> h.add(MDCTraceUtils.TRACE_ID_HEADER, traceId))
                 .build();
 
         ServerWebExchange build = exchange.mutate().request(serverHttpRequest).build();

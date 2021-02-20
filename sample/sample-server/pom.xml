@@ -28,6 +28,14 @@
             <groupId>com.bizmda.bizsip</groupId>
             <artifactId>log-spring-boot-starter</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.bizmda.bizsip</groupId>
+            <artifactId>log-spring-boot-starter</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-all</artifactId>
+        </dependency>
     </dependencies>
     <build>
         <plugins>

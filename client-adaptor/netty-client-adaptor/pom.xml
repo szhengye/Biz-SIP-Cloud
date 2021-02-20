@@ -28,6 +28,10 @@
             <groupId>io.netty</groupId>
             <artifactId>netty-all</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.bizmda.bizsip</groupId>
+            <artifactId>log-spring-boot-starter</artifactId>
+        </dependency>
     </dependencies>
     <build>
         <plugins>

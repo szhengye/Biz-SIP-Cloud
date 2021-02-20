@@ -8,6 +8,7 @@ import com.bizmda.bizsip.integrator.checkrule.*;
 import com.bizmda.bizsip.integrator.config.IntegratorServiceMapping;
 import com.bizmda.bizsip.integrator.executor.AbstractIntegratorExecutor;
 import com.bizmda.bizsip.integrator.executor.SipServiceLogService;
+import com.bizmda.log.trace.MDCTraceUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -36,7 +37,7 @@ public class IntegratorController {
                                    @PathVariable(required = false) Map<String, Object> pathVariables,
                                    @RequestParam(required = false) Map<String, Object> parameters) throws BizException {
         String serviceId = request.getHeader("Biz-Service-Id");
-        log.info("Biz-Service-id:{},{},{}",serviceId,request.getHeaderNames(),request.getHeader(BizConstant.TRACE_ID_HEADER));
+        log.info("Biz-Service-id:{},{},{}",serviceId,request.getHeaderNames(),request.getHeader(MDCTraceUtils.TRACE_ID_HEADER));
         BizMessage<JSONObject> inMessage = BizMessage.createNewTransaction();
         inMessage.setData(inJsonObject);
         BizUtils.bizMessageThreadLocal.set(inMessage);
