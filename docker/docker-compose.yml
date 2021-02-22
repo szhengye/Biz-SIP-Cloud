@@ -1,20 +1,6 @@
 version: '3.1'
 services:
-#  logstash:
-#    restart: always
-#    image: logstash:7.6.2
-#    container_name: logstash
-#    volumes:
-#      - /bizsip:/bizsip
-#    environment:
-#      TZ: Asia/Shanghai
-#    ports:
-#      - 5044:5044
-#    extra_hosts:
-#      - "elasticsearch:139.198.177.218"
-
   filebeat:
-#    restart: always
     image: elastic/filebeat:7.6.2
     container_name: filebeat
     volumes:
@@ -29,12 +15,10 @@ services:
     build:
       context: ../api-gateway/target
       dockerfile: ../src/main/docker/Dockerfile
-#    restart: always
     image: bizsip/api-gateway:latest
     container_name: api-gateway
     volumes:
-      - /bizsip/config:/bizsip/config
-      - /bizsip/logs:/logs
+      - /bizsip:/bizsip
     ports:
       - 8000:8000
     environment:
@@ -47,12 +31,10 @@ services:
     build:
       context: ../integrator/target
       dockerfile: ../src/main/docker/Dockerfile
-#    restart: always
     image: bizsip/integrator:latest
     container_name: integrator
     volumes:
-      - /bizsip/config:/bizsip/config
-      - /bizsip/logs:/logs
+      - /bizsip:/bizsip
     environment:
       TZ: Asia/Shanghai
       BIZSIP_LOG_FILENAME: /bizsip/logs/integrator.log
@@ -60,50 +42,44 @@ services:
       - ./bizsip.env
 
 
-#  dynamic-config:
-#    build:
-#      context: ../dynamic-config/target
-#      dockerfile: ../src/main/docker/Dockerfile
-#    restart: always
-#    image: bizsip/dynamic-config:latest
-#    container_name: dynamic-config
-#    volumes:
-#      - /bizsip/config:/bizsip/config
-#      - /bizsip/logs:/logs
-#    environment:
-#      TZ: Asia/Shanghai
-#      BIZSIP_LOG_FILENAME: /bizsip/logs/dynamic-config.log
-#    env_file:
-#      - ./bizsip.env
+  dynamic-config:
+    build:
+      context: ../dynamic-config/target
+      dockerfile: ../src/main/docker/Dockerfile
+    image: bizsip/dynamic-config:latest
+    container_name: dynamic-config
+    volumes:
+      - /bizsip:/bizsip
+    environment:
+      TZ: Asia/Shanghai
+      BIZSIP_LOG_FILENAME: /bizsip/logs/dynamic-config.log
+    env_file:
+      - ./bizsip.env
 
-#  sample-client:
-#    build:
-#      context: ../sample/sample-client/target
-#      dockerfile: ../src/main/docker/Dockerfile
-#    restart: always
-#    image: bizsip/sample-client:latest
-#    container_name: sample-client
-#    volumes:
-#      - /bizsip/config:/bizsip/config
-#      - /bizsip/logs:/logs
-#    ports:
-#      - 8081:8080
-#    environment:
-#      TZ: Asia/Shanghai
-#      BIZSIP_LOG_FILENAME: /bizsip/logs/sample-client.log
-#    env_file:
-#      - ./bizsip.env
+  sample-client:
+    build:
+      context: ../sample/sample-client/target
+      dockerfile: ../src/main/docker/Dockerfile
+    image: bizsip/sample-client:latest
+    container_name: sample-client
+    volumes:
+      - /bizsip:/bizsip
+    ports:
+      - 8081:8080
+    environment:
+      TZ: Asia/Shanghai
+      BIZSIP_LOG_FILENAME: /bizsip/logs/sample-client.log
+    env_file:
+      - ./bizsip.env
 
   sample-server:
     build:
       context: ../sample/sample-server/target
       dockerfile: ../src/main/docker/Dockerfile
-#    restart: always
     image: bizsip/sample-server:latest
     container_name: sample-server
     volumes:
-      - /bizsip/config:/bizsip/config
-      - /bizsip/logs:/logs
+      - /bizsip:/bizsip
     environment:
       TZ: Asia/Shanghai
       BIZSIP_LOG_FILENAME: /bizsip/logs/sample-server.log
@@ -114,12 +90,10 @@ services:
     build:
       context: ../client-adaptor/netty-client-adaptor/target
       dockerfile: ../src/main/docker/Dockerfile
-#    restart: always
     image: bizsip/netty-client-adaptor:latest
     container_name: netty-client-adaptor
     volumes:
-      - /bizsip/config:/bizsip/config
-      - /bizsip/logs:/logs
+      - /bizsip:/bizsip
     ports:
       - 10002:10002
     environment:
@@ -128,28 +102,23 @@ services:
     env_file:
       - ./bizsip.env
 
-#  bizsip-admin:
-#    restart: always
-#    image: bizsip/admin:latest
-#    container_name: bizsip-admin
-#    volumes:
-#      - /bizsip:/bizsip
-#      - /bizsip/config:/bizsip/config
-#      - /bizsip/logs:/logs
-#    ports:
-#      - 8080:8080
-#    environment:
-#      TZ: Asia/Shanghai
-#      BIZSIP_LOG_FILENAME: /bizsip/logs/bizsip-admin.log
+  bizsip-admin-app:
+    image: bizsip/admin-app:latest
+    container_name: bizsip-admin-app
+    volumes:
+      - /bizsip:/bizsip
+    ports:
+      - 8080:8080
+    environment:
+      TZ: Asia/Shanghai
+      BIZSIP_LOG_FILENAME: /bizsip/logs/bizsip-admin.log
 
-#  bizsip-nginx:
-#    restart: always
-#    image: bizsip/nginx:latest 
-#    container_name: bizsip-nginx
-#    ports:
-#      - 80:80
-#    environment:
-#      TZ: Asia/Shanghai
-#    extra_hosts:
-#      - "jeecg-boot-system:106.12.61.145"
-
+  bizsip-admin-web:
+    image: bizsip/admin-web:latest
+    container_name: bizsip-admin-web
+    ports:
+      - 80:80
+    environment:
+      TZ: Asia/Shanghai
+    extra_hosts:
+      - "jeecg-boot-system:106.12.61.145"
