@@ -21,8 +21,8 @@ spring:
 logging:
   level:
     com.bizmda.bizsip: info
-  file:
-    name: ${BIZSIP_LOG_FILENAME:}
+#  file:
+#    name: ${BIZSIP_LOG_FILENAME}
 
 graceful:
   shutdown:
