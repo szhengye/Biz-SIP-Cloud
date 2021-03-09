@@ -1,0 +1,10 @@
+org.springframework.context.ApplicationContextInitializer=\
+com.bizmda.log.config.TtlMDCAdapterInitializer
+
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+com.bizmda.log.trace.WebTraceFilter,\
+com.bizmda.log.trace.FeignTraceInterceptor
+#com.bizmda.log.config.LogAutoConfigure,
+#com.bizmda.log.service.impl.DbAuditServiceImpl,
+#com.bizmda.log.service.impl.LoggerAuditServiceImpl,
+#com.bizmda.log.aspect.AuditLogAspect,

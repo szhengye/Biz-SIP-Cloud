@@ -15,7 +15,7 @@ services:
     build:
       context: ../api-gateway/target
       dockerfile: ../src/main/docker/Dockerfile
-    image: bizsip/api-gateway:latest
+    image: registry.cn-shanghai.aliyuncs.com/szhengye/bizsip:bizsip-api-gateway
     container_name: api-gateway
     volumes:
       - /bizsip:/bizsip
@@ -31,7 +31,7 @@ services:
     build:
       context: ../integrator/target
       dockerfile: ../src/main/docker/Dockerfile
-    image: bizsip/integrator:latest
+    image: registry.cn-shanghai.aliyuncs.com/szhengye/bizsip:bizsip-integrator
     container_name: integrator
     volumes:
       - /bizsip:/bizsip
@@ -46,7 +46,7 @@ services:
     build:
       context: ../dynamic-config/target
       dockerfile: ../src/main/docker/Dockerfile
-    image: bizsip/dynamic-config:latest
+    image: registry.cn-shanghai.aliyuncs.com/szhengye/bizsip:bizsip-dynamic-config
     container_name: dynamic-config
     volumes:
       - /bizsip:/bizsip
@@ -60,7 +60,7 @@ services:
     build:
       context: ../sample/sample-client/target
       dockerfile: ../src/main/docker/Dockerfile
-    image: bizsip/sample-client:latest
+    image: registry.cn-shanghai.aliyuncs.com/szhengye/bizsip:bizsip-sample-client
     container_name: sample-client
     volumes:
       - /bizsip:/bizsip
@@ -76,7 +76,7 @@ services:
     build:
       context: ../sample/sample-server/target
       dockerfile: ../src/main/docker/Dockerfile
-    image: bizsip/sample-server:latest
+    image: registry.cn-shanghai.aliyuncs.com/szhengye/bizsip:bizsip-sample-server
     container_name: sample-server
     volumes:
       - /bizsip:/bizsip
@@ -90,7 +90,7 @@ services:
     build:
       context: ../client-adaptor/netty-client-adaptor/target
       dockerfile: ../src/main/docker/Dockerfile
-    image: bizsip/netty-client-adaptor:latest
+    image: registry.cn-shanghai.aliyuncs.com/szhengye/bizsip:bizsip-netty-client-adaptor
     container_name: netty-client-adaptor
     volumes:
       - /bizsip:/bizsip
@@ -112,6 +112,8 @@ services:
     environment:
       TZ: Asia/Shanghai
       BIZSIP_LOG_FILENAME: /bizsip/logs/bizsip-admin.log
+    env_file:
+      - ./bizsip.env
 
   bizsip-admin-web:
     image: bizsip/admin-web:latest
